@@ -81,14 +81,29 @@ Siehe `docs/DEPLOYMENT.md` für Konfigurationsoptionen.
 
 ---
 
-## Versionierung & Patches
+## Support & Versionierung
 
-| Version | Status | Support bis |
-|---------|--------|------------|
-| 0.2.x   | 🟢 Aktiv | 2026-12-31 |
-| 0.1.x   | 🟡 Legacy | 2026-09-30 |
+### Version Support Matrix
 
-Patches werden als `0.2.1`, `0.2.2`, etc. released.
+| Version | Status | Released | Support bis | Notes |
+|---------|--------|----------|-------------|-------|
+| 0.2.x   | 🟢 Aktiv | 2026-06-28 | 2026-12-31 | Aktuell empfohlen |
+| 0.1.x   | 🟡 Legacy | 2026-06-01 | 2026-09-30 | Security Patches nur |
+| 0.0.x   | 🔴 End-of-Life | - | 2026-03-31 | Nicht mehr unterstützt |
+
+### Patch-Strategie
+
+- **Bug-Fixes & Security Patches**: Werden als `0.2.1`, `0.2.2`, etc. released (Bugfix-Nummern)
+- **Minor Features**: Werden als `0.3.0`, `0.4.0`, etc. released (Minor-Versionen)
+- **Breaking Changes**: Werden als `1.0.0`, `2.0.0`, etc. released (Major-Versionen)
+- **Release-Cadence**: Monatlich (1. Freitag des Monats) oder ad-hoc bei kritischen Patches
+
+### Sicherheits-Updates
+
+- **Kritisch** (CVSS 9.0+): Innerhalb von 24-48 Stunden gepatched
+- **Hoch** (CVSS 7.0-8.9): Innerhalb von 1 Woche gepatched
+- **Mittel** (CVSS 4.0-6.9): Mit nächstem Release gepatched
+- **Niedrig** (CVSS < 4.0): Mit zukünftigen Releases adressiert
 
 ---
 
