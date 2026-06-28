@@ -163,8 +163,10 @@ GitHub Actions synchronisiert automatisch diese Dateien:
 - `CHANGELOG.md` — Release-Notizen
 - `ROADMAP.md` — Öffentliche Feature-Roadmap
 - `SECURITY.md` — Sicherheitsrichtlinien
+- `THIRD_PARTY_NOTICES.md` — Lizenzhinweise zu Abhängigkeiten
 - `docs/API.md` — API-Dokumentation
 - `docs/DEPLOYMENT.md` — Diese Datei
+- `docs/SYSTEM_OVERVIEW.md` — System- und Ablaufübersicht
 - `LICENSE` — Lizenztext
 
 **Trigger**:

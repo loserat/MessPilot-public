@@ -8,14 +8,12 @@ MessPilot ist eine Anwendung zur Dokumentation von Elektro-Inspektionen und hand
 
 **Bitte melden Sie Sicherheitsprobleme NICHT als öffentliches Issue.**
 
-Statt dessen kontaktieren Sie uns vertraulich:
+Stattdessen nutzen Sie bitte den vertraulichen GitHub-Meldeweg, sobald er im Public-Repository aktiviert ist:
 
-📧 **Email**: `security@messpilot.local` (wird weitergeleitet)
+- Public Repo: https://github.com/loserat/MessPilot-public
+- Bereich: `Security` > `Report a vulnerability`
 
-**Oder via GitHub Private Security Vulnerability Report:**
-- Navigieren Sie zur privaten Repo: https://github.com/loserat/messpilot
-- Gehen Sie zu „Security" > „Report a vulnerability"
-- Folgen Sie der Anleitung
+Falls dieser Meldeweg noch nicht verfügbar ist, öffnen Sie bitte **kein öffentliches Detail-Issue**. Legen Sie stattdessen ein kurzes Issue ohne technische Details an und bitten Sie um einen vertraulichen Kontaktweg.
 
 ---
 
@@ -123,7 +121,7 @@ Vor der Produktivnutzung:
 
 ## Kontakt
 
-- **Security**: `security@messpilot.local`
+- **Security**: Vertrauliche Meldung über `Security` > `Report a vulnerability` im Public Repo, sobald aktiviert
 - **Issues/Bugs**: https://github.com/loserat/MessPilot-public/issues
 - **Diskussionen**: https://github.com/loserat/MessPilot-public/discussions
 
