@@ -7,6 +7,9 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Internal
+- Sync-Test (2026-06-28): Verifiziert automatischen Private→Public Abgleich via GitHub Actions.
+
 ### Planned
 - Backend Persistierung: SQLite/PostgreSQL Migration
 - Erweiterte Authentifizierung: OAuth2 / LDAP Support
