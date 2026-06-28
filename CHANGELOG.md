@@ -7,14 +7,13 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
-### Internal
-- Sync-Test (2026-06-28): Verifiziert automatischen Private→Public Abgleich via GitHub Actions.
-
 ### Planned
 - Backend Persistierung: SQLite/PostgreSQL Migration
 - Erweiterte Authentifizierung: OAuth2 / LDAP Support
 - Mobile-optimierte Ansichten
 - Import/Export von Bestandsdaten (CSV, XLS, JSON)
+- Audit-Logging für alle Änderungen
+- 2FA (Two-Factor Authentication)
 
 ---
 
@@ -24,25 +23,29 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - **Verteiler-Modul**: Hierarchische Verwaltung von Schutzvorrichtungen (Schmelz → RCD → Stromkreise) mit Drag-and-Drop
 - **Protokoll-Workflows**: VDE-Integration, Messgruppen-Tabs (Schutzleiter, Isolation, Schleife/Netz, RCD)
 - **Raum-Editor**: SVG-basiertes Sketch-Tool mit Gitter-Snap und Raum-Templates
-- **PDF-Export**: GitHub-Logo und Beleuchtungs-PDF Seite 1+2 Layout
+- **PDF-Export**: GitHub-Logo und Beleuchtungs-PDF Layout Seite 1 + 2
 - **Versioning-Service**: Git-basierte Versions-Erkennung mit Caching
 - **Kontext-Pinning**: Persistierung von Liegenschaft/Gebäude-Kontext über Sessions
+- **GitHub Actions Sync**: Automatische Synchronisation von Dokumentation zur Public-Repo
 
 ### Improved
 - Dashboard UI: Kompaktere Raum-Dialog Darstellung
 - Messpunkt-Parser: Robustheit und Fehlerbehandlung
 - VDE-Workflow: Zusammenfassung von Grunddaten & Verteiler-Schritt
 - Authentifizierung: UI-Überarbeitung mit Session-Management
-
-### Internal
-- Modulare Frontend-Architektur vorbereitet für künftige Splits
-- Code-Commenting: Section Headers für bessere Navigierbarkeit
-- Daily-Dokumentation: Detaillierte Progress Logs (docs/daily/)
+- Code-Kommentierung: Section Headers für bessere Navigierbarkeit
 
 ### Fixed
 - Auth-Flow: Session-Persistence über Seitenneulade
 - API Response Format: Standardisierte Fehlerbehandlung
 - Storage: JSON-Backup bei fehlerhaften Writes
+- Sync-Workflow: Token-Authentifizierung für Cross-Repo-Zugriff
+
+### Known Issues
+- Auth-System ist noch nicht produktionsreif (kein CSRF-Schutz, kein Audit-Log)
+- Datenspeicher ist JSON-basiert (kein SQL-Backend)
+- PDF-Export ist noch auf Beleuchtungs-Standard begrenzt
+- Keine Mandantenfähigkeit
 
 ---
 
@@ -55,8 +58,10 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - REST API mit standardisierten Endpoints
 - Docker-basiertes Deployment
 - JSON-File-basierte Datenspeicherung
-- Rollenbasierte Zugriffskontrolle (Admin, User, Viewer)
+- Rollenbasierte Zugriffskontrolle (Admin, User, Viewer, SystemAdmin)
 - Basis-PDF-Export für Inspektionen
+- Benutzer-Management mit Login/Logout
+- System-Einstellungen mit Theme-Wechsel
 
 ---
 
@@ -72,6 +77,10 @@ Versionen werden in `src/services/githubVersion.service.js` automatisch über Gi
 ## Beitragen
 
 Melden Sie Bugs, Wünsche und Verbesserungen bitte unter:
-https://github.com/loserat/MessPilot-public/issues
+👉 https://github.com/loserat/MessPilot-public/issues
 
 Für Sicherheitsprobleme siehe `SECURITY.md`.
+
+---
+
+**Danke dass Sie MessPilot verwenden!** 🚀
