@@ -1,0 +1,40 @@
+name: Funktionswunsch
+description: Vorschläge für neue Funktionen oder Verbesserungen.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Problem / Bedarf"
+      description: "Welches Problem soll gelöst bzw. welcher Bedarf gedeckt werden?"
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Gewünschte Lösung"
+      description: "Beschreiben Sie die gewünschte Funktion oder Verbesserung."
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternativen"
+      description: "Gibt es alternative Ansätze oder Workarounds?"
+  - type: textarea
+    id: benefit
+    attributes:
+      label: "Nutzen"
+      description: "Welchen Nutzen hat die vorgeschlagene Änderung für Nutzer?"
+  - type: dropdown
+    id: priority
+    attributes:
+      label: "Priorität"
+      options:
+        - label: "Niedrig"
+          value: "low"
+        - label: "Mittel"
+          value: "medium"
+        - label: "Hoch"
+          value: "high"
+  - type: textarea
+    id: additional
+    attributes:
+      label: "Zusatzinformationen"

@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Diskussionen
+    url: https://github.com/loserat/MessPilot-public/discussions
+    about: "Allgemeine Fragen und Erfahrungsaustausch"
+  - name: Dokumentation
+    url: https://github.com/loserat/MessPilot-public
+    about: "Öffentliche Dokumentation und Anleitungen"
+  - name: Sicherheitsmeldung (privat)
+    url: https://github.com/loserat/MessPilot-public/security
+    about: "Privater Kontaktweg für Sicherheitsprobleme (nicht öffentlich melden)"

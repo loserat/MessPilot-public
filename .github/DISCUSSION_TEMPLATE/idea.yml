@@ -1,0 +1,6 @@
+title: "Idee: "
+labels: ["idea"]
+body:
+  - type: markdown
+    attributes:
+      value: "Beschreiben Sie die Idee, mögliche Vorteile und ggf. Zielgruppen."

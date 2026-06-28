@@ -1,0 +1,6 @@
+title: "Frage: "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: "Bitte beschreiben Sie Ihre Frage klar und geben Sie alle relevanten Informationen (Version, Kontext, Reproduktionsschritte) an."

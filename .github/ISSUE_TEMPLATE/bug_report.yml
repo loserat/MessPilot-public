@@ -1,0 +1,49 @@
+name: Fehlerbericht
+description: Melden Sie bitte reproduzierbare Fehler mit klaren Schritten und Angaben zur Umgebung.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "Fehlerbeschreibung"
+      description: "Beschreiben Sie das beobachtete Problem kurz und präzise."
+      placeholder: "Was ist passiert?"
+  - type: textarea
+    id: steps
+    attributes:
+      label: "Schritte zur Reproduktion"
+      description: "Liste der Schritte, um den Fehler reproduzieren zu können."
+      placeholder: "1. ...\n2. ..."
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Erwartetes Verhalten"
+  - type: textarea
+    id: actual
+    attributes:
+      label: "Tatsächliches Verhalten"
+  - type: input
+    id: version
+    attributes:
+      label: "Version"
+      description: "z.B. v0.1.0"
+  - type: input
+    id: environment
+    attributes:
+      label: "Browser / Gerät"
+      description: "z.B. Chrome 115 auf macOS"
+  - type: textarea
+    id: attachments
+    attributes:
+      label: "Screenshots / Zusatzinformationen"
+  - type: dropdown
+    id: sensitive
+    attributes:
+      label: "Bestätigung: keine sensiblen Daten"
+      description: "Bitte bestätigen Sie, dass Sie keine sensiblen oder personenbezogenen Daten in diesem Issue veröffentlichen."
+      options:
+        - label: "Ja, das Issue enthält keine sensiblen Daten"
+          value: "yes"
+        - label: "Nein, das Issue enthält sensible Daten (nicht posten)"
+          value: "no"
