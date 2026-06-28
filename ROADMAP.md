@@ -1,91 +1,84 @@
-# Roadmap MessPilot
+# 🗺️ Roadmap MessPilot
 
-Dies ist die öffentliche Roadmap für MessPilot. Sie zeigt geplante Funktionen, Themen in Prüfung und später vorgesehene Erweiterungen.
+Die öffentliche Roadmap zeigt geplante Features, Status quo und künftige Richtung von MessPilot.
 
-**Hinweis**: Diese Roadmap ist unverbindlich und unterliegt Änderungen. Interne Deadlines und kundenspezifische Anforderungen werden hier nicht veröffentlicht.
-
----
-
-## 🚀 Nächste Schritte (Q3 2026)
-
-### Backend & Persistierung
-- [ ] Migration zu PostgreSQL / SQLite für produktive Deployments
-- [ ] Datenbankschema für alle Entitäten (Kunden, Liegenschaften, Gebäude, Räume, Systeme, Messungen, Defekte)
-- [ ] Backup & Recovery Mechanismen
-- [ ] API-Dokumentation mit OpenAPI/Swagger
-
-### Frontend Modularisierung
-- [ ] Aufteilung von `app.js` in dedizierte Module (Helpers, Renderer, Event-Handler)
-- [ ] Bessere Fehlerbehandlung und Validierung
-- [ ] Performance-Optimierung (Lazy Loading, Caching)
-
-### Dokumentation
-- [ ] Benutzerhandbuch mit Screenshots und Video-Tutorials
-- [ ] Administratoren-Leitfaden
-- [ ] API-Referenz (OpenAPI/Swagger)
+**Status:** Aktive Entwicklung (Beta Phase 0.2.x)  
+**Hinweis:** Diese Roadmap ist unverbindlich. Interne Deadlines und Kundenspezifisches werden nicht öffentlich geteilt.
 
 ---
 
-## 🔄 In Prüfung
+## 🔴 Kurze Frist (Q3-Q4 2026)
 
-### Authentifizierung & Berechtigungen
-- OAuth2 / Single-Sign-On (SSO) Integration
-- LDAP/Active-Directory Support
-- Audit-Logging für Änderungen
+### Kritisch
+- [ ] **Backend-Persistierung** — Wechsel von JSON zu SQLite/PostgreSQL
+- [ ] **Auth-Hardening** — CSRF-Schutz, Audit-Log, Session-Management
+- [ ] **Performance** — Caching, Query-Optimierung, Lazy Loading
 
-### Datenimport/-export
-- CSV-Import für Stammdaten
-- XLS-Export für Berichte
-- JSON-API für externe Systeme
-
-### Erweiterte Messfunktionen
-- Protofile Verwaltung (Mehrere Messprotokolle parallel)
-- Historische Daten & Trend-Analyse
-- Export zu externen Systemen (ERP, CMS)
+### Wichtig
+- [ ] **Frontend Modularisierung** — `app.js` aufteilen in dedizierte Module
+- [ ] **Fehlerbehandlung** — Konsistente Client- und Server-Side Validierung
+- [ ] **API-Docs** — OpenAPI/Swagger Integration
+- [ ] **Benutzer-Doku** — Screenshots, Video-Tutorials, Admin-Leitfaden
 
 ---
 
-## 🎯 Geplant (H2 2026 / 2027)
+## 🔄 Mittelfrist (H1 2027)
 
-### Mobile Support
-- Responsive Design für Tablets
-- Progressive Web App (PWA) für Offline-Nutzung
-- Barcode/QR-Code Scanner für Orte/Systeme
-
-### Erweiterte Reports
-- Inspektions-Dashboard mit Statistiken
-- Prognose für Wartungsintervalle
-- SLA-Tracking und Compliance-Reports
-
-### Integration & API
-- Webhook-Support für externe Systeme
-- Kalender-Integration (ICS/CalDAV)
-- Email-Notifications
-
-### Performance & Skalierung
-- Datenbankindexierung und Query-Optimierung
-- Caching-Layer (Redis)
-- Multi-Tenant Support
+### In Prüfung
+- [ ] **OAuth2 / SSO** — Google, Nextcloud, etc.
+- [ ] **LDAP/AD** — Enterprise-Authentifizierung
+- [ ] **Import/Export** — CSV, XLS, JSON für Stammdaten
+- [ ] **Mehrsprachigkeit** — DE, EN, ggf. weitere Sprachen
+- [ ] **Mobile-Support** — Responsive Design, Touch-Optimierung
 
 ---
 
-## 💡 Überlegungen (zukünftig)
+## 🚀 Längerfristig (2027+)
 
-Folgende Themen werden evaluiert:
+### Erweiterte Funktionen
+- [ ] **Progressive Web App (PWA)** — Offline-Nutzung, Installierbar
+- [ ] **Mobile App** — Native iOS/Android Apps
+- [ ] **Barcode/QR-Scanner** — Für Ort- und System-Erfassung
+- [ ] **Webhooks** — Externe System-Integration
+- [ ] **Email-Notifications** — Status-Updates via Mail
 
-- Machine Learning für Vorhersage von Wartungsbedarfen
-- GIS-Integration für geografische Visualisierung
-- IoT-Sensor Integration (Temperatur, Luftfeuchte, etc.)
-- Blockchain für Audit-Trail Unverbrüchlichkeit
+### Advanced Analytics
+- [ ] **Inspektions-Dashboard** — Statistiken, Trends, Forecasts
+- [ ] **Wartungs-Planung** — Automatische Wartungsintervalle
+- [ ] **Compliance-Reports** — SLA-Tracking, Audit-Trails
+
+### Skalierung
+- [ ] **Multi-Tenant** — Mehrere Organisationen in einer Instance
+- [ ] **Redis-Caching** — Performance bei hohem Traffic
+- [ ] **Database Sharding** — Große Datenmengen verteilen
 
 ---
 
-## Feedback & Voting
+## 🔮 Fernzukunft (Evaluierung)
 
-Sie können auf geplante Features **abstimmen** oder neue Ideen in der **Public-Repo** einreichen:
+Folgende Technologien/Konzepte werden künftig evaluiert:
 
-👉 https://github.com/loserat/MessPilot-public/issues
+- **Machine Learning** — Wartungsvorhersagen, Anomalie-Erkennung
+- **GIS/Mapping** — Geografische Visualisierung, Lageplanung
+- **IoT Integration** — Temperatur-, Feuchte-, Bewegungs-Sensoren
+- **Blockchain** — Revisionssicherheit, Tamper-Protection
 
 ---
 
-**Letzte Aktualisierung**: 28. Juni 2026
+## 👥 Feedback & Voting
+
+**Du hast eine Idee?** Teile sie in der öffentlichen Repo:
+
+👉 **[MessPilot-public Issues](https://github.com/loserat/MessPilot-public/issues)**
+
+Du kannst:
+- 🐛 Bugs melden
+- ✨ Feature-Anfragen stellen  
+- 💬 In Diskussionen teilnehmen
+- 👍 Votes auf existierende Issues geben
+
+---
+
+**Letzte Aktualisierung:** 28. Juni 2026  
+**Status:** Beta (v0.2.0)  
+**Community-Repo:** https://github.com/loserat/MessPilot-public
