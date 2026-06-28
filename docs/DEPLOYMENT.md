@@ -160,6 +160,7 @@ MessPilot betreibt eine **private Development-Repo** und eine separate **öffent
 ### Automatische Synchronisierung
 
 GitHub Actions synchronisiert automatisch diese Dateien:
+- `README.md` — Public-Startseite, erzeugt aus `.github/PUBLIC_README.md`
 - `CHANGELOG.md` — Release-Notizen
 - `ROADMAP.md` — Öffentliche Feature-Roadmap
 - `SECURITY.md` — Sicherheitsrichtlinien
