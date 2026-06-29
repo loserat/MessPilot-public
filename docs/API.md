@@ -35,7 +35,9 @@ Beispielantwort:
       "distributions": 4,
       "inspections": 4,
       "measurements": 4,
-      "defects": 5
+      "defects": 5,
+      "inspectors": 2,
+      "testDevices": 2
     }
   },
   "message": "Backend erreichbar"
@@ -118,6 +120,49 @@ Rollen:
 - `viewer`
 - `user`
 - `admin`
+
+### Prüfer
+
+```http
+GET    /api/inspectors
+GET    /api/inspectors/:id
+POST   /api/inspectors
+PUT    /api/inspectors/:id
+DELETE /api/inspectors/:id
+```
+
+Wichtige Felder:
+
+- `name`
+- `role`
+- `certificateNumber`
+- `phone`
+- `email`
+- `signatureFileName`
+- `status`
+- `note`
+
+### Messgeräte
+
+```http
+GET    /api/test-devices
+GET    /api/test-devices/:id
+POST   /api/test-devices
+PUT    /api/test-devices/:id
+DELETE /api/test-devices/:id
+```
+
+Wichtige Felder:
+
+- `name`
+- `deviceType`
+- `manufacturer`
+- `model`
+- `serialNumber`
+- `calibrationDate`
+- `calibrationDue`
+- `status`
+- `note`
 - `systemadmin`
 
 ## CRUD-Endpunkte
