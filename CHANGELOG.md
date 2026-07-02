@@ -7,7 +7,14 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
-Keine Eintraege seit `0.5.1`.
+Keine Eintraege seit `0.5.2`.
+
+---
+
+## [0.5.2] - 2026-07-02
+
+### Added
+- **Online-Beispieldaten**: Frische Stores enthalten jetzt ein bestandenes DIN-VDE-0100-600-Demoprotokoll und ein bestandenes ASR-Beleuchtungsprotokoll inklusive Messwerten fuer Listen-, Bearbeiten- und PDF-Tests.
 
 ---
 
