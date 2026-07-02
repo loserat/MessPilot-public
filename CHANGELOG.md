@@ -7,7 +7,15 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
-Keine Eintraege seit `0.5.0`.
+Keine Eintraege seit `0.5.1`.
+
+---
+
+## [0.5.1] - 2026-07-02
+
+### Fixed
+- **VDE-Online-Speichern**: API-Payload-Limit auf `5mb` angehoben, damit groessere VDE-Protokolle mit Stromkreis- und Messwertmatrix serverseitig gespeichert werden.
+- **Protokollnavigation**: Interne Routenbuttons speichern den aktiven Protokollentwurf jetzt vor dem Wechsel der Ansicht.
 
 ---
 
