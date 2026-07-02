@@ -23,8 +23,21 @@ Beispielantwort:
     "app": "MessPilot",
     "status": "ok",
     "mode": "demo",
-    "database": "jsonFile",
-    "storage": "storage/demoStore.json",
+    "storage": {
+      "mode": "json",
+      "database": "jsonFile",
+      "databaseUrlConfigured": false,
+      "databaseUrlMasked": "",
+      "databaseHost": "",
+      "databaseName": "",
+      "dataStorage": "storage/demoStore.json",
+      "pdfStorage": {
+        "mode": "local",
+        "path": "storage/pdfs"
+      },
+      "persistentStorageRequired": true,
+      "activeRepository": "json"
+    },
     "timestamp": "2026-06-15T19:37:31.926Z",
     "counts": {
       "customers": 5,
@@ -43,6 +56,8 @@ Beispielantwort:
   "message": "Backend erreichbar"
 }
 ```
+
+Die Datenbank-URL wird nie im Klartext ausgeliefert. Fuer den Systembereich wird nur eine maskierte Darstellung und der technische Status gemeldet.
 
 ## Einheitliche Antworten
 
@@ -120,6 +135,7 @@ Rollen:
 - `viewer`
 - `user`
 - `admin`
+- `systemadmin`
 
 ### Prüfer
 
@@ -163,7 +179,6 @@ Wichtige Felder:
 - `calibrationDue`
 - `status`
 - `note`
-- `systemadmin`
 
 ## CRUD-Endpunkte
 
@@ -296,6 +311,8 @@ curl -X POST http://localhost:3100/api/measurements \
 
 ```http
 GET /api/export/measurements/:id/pdf
+POST /api/export/measurements/:id/archive
+POST /api/export/measurements/:id/unarchive
 ```
 
 Erzeugt serverseitig ein PDF fuer ein gespeichertes Messprotokoll. Standard ist eine Inline-Ausgabe fuer Browser-Vorschau.
@@ -304,6 +321,8 @@ Optionale Query-Parameter:
 
 - `?preview=1`: Vorschau erzeugen, ohne den PDF-Status des Protokolls zu veraendern.
 - `?download=1`: PDF als Download ausliefern und den Exportstatus als erzeugt markieren.
+
+Archivieren erzeugt/markiert den PDF-Stand serverseitig und setzt den PDF-Status auf `Erzeugt`. Zurueckholen setzt den PDF-Status wieder auf `Nicht erzeugt`, damit das Protokoll wieder in der aktiven Liste bearbeitet werden kann.
 
 Der aktuelle PDF-Export enthaelt:
 
@@ -395,6 +414,9 @@ curl -b /tmp/messpilot.cookies -X POST http://localhost:3100/api/customers \
 
 - Daten werden aktuell in `storage/demoStore.json` gespeichert.
 - `storage/` wird nicht versioniert und ist lokale Laufzeitpersistenz.
+- Der Healthcheck meldet die konfigurierte Storage-Art ueber `storage.mode`.
+- Der Healthcheck meldet den tatsaechlich aktiven Repository-Adapter ueber `storage.activeRepository`.
+- PostgreSQL ist als Zielarchitektur vorbereitet, aber noch nicht als Laufzeit-Backend aktiv.
 - Keine Relationenpruefung zwischen IDs.
 - Authentifizierung und Rollen sind ein erster JSON-/Cookie-Startpunkt, aber noch nicht produktiv gehaertet.
 - Keine Uploads.

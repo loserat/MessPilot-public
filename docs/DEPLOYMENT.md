@@ -132,6 +132,8 @@ storage/demoStore.json
 
 Diese Datei ist lokale Laufzeitpersistenz und wird nicht versioniert.
 
+Wichtig fuer Redeploys: Wenn `/app/storage` im Container nicht auf ein persistentes Volume zeigt, sind angelegte Protokolle, Kunden und Stammdaten nach einem neuen Deploy weg. Fuer produktive Nutzung ist das nur eine Uebergangsloesung; Zielbild ist PostgreSQL fuer strukturierte Daten plus dauerhafter PDF-Storage auf Volume, NAS oder S3/MinIO-kompatiblem Speicher.
+
 Sichern:
 
 ```bash
