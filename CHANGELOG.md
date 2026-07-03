@@ -7,7 +7,15 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
-Keine Eintraege seit `0.5.4`.
+### Added
+- **Login-Version**: Der Anmeldebildschirm zeigt die aktuelle App-Version dezent am unteren Bildschirmrand; die Versionsinfo wird bereits vor dem Login geladen.
+
+### Changed
+- **Theme-System**: Darstellung auf ein zentrales `Light / System / Dark`-Modell reduziert; alte Theme-Presets und Demo-Presets entfernt.
+- **UI-Farben**: Light- und Dark-Theme auf eine ruhigere, Apple-naehere Farbpalette umgestellt; primaere GUI-Aktionen verwenden kein Gruen mehr, sondern den blauen Systemakzent.
+- **Login-Screen**: Header im Anmeldezustand ausgeblendet, Hintergrund fuellt den kompletten Viewport, Loginfenster kompakter gestaltet und Logo in den Login-Kopf verschoben.
+- **Login-Hintergrund**: Interaktive Code-Partikel durch einen ruhigen Oszilloskop-/Messkurven-Hintergrund ersetzt; grosser dezenter `MessPilot`-Schriftzug liegt oberhalb des Loginfensters.
+- **Formularfelder**: Browseruebergreifende Feldradien zentralisiert, damit Chrome und Safari naeher beieinander liegen.
 
 ---
 
