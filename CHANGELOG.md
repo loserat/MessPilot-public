@@ -7,9 +7,16 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+---
+
+## [0.6.0-beta.1] - 2026-07-03
+
 ### Added
 - **Login-Version**: Der Anmeldebildschirm zeigt die aktuelle App-Version dezent am unteren Bildschirmrand; die Versionsinfo wird bereits vor dem Login geladen.
 - **Beta-Kennung**: Login-Hintergrund und Topbar-Branding weisen sichtbar, aber dezent auf den Beta-Status hin.
+- **ESD-Ableitmessung**: Neue Protokollbasis fuer ESD Punkt-zu-Punkt-Messungen mit Raumbezug, Norm-/Grenzwertschritt, Potentialausgleich-Bauteilen, farbigem Bezug, Messpunktraster, automatischer Bewertung und PDF-Vorbereitung.
+- **ESD-Versionierung**: Eigene Bausteinversionen fuer `protocol-esd-point-to-point` und `pdf-esd-template` angelegt.
+- **ESD-Dokumentation**: Pruefschritte, Datenregeln, Bewertung und offene fachliche Punkte in `docs/ESD_PROTOCOL.md` dokumentiert.
 
 ### Changed
 - **Theme-System**: Darstellung auf ein zentrales `Light / System / Dark`-Modell reduziert; alte Theme-Presets und Demo-Presets entfernt.
@@ -17,6 +24,14 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - **Login-Screen**: Header im Anmeldezustand ausgeblendet, Hintergrund fuellt den kompletten Viewport, Loginfenster kompakter gestaltet und Logo in den Login-Kopf verschoben.
 - **Login-Hintergrund**: Interaktive Code-Partikel durch einen ruhigen Oszilloskop-/Messkurven-Hintergrund ersetzt; grosser dezenter `MessPilot`-Schriftzug liegt oberhalb des Loginfensters.
 - **Formularfelder**: Browseruebergreifende Feldradien zentralisiert, damit Chrome und Safari naeher beieinander liegen.
+- **ESD-Messschritt**: Raumdaten, Raster, erfasste Messpunkte und Stepper aus der ASR-Messung uebernommen.
+- **ESD-Bezug**: Messwerte werden jetzt direkt in den Bauteil-/Potentialausgleich-Karten angezeigt; die separate Bezug-Spalte der Messpunktliste entfaellt.
+- **PDF-Branding**: Alle PDF-Seiten erhalten ein dezentes MessPilot-Wellen-Wasserzeichen als Vektor-Overlay.
+
+### Fixed
+- **ESD-Messwerte**: Bewertung und Fortschritt verlangen jetzt genau einen Messwert je Messpunkt statt mindestens einen Wert je Bezug.
+- **ESD-Bauteile**: Farbauswahl, Default-Farbe, Drag-Position und Loeschen von Potentialausgleich-Bauteilen stabilisiert.
+- **Protokoll-Loeschen**: Loeschdialog erwartet bei technischen lokalen IDs nicht mehr die lange `local-...` Kennung, sondern einen kurzen Bestaetigungstext.
 
 ---
 
