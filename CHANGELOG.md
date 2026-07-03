@@ -9,6 +9,26 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ---
 
+## [0.6.0-beta.3] - 2026-07-03
+
+### Added
+- **Benutzer bearbeiten**: Master und Admins erhalten in der Benutzerliste wieder einen Bearbeiten-Dialog fuer Name, Benutzer/E-Mail, Rolle, Status, Pruefer-Zuordnung und optionales neues Passwort.
+- **Admin-Demo-Start**: Login ist fuer den Beta-Test mit `admin / admin` vorbelegt; `master / master` bleibt als geschuetztes Master-Konto enthalten.
+- **System > Plugins**: Platzhalterbereich fuer spaetere Messgeraete-Plugins wie Fluke, Megger oder weitere Schnittstellen vorbereitet.
+
+### Changed
+- **Rollenmodell**: Rollen auf `master`, `admin`, `user`, `viewer` und `demo` vereinheitlicht; alte Systemadmin-/Gast-Begriffe werden intern migriert.
+- **Benutzerrechte**: `admin` darf normale Benutzer verwalten, `master` verwaltet zusaetzlich geschuetzte Admin-/Master-Konten.
+- **Protokoll-Menues**: Protokollanlage-Menue schliesst per Klick ausserhalb, blendet bei Inaktivitaet ab und nutzt eine passendere Archiv-Navigation.
+- **Systemeinstellungen**: Tab `System` wurde zu `Einstellungen`, Versionen stehen wieder in einem eigenen Tab; PDF-Wasserzeichen, Theme und weitere Schalter sind kompakter angeordnet.
+
+### Fixed
+- **Benutzerverwaltung**: Bearbeiten-Button und Dialog fehlen nicht mehr fuer berechtigte Master-/Admin-Sitzungen.
+- **Zuordnungsdialoge**: Gepinnte Kontexte und freie Auswahl bleiben konsistenter, damit neue Protokolle nicht durch alte Pin-Zustaende blockiert werden.
+- **Topbar-Kontext**: Entpinnen von Kunden/Raeumen synchronisiert die Anzeige in der Topbar sauberer.
+
+---
+
 ## [0.6.0-beta.2] - 2026-07-03
 
 ### Added

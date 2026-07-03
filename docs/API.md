@@ -92,8 +92,10 @@ Startkonto im lokalen Seed:
 ```text
 Benutzer: admin
 Passwort: admin
-Rolle: systemadmin
+Rolle: admin
 ```
+
+Geschuetztes Master-Konto: `master / master`. Lokale Standardkonten folgen dem Schema Benutzer=Passwort=Rolle: `master`, `admin`, `user`, `viewer`, `demo`.
 
 ### Session pruefen
 
@@ -108,8 +110,8 @@ POST /api/auth/login
 Content-Type: application/json
 
 {
-  "email": "admin",
-  "password": "admin"
+  "email": "master",
+  "password": "master"
 }
 ```
 
@@ -128,32 +130,33 @@ POST /api/users
 PUT  /api/users/:id
 ```
 
-`POST` und `PUT` benoetigen `systemadmin`. Benutzer werden nicht geloescht, sondern ueber `status: "disabled"` deaktiviert.
+`GET`, `POST` und `PUT` fuer Benutzer benoetigen `master` oder `admin`. Admins koennen normale Benutzer pflegen; geschuetzte `master`- und `admin`-Konten duerfen nur von `master` geaendert werden. Benutzer werden nicht geloescht, sondern ueber `status: "disabled"` deaktiviert.
 
 Rollen:
 
-- `viewer`
-- `user`
+- `master`
 - `admin`
-- `systemadmin`
+- `user`
+- `viewer`
+- `demo`
+- `demo`
 
-Geplantes Rollen-Zielbild:
+Aktives Rollenmodell:
 
-- `viewer`: nur lesen und exportierte/erzeugte Dokumente ansehen.
-- `user`: fachliche Bearbeitung ohne Systemverwaltung.
-- `inspector`: Messungen durchfuehren, Messwerte erfassen und Protokolle abschliessen.
+- `master`: Benutzer, Rollen, Lizenz, Datenbank, Updates und Systemstatus verwalten.
 - `admin`: Kunden-/Objektstruktur, Messgeraete, Pruefer und fachliche Einstellungen verwalten.
-- `systemadmin`: Benutzer, Rollen, Lizenz, Datenbank, Updates und Systemstatus verwalten.
-- `auditor`: spaeter optional fuer Audit-/Revisionssicht ohne Bearbeitung.
+- `user`: fachliche Bearbeitung ohne Systemverwaltung.
+- `viewer`: nur lesen und exportierte/erzeugte Dokumente ansehen.
+- `demo`: Demo-/Gastzugang ohne Schreibrechte.
 
-Aktuell sind nur `viewer`, `user`, `admin` und `systemadmin` serverseitig aktiv. Das feinere Modell ist vorbereitetes Zielbild und noch kein aktiver API-Vertrag.
+`master` und `admin` sind geschuetzte Kernrollen und duerfen nicht deaktiviert oder in andere Rollen umgewandelt werden.
 
 ### Lizenz und Feature-Gates
 
 Noch kein aktiver Endpunkt. Geplantes Ziel:
 
 - `GET /api/system/license` fuer Status, Edition, Limits und Installations-ID
-- `PUT /api/system/license` fuer Lizenzschluessel durch `systemadmin`
+- `PUT /api/system/license` fuer Lizenzschluessel durch `master`
 - serverseitige Pruefung vor Kundenanlage, PDF-Export und editionabhaengigen Funktionen
 
 Beispiele fuer spaetere Gates:
@@ -409,7 +412,7 @@ Kunden laden:
 ```bash
 curl -c /tmp/messpilot.cookies \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin","password":"admin"}' \
+  -d '{"email":"master","password":"master"}' \
   http://localhost:3100/api/auth/login
 
 curl -b /tmp/messpilot.cookies http://localhost:3100/api/customers

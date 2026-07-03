@@ -290,7 +290,7 @@ Fuer Tests:
 
 - Server per HTTPS absichern
 - Zugriff falls moeglich zunaechst per VPN, Basic Auth oder IP-Whitelist begrenzen
-- Startkonto `admin / admin` sofort aendern
+- Demo-Startkonto `admin / admin` und geschuetztes Master-Konto `master / master` vor produktivem Betrieb sofort aendern
 - bei reinem HTTPS-Betrieb `COOKIE_SECURE=true` setzen
 - `storage/` regelmaessig sichern
 
