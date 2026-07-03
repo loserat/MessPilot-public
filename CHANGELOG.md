@@ -7,7 +7,16 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
-Keine Eintraege seit `0.5.2`.
+Keine Eintraege seit `0.5.3`.
+
+---
+
+## [0.5.3] - 2026-07-03
+
+### Fixed
+- **VDE-Protokollspeicherung**: Server-Speicherung ist im Protokollablauf jetzt verbindlich; API-Fehler werden sichtbar im Protokollhinweis angezeigt statt still auf lokalen Browser-Speicher auszuweichen.
+- **VDE-Zwischenschritte**: Schrittwechsel, Zurueck/Weiter, Abschluss, Listenwechsel und Editor-Schliessen brechen bei fehlgeschlagenem Server-Save ab, damit keine Messwerte unbemerkt verloren gehen.
+- **Messprotokoll-API**: Speichern nutzt den gemeinsamen API-Wrapper mit HTTP-Statuspruefung und sauberer Fehlermeldung.
 
 ---
 
