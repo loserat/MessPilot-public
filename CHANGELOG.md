@@ -9,6 +9,22 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ---
 
+## [0.6.0-beta.2] - 2026-07-03
+
+### Added
+- **System > System**: Versionsbereich zeigt jetzt einen direkten Changelog-Link zum Public Repository.
+- **Adminkonsole**: Admins sehen App-Version, Versionsquelle, Commit und Changelog-Link direkt in den technischen Systemdaten.
+- **Kundenanlage**: Kundendialog enthaelt jetzt Liegenschafts-Tabs; mindestens eine Liegenschaft ist beim Speichern Pflicht, weitere Liegenschaften koennen ueber `+` direkt im Kunden angelegt werden.
+
+### Changed
+- **Systemnavigation**: `Themes` und `Version` wurden in den zentralen Tab `System` zusammengefuehrt; alte lokale Tab-Zustaende werden weiter auf `System` umgeleitet.
+- **Systemversionen**: Baustein-/Unterversionen werden als responsive Kacheln statt als breite Tabelle dargestellt.
+- **Topbar**: Das separate Zahnrad fuer Einstellungen wurde entfernt, weil der Systemzugang ueber das Benutzermenue erfolgt.
+- **Dashboard**: Die Schnellzugriff-Kacheln wurden entfernt; Dashboard fokussiert jetzt auf Statuszahlen, naechste Pruefungen, aktuelle Arbeit und Arbeitsfokus.
+- **Kundenbereich**: Der Untertab `Liegenschaften` wurde entfernt; Liegenschaften werden im Kundenstamm als Baum unter dem jeweiligen Kunden und im Kundendialog gepflegt.
+
+---
+
 ## [0.6.0-beta.1] - 2026-07-03
 
 ### Added

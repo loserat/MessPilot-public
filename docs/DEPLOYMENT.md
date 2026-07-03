@@ -155,6 +155,40 @@ docker compose up -d --build
 docker compose exec -T messpilot wget -qO- http://127.0.0.1:3100/api/health
 ```
 
+## Zielbild: Kundeninstallation per Docker
+
+Langfristig soll MessPilot beim Kunden lokal oder auf einem kundeneigenen Server per Docker laufen.
+
+Geplante Zielarchitektur:
+
+- `messpilot` App-Container
+- PostgreSQL-Container oder externer PostgreSQL-Dienst
+- persistenter Storage fuer PDFs, Zertifikate, Exporte und Backups
+- `.env` fuer Datenbank, Storage, Lizenzstatus und Updatekanal
+- Healthcheck fuer App-Version, Datenbankschema, Storage und spaeter Lizenzstatus
+
+Updateprinzip:
+
+1. Backup von Datenbank und Datei-Storage erstellen.
+2. Neues Docker-Image oder neuen Git-Stand laden.
+3. Container neu starten.
+4. Datenbankmigrationen ausfuehren.
+5. Healthcheck pruefen.
+6. App-Version und Schema-Version in der Adminkonsole kontrollieren.
+
+Fuer Kundenbetrieb duerfen Daten niemals im austauschbaren App-Container liegen. Ohne persistentes Volume oder SQL-Datenbank ist ein Redeploy nicht produktionssicher.
+
+## Lizenzvorbereitung
+
+Eine spaetere Kundeninstallation soll einen Lizenzschluessel aufnehmen koennen. Technisch geplant:
+
+- Lizenzstatus unter `System > Adminkonsole`
+- Installation-ID je Docker-/Serverinstallation
+- offline pruefbarer Lizenzschluessel oder optionaler Online-Check
+- Feature-Gates serverseitig, z. B. Kundenlimit oder PDF-Wasserzeichen
+
+Aktuell wird noch keine Lizenz erzwungen.
+
 ## Synchronisierung zur öffentlichen Repository
 
 MessPilot betreibt eine **private Development-Repo** und eine separate **öffentliche Community-Repo** für Issues und Releases.

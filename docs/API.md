@@ -137,6 +137,31 @@ Rollen:
 - `admin`
 - `systemadmin`
 
+Geplantes Rollen-Zielbild:
+
+- `viewer`: nur lesen und exportierte/erzeugte Dokumente ansehen.
+- `user`: fachliche Bearbeitung ohne Systemverwaltung.
+- `inspector`: Messungen durchfuehren, Messwerte erfassen und Protokolle abschliessen.
+- `admin`: Kunden-/Objektstruktur, Messgeraete, Pruefer und fachliche Einstellungen verwalten.
+- `systemadmin`: Benutzer, Rollen, Lizenz, Datenbank, Updates und Systemstatus verwalten.
+- `auditor`: spaeter optional fuer Audit-/Revisionssicht ohne Bearbeitung.
+
+Aktuell sind nur `viewer`, `user`, `admin` und `systemadmin` serverseitig aktiv. Das feinere Modell ist vorbereitetes Zielbild und noch kein aktiver API-Vertrag.
+
+### Lizenz und Feature-Gates
+
+Noch kein aktiver Endpunkt. Geplantes Ziel:
+
+- `GET /api/system/license` fuer Status, Edition, Limits und Installations-ID
+- `PUT /api/system/license` fuer Lizenzschluessel durch `systemadmin`
+- serverseitige Pruefung vor Kundenanlage, PDF-Export und editionabhaengigen Funktionen
+
+Beispiele fuer spaetere Gates:
+
+- ohne Lizenz maximal 2 Kunden
+- PDF-Wasserzeichen nur mit passender Lizenz entfernen
+- erweiterte Rollen/Rechte und Branding nur mit passender Edition
+
 ### Prüfer
 
 ```http
