@@ -7,7 +7,14 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
-Keine Eintraege seit `0.5.3`.
+Keine Eintraege seit `0.5.4`.
+
+---
+
+## [0.5.4] - 2026-07-03
+
+### Fixed
+- **Protokollabschluss**: Klick auf den Haken am Ende des VDE-/Protokollablaufs speichert und springt danach wieder in die aktive Protokollliste.
 
 ---
 
