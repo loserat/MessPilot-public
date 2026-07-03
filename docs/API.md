@@ -196,6 +196,8 @@ PUT    /api/test-devices/:id
 DELETE /api/test-devices/:id
 ```
 
+Messgeraete koennen optional ueber `inspectorId` einem Pruefer zugeordnet werden. Die Zuordnung ist nicht exklusiv; ein Pruefer darf mehrere Messgeraete verantworten.
+
 Wichtige Felder:
 
 - `name`

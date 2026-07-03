@@ -7,6 +7,24 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Added
+- **System > Messgeräte**: Messgeräte können optional einem Prüfer zugeordnet werden; Liste, Details und Bearbeiten-Dialog zeigen die Zuordnung.
+- **System > Benutzer**: Benutzerliste ist jetzt nach Name, Benutzer/E-Mail, Rolle, Prüfer und Status sortierbar.
+- **Dashboard**: Fällige und abgelaufene Messgeräte-Kalibrierungen werden als eigene Übersicht angezeigt.
+- **System > Messgeräte**: Messgeräteliste kann über ein rechtes Exportmenü als CSV oder JSON heruntergeladen werden.
+- **Dashboard > Nächste Prüfungen**: Wiederholungsprüfungen können direkt aus dem Dashboard als neues VDE-Protokoll gestartet werden; alte Messwerte werden als schreibgeschützte Vorwerte übernommen und neue Messwerte vorbelegt.
+
+### Changed
+- **Topbar-Benutzermenü**: Das Menü wird als eigener Body-Layer gerendert, damit Einstellungen, Abmelden und Light/System/Dark unabhängig von Dashboard- oder Tabellenflächen klickbar bleiben.
+- **Untertab-Leisten**: System- und Kunden-Untertabs nutzen schwebende Pills ohne durchgehenden Hintergrundbalken.
+- **Asset-Auslieferung**: Stylesheet sowie zentrale App-/Auth-Skripte erhalten eine Asset-Version, damit Browser/Docker nach UI-Fixes nicht am alten Stand hängen bleiben.
+- **System > Benutzer**: Rollen-, Prüfer- und Statuszuweisungen werden nicht mehr als Dropdowns direkt in der Liste angezeigt, sondern im Anlegen-/Bearbeiten-Dialog gepflegt.
+- **Wiederholungsprüfung**: Norm-Bezug wurde für `DGUV V3`-Wiederholungsprüfungen auf `DIN VDE 0105-100` vereinheitlicht (Setup, Protokollanzeige, PDF-Header/Norm-Checkbox).
+
+### Fixed
+- **Topbar-Menü**: Klicks auf Einstellungen, Abmelden und Theme-Auswahl werden nicht mehr von darunterliegenden Listen oder Dashboard-Tabellen abgefangen.
+- **Login-Footer**: GitHub-Link auf dem Anmeldebildschirm sitzt wieder bündig unten links zur Versionsanzeige.
+
 ---
 
 ## [0.6.0-beta.3] - 2026-07-03
