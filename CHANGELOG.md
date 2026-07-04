@@ -9,6 +9,26 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ---
 
+## [0.6.0-beta.8] - 2026-07-04
+
+### Added
+- **Versionsbausteine erweitert**: Neue Bausteine `protocol-repeat-workflow`, `pdf-export-engine`, `role-access-control`, `measurement-device-management`, `dashboard-analytics`, `system-qr-system` und `admin-console` in `src/config/versioning.js` aufgenommen.
+- **Version-Tooling in der UI**: Für die neuen Bausteine wurden passende Beschreibungen und Changelog-Texte in `public/js/app.settings.js` ergänzt, damit `Einstellungen > Version` die neue Funktionstiefe vollständig zeigt.
+- **Wiederholungsprüfung und Workflow-Ziele**: Der Wiederholungs-Workflow ist in den Bausteinen als eigener Bestandteil dokumentiert, inkl. Live-Vorwertlogik und Wiederholungs-Kettenverhalten.
+- **App-Beta auf 0.6.0-beta.8**: Globale Versionsnummer auf `0.6.0-beta.8` angehoben, damit das neue Modullevel im UI konsistent sichtbar ist.
+
+### Changed
+- **Bausteinstände neu bewertet**: `ui-shell`, `backend-api`, `protocol-core`, `protocol-lighting`, `protocol-esd-point-to-point`, `vde-circuit-model`, `pdf-lighting-template`, `pdf-esd-template`, `role-access-control`, `measurement-device-management`, `system-qr-system`, `admin-console` und `pdf-export-engine` auf den aktuellen Beta-Stand gebracht.
+- **Dokumentationslinien vereinfacht**: Tägliche Dokumentation und zentrale Versionsseite wurden für den neuen Beta-Wert aktualisiert (README, `docs/VERSIONING.md`, `docs/daily/2026-07-04.md`, CHANGELOG-Header).
+- **Komponenten-Transparenz erhöht**: In den Bausteinbeschreibungen werden jetzt explizit mehr App-Funktionen benannt (Dashboard, Mesgeräte, Rollen- und QR-Flüsse, Adminkonsole).
+
+### Fixed
+- **Versionskonsistenz**: `package.json` und `package-lock.json` auf denselben App-Tag gebracht.
+- **Release-Nachvollziehbarkeit**: Neue Beta-Komponenten sind in der Komponentenliste ersichtlich und haben dedizierte Changelog-Texte für spätere Rückverfolgung.
+- **Kommunikationskette**: Täglicher Fortschritt inkl. App-Beta-Wechsel jetzt sauber dokumentiert, um spätere Release-Übergabe zu erleichtern.
+
+---
+
 ## [0.6.0-beta.7] - 2026-07-04
 
 ### Added
