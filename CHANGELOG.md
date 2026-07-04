@@ -7,6 +7,20 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Added
+- **Firmaeinstellungen API**: Eigener Backend-Pfad fuer `companySettings`, damit Firmenstammdaten und Logos nicht nur lokal im Browser liegen.
+- **Versionsansicht**: `Einstellungen > Version` zeigt die vorhandenen lokalen SVG-Brand-Assets als schnelle Sichtpruefung.
+
+### Changed
+- **Systemeinstellungen**: Mehrere Auswahlfelder wurden auf kompakte Schalter-/Segmentlogik umgestellt und visuell an den vorhandenen Theme-Switch angeglichen.
+- **Bildablage fuer PDF**: Firmenlogo- und Unterschrifts-Uploads werden auf einen PDF-tauglicheren Pfad vorbereitet, statt nur als GUI-Vorschau behandelt zu werden.
+
+### Fixed
+- **PDF-Export / Firmenlogo**: Hinterlegte Firmenlogos werden im PDF-Export wieder in den vorgesehenen Feldern verarbeitet; bestehende JPEG- und PNG-Daten werden akzeptiert.
+- **PDF-Export / Prüfer-Unterschrift**: Hinterlegte Unterschriften aus den Prüferdaten werden im PDF-Export wieder im Unterschriftsbereich verarbeitet.
+- **Wiederholungsprüfung Folgekette**: `Wiederholungsprüfung 2` zieht Vorwerte nicht mehr nur aus einem alten Snapshot, sondern löst den aktuellen Stand von `Wiederholungsprüfung 1` live auf.
+- **Wiederholungsprüfung bei offenem Bearbeitungsstand**: Wird eine neue Wiederholungsprüfung aus einem gerade bearbeiteten Vorgänger gestartet, wird auch der aktuelle Arbeitsstand als Quelle berücksichtigt.
+
 ---
 
 ## [0.6.0-beta.6] - 2026-07-04
