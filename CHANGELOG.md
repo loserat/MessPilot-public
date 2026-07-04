@@ -9,6 +9,21 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ---
 
+## [0.6.0-beta.6] - 2026-07-04
+
+### Added
+- **Topbar**: Einstellungen-Icon im Topbar wieder integriert, ergänzt um ein separates Benutzermenü mit Account-, Passwort- und Abmelden-Aktionen.
+- **Passwortzugriff**: `master` und `admin` können im Topbar-Menu direkt zur Benutzerkonto-Ansicht wechseln.
+
+### Changed
+- **Topbar-Menüarchitektur**: Benutzer- und Einstellungen-Handling zentral auf neue Handler in `app.topbar.js` und robuste UI-Struktur in `app.auth.js` überführt; Klickpfade klar getrennt.
+
+### Fixed
+- **Topbar-Klickbarkeit**: Menü überdeckt Klickflächen nicht mehr, Theme-Wechsel und Navigation aus dem Topbar funktionieren konsistent.
+- **Account-Edit-Berechtigung**: `admin`/`master` können sich in `topbar > Benutzerkonto` konsistent selbst bearbeiten (`auth.service.js`).
+
+---
+
 ## [0.6.0-beta.5] - 2026-07-04
 
 ### Added
