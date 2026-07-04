@@ -9,6 +9,28 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ---
 
+## [0.6.0-beta.5] - 2026-07-04
+
+### Added
+- **System > QR-Code**: Neuer QR-Code-Bereich fuer Systemlinks mit Vorschau, Vergroesserung, SVG-Download und optionalem Logo in der Mitte.
+- **Brand-Assets**: Lokale MessPilot-CI-Assets fuer Favicon, Symbol, Icon und Wortmarke in Light-/Dark-Varianten vorbereitet.
+- **System > Plugins**: Fluke-App-Kandidat `zach-edf/fluke-app` als spaeter zu pruefende Messgeraete-Anbindung dokumentiert.
+
+### Changed
+- **Frontend-Refactor**: `app.js` weiter entlastet; Topbar, Dialog-Schliessen, Navigation/Tab-Wechsel, Kundenaktionen, Settings-Aktionen, Verteileraktionen, Protokollaktionen, Protokollschritte, Messpunktlogik und VDE-Stromkreisaktionen liegen jetzt in eigenen bzw. fachlich passenden Modulen.
+- **PDF-Service-Refactor**: Wiederverwendbare PDF-Basisfunktionen, Dokument-/Zeichenhelfer, Geometrie, Messdatenaufbereitung, VDE-Daten und Lighting-/ESD-Layout aus `pdf.service.js` in kleinere Service-Module ausgelagert.
+- **Brand-Hintergrund**: GUI- und Login-Wellen nutzen die CI-Farben zentral, sind in Light und Dark kraeftiger sichtbar und bleiben ueber die Systemeinstellungen steuerbar.
+- **Logo/CI**: Topbar, Login, QR-Code und lokale Assets nutzen die neue runde Wellenmarke statt des alten Messkurvenzeichens.
+- **Asset-Auslieferung**: CSS- und JS-Asset-Versionen wurden erneut erhoeht, damit Browser/Coolify den Beta-Bugfix-Stand sicher neu laden.
+- **Technische Dokumentation**: Modulgrenzen, PDF-Service-Aufbau und Refactor-Zwischenstand in `docs/TECHNICAL.md` nachgezogen.
+
+### Fixed
+- **Archivierung von Wiederholungspruefungen**: Hauptpruefung und alle zugehoerigen Wiederholungspruefungen werden beim Archivieren und Wiederherstellen als zusammenhaengende Pruefgruppe behandelt.
+- **QR-Code-Scanbarkeit**: Logo-Aussparung, Modulrundung und QR-Version wurden so angepasst, dass iPhone-Scanner den Code zuverlaessiger erkennen.
+- **Login-Anzeige**: App-Topbar bleibt beim Laden des Anmeldebildschirms ausgeblendet; GitHub-Link und Theme-Schalter sind stabil positioniert.
+
+---
+
 ## [0.6.0-beta.4] - 2026-07-04
 
 ### Added
