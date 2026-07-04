@@ -7,19 +7,36 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+---
+
+## [0.6.0-beta.7] - 2026-07-04
+
 ### Added
 - **Firmaeinstellungen API**: Eigener Backend-Pfad fuer `companySettings`, damit Firmenstammdaten und Logos nicht nur lokal im Browser liegen.
-- **Versionsansicht**: `Einstellungen > Version` zeigt die vorhandenen lokalen SVG-Brand-Assets als schnelle Sichtpruefung.
+- **System > Icons**: Eigener Icon- und Asset-Bereich fuer Brandmarks, animierte Logos, Loader, UI-Iconset, Sprite und iOS-App-Icons.
+- **iOS-App-Icons**: Master-SVG, PNG-Groessen und Xcode-kompatibles `AppIcon.appiconset` fuer eine spaetere iOS-App vorbereitet.
+- **Animierte Brand-Assets**: Logo-, Symbol-, Favicon- und Loader-Varianten im MessPilot-CI ergaenzt.
+- **Globale Ladeanimationen**: Zentrale MessPilot-Ladeanimation fuer GUI-Ladevorgaenge, App-Start, PDF-Vorschau und Abmelden vorbereitet.
+- **UI-Iconset**: Konsistentes MessPilot-SVG-Iconset fuer Navigation, Aktionen, System/Admin und Statusbeispiele vorbereitet.
 
 ### Changed
+- **App-Version**: Beta-Version auf `0.6.0-beta.7` angehoben, weil der GUI-/CI-Designstand deutlich fortgeschritten ist.
 - **Systemeinstellungen**: Mehrere Auswahlfelder wurden auf kompakte Schalter-/Segmentlogik umgestellt und visuell an den vorhandenen Theme-Switch angeglichen.
 - **Bildablage fuer PDF**: Firmenlogo- und Unterschrifts-Uploads werden auf einen PDF-tauglicheren Pfad vorbereitet, statt nur als GUI-Vorschau behandelt zu werden.
+- **System > Icons Performance**: Asset-Gruppen werden jetzt ueber Untertabs geladen, damit animierte SVGs und viele PNGs nicht alle gleichzeitig im DOM liegen.
+- **Login-Branding**: Anmeldebereich zeigt nur noch eine zentrale Logo-/Animationsvariante statt doppelter Wellenanimation.
+- **Theme-Umschaltung**: Light-/Dark-/System-Wechsel dimmt ueber langsamere UI-Transitions ohne Blitz-Overlay.
+- **CI-Farben und Logos**: Light-/Dark-Logos, BETA-Platzierung, Icon-Zentrierung, Loader und App-Icon-Stil weiter an das MessPilot-CI angepasst.
+- **System > Icons statt Version**: Brand-Asset-Uebersicht aus dem Versionsbereich in einen eigenen Icon-Bereich ueberfuehrt.
 
 ### Fixed
 - **PDF-Export / Firmenlogo**: Hinterlegte Firmenlogos werden im PDF-Export wieder in den vorgesehenen Feldern verarbeitet; bestehende JPEG- und PNG-Daten werden akzeptiert.
 - **PDF-Export / Prüfer-Unterschrift**: Hinterlegte Unterschriften aus den Prüferdaten werden im PDF-Export wieder im Unterschriftsbereich verarbeitet.
 - **Wiederholungsprüfung Folgekette**: `Wiederholungsprüfung 2` zieht Vorwerte nicht mehr nur aus einem alten Snapshot, sondern löst den aktuellen Stand von `Wiederholungsprüfung 1` live auf.
 - **Wiederholungsprüfung bei offenem Bearbeitungsstand**: Wird eine neue Wiederholungsprüfung aus einem gerade bearbeiteten Vorgänger gestartet, wird auch der aktuelle Arbeitsstand als Quelle berücksichtigt.
+- **Zentrierter GUI-Loader**: Globale Ladeanimation sitzt nicht mehr oben im Layout, sondern fixed in der Bildschirmmitte.
+- **Abmelden-Feedback**: Logout zeigt eine sofortige mittige MessPilot-Ladeanimation.
+- **Theme-Dimmen**: Aufhellendes Fade-Cover entfernt, weil es beim Umschalten wie ein Blitz wirken konnte.
 
 ---
 
