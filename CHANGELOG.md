@@ -7,24 +7,36 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+---
+
+## [0.7.0] - 2026-07-10
+
 ### Added
 - **Coolify-Postgres-Rollout dokumentiert**: Die Deployment- und Datenbankdokumentation beschreibt jetzt den sauberen Weg ueber eine eigene interne PostgreSQL-Ressource (`messpilot`), das Setzen von `DATABASE_URL` in der App und die anschliessenden Prisma-Testschritte.
-- **SQL-Migrationsstatus dokumentiert**: Die technische Dokumentation beschreibt jetzt den aktuellen Hybridstand aus JSON-Spiegel, SQL-Schreibpfaden, Prisma-Sessions und fachlichen Legacy-IDs.
+- **SQL-Betriebsstatus dokumentiert**: Die technische Dokumentation beschreibt jetzt den aktiven PostgreSQL-/Prisma-Betrieb, Legacy-IDs fuer Frontend-Kompatibilitaet und den bereinigten SQL-Status in System- und Adminansichten.
+- **SQL-Datenbank leeren im Adminbereich**: Unter `System > SQL-Datenbank` gibt es jetzt eine geschuetzte Admin-Funktion, die die fachlichen SQL-Nutzdaten gezielt leert, ohne Benutzerzugang, Sessions und Systemanker zu entfernen.
 
 ### Changed
-- **SQL-Betriebsstatus praezisiert**: Dokumentiert ist jetzt explizit, dass die PostgreSQL-Verbindung in Coolify vorbereitet werden kann, waehrend die aktuelle Runtime fachlich weiterhin auf dem JSON-Adapter laeuft, bis die async Prisma-Anbindung aktiviert wird.
+- **SQL-Only Backendpfad hergestellt**: Repository-Layer, Healthcheck, PDF-Exportpfade und sichtbare Quell-Badges laufen jetzt ohne stillen JSON-Fallback auf dem PostgreSQL-/Prisma-Stand.
 - **Protokoll-GUI auf SQL-Sicht umgestellt**: Die Messprotokoll-Liste im Frontend mischt keine lokalen Browser-Protokolle mehr mit API-Daten. Sichtbar bleiben nur noch die vom Backend gelieferten Datensaetze.
 - **Relation-ID-Mapping vereinheitlicht**: SQL-Records geben in den zentralen `toRecord`-Mappings wieder fachliche IDs aus dem Payload zurueck statt interner SQL-UUIDs. Das betrifft Benutzer-/Kundenketten, Gebaeude-/Raumketten sowie Protokoll-, Mangel- und Dokumentrelationen.
-- **CRUD-Fallback fuer Hybrid-Bestand erweitert**: `Gebaeude`, `Raeume`, `Verteiler` und `Protokolle` loesen `find/update/remove` jetzt robuster ueber direkte SQL-ID, Legacy-ID oder JSON-Spiegel auf.
-- **Adminkonsole-Statuslogik nachgezogen**: `System > Adminkonsole` zeigt den aktiven Adapter, SQL-Vorbereitung und Migrationsstaende jetzt konsistenter an.
+- **CRUD-Aufloesung fuer Legacy-IDs vereinheitlicht**: `Gebaeude`, `Raeume`, `Verteiler` und `Protokolle` loesen `find/update/remove` robuster ueber direkte SQL-ID, Legacy-ID und fachliche Inhaltsbezuge auf.
+- **Adminkonsole-Statuslogik nachgezogen**: `System > Adminkonsole` und `System > SQL-Datenbank` zeigen jetzt den aktiven PostgreSQL-Status ohne JSON-Mischbild konsistenter an.
+- **Protokollanlage fuer SQL harmonisiert**: `Pruefschritte starten` und die Wiederholungspruefungs-Pfade legen neue VDE-Protokolle jetzt frueher an den echten Server-/SQL-Pfad an, statt zuerst nur auf fluechtigen Browser-Drafts zu laufen.
+- **Legacy-DemoStore entschärft**: Die alte Demo-/JSON-Fixture erzeugt im PostgreSQL-Modus keine Dateien und keine Speicherseiteneffekte mehr.
 
 ### Fixed
 - **VDE-Protokollworkflow**: Nach dem Anlegen eines VDE-Protokolls fuehrt `Pruefschritte starten` wieder in den eigentlichen Editor statt im Grunddatenmodus zu blockieren; redundante Footer-Navigation im Schrittbereich wurde entfernt.
-- **Protokollquellen in der Liste sichtbar**: Protokolle markieren jetzt direkt in der Liste, ob ihr Datensatz aus `SQL` oder `JSON` stammt, damit Hybrid- und Migrationsfehler schneller auffallen.
+- **Protokollquellen in der Liste sichtbar**: Protokolle markieren jetzt direkt in der Liste ihre Datenquelle; sichtbare Default-Badges fallen nicht mehr ungewollt auf `JSON` zurueck.
 - **Protokoll-Loeschen im SQL-Hybridmodus**: Vor dem Entfernen eines Protokolls werden verknuepfte Messwerte geloescht und Mangel-/Dokumentrelationen entkoppelt; zusaetzlich wird das Zielprotokoll bei ID-Drift ueber Spiegel- und Inhaltsdaten aufgeloest.
 - **Protokoll-Anlage mit lokalen Draft-IDs**: Temporaere Frontend-IDs wie `tmp-*` oder `local-*` werden beim SQL-Create nicht mehr als echte `legacyId` gespeichert.
 - **Kettenbruch bei Raum/Gebaeude/Verteiler**: Fachliche Relationen wie `customerId`, `locationId`, `buildingId`, `roomId`, `distributionId` und `protocolId` bleiben fuer das Frontend stabil, obwohl SQL intern UUIDs verwendet.
-- **Auth-Sessions auf SQL vorbereitet**: Das Prisma-Schema und der Auth-Service unterstuetzen jetzt SQL-Sessions als laufzeitfaehigen Pfad mit JSON-Fallback.
+- **Auth-Sessions auf SQL vorbereitet**: Das Prisma-Schema und der Auth-Service unterstuetzen jetzt SQL-Sessions als laufzeitfaehigen Pfad fuer den aktiven PostgreSQL-Betrieb.
+- **Wiederholungspruefungen als SQL-Protokolle**: Aus einem bestehenden VDE-Protokoll gestartete Wiederholungspruefungen bleiben nicht mehr auf einem lokalen Draft haengen, sondern werden ueber den Serverpfad als echte SQL-Protokolle angelegt.
+- **Wiederholungspruefungen in der Liste sichtbar**: Neu angelegte Wiederholungspruefungen tauchen nach dem Speichern wieder konsistent in der Protokollansicht auf.
+- **Verteilerwahl in der Protokollanlage**: Die Verteilerliste im Protokoll-Wizard filtert SQL-Verteiler wieder robuster ueber Kunde, Gebaeude und Raum, auch wenn nicht jede Hilfsrelation direkt am Datensatz mitgeschrieben ist.
+- **Doppelte Schrittleiste im VDE-Editor**: Die Pruefschrittnavigation wird im VDE-Workspace nicht mehr doppelt gerendert.
+- **Adminkonsole-Healthcheck**: Fehlende optionale Zaehlpfade werfen die gesamte Systemansicht nicht mehr auf `Backend nicht verfügbar`.
 
 ---
 
