@@ -7,6 +7,12 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Added
+- **Coolify-Postgres-Rollout dokumentiert**: Die Deployment- und Datenbankdokumentation beschreibt jetzt den sauberen Weg ueber eine eigene interne PostgreSQL-Ressource (`messpilot`), das Setzen von `DATABASE_URL` in der App und die anschliessenden Prisma-Testschritte.
+
+### Changed
+- **SQL-Betriebsstatus praezisiert**: Dokumentiert ist jetzt explizit, dass die PostgreSQL-Verbindung in Coolify vorbereitet werden kann, waehrend die aktuelle Runtime fachlich weiterhin auf dem JSON-Adapter laeuft, bis die async Prisma-Anbindung aktiviert wird.
+
 ---
 
 ## [0.6.0-beta.8] - 2026-07-04

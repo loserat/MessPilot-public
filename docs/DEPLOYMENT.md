@@ -11,6 +11,7 @@ Der empfohlene Stand fuer jetzt:
 - Docker Compose
 - Port intern: `3100`
 - persistenter Ordner: `./storage`
+- persistentes Volume fuer PostgreSQL: `postgres_data`
 - Reverse Proxy davor, z. B. Nginx, Caddy, Traefik oder Coolify
 
 ## Voraussetzungen auf dem Server
@@ -38,6 +39,9 @@ Standard:
 
 ```text
 MESSPILOT_PORT=3100
+POSTGRES_USER=messpilot
+POSTGRES_PASSWORD=replace-with-a-local-secret
+POSTGRES_DB=messpilot
 ```
 
 ## Start mit Docker
@@ -103,6 +107,7 @@ Aktueller Stand ist Coolify-kompatibel:
 - Start per `docker-compose.yml`
 - Port `3100`
 - Volume fuer Persistenz: `./storage:/app/storage`
+- PostgreSQL-Volume: `/var/lib/postgresql/data`
 - Healthcheck: `/api/health`
 
 Empfohlene Coolify-Einstellungen:
@@ -118,9 +123,23 @@ Empfohlene Coolify-Einstellungen:
 PORT=3100
 NODE_ENV=production
 MESSPILOT_PORT=3100
+POSTGRES_USER=messpilot
+POSTGRES_PASSWORD=<secret>
+POSTGRES_DB=messpilot
+DATABASE_URL=postgresql://messpilot:<secret>@<coolify-postgres-host>:5432/messpilot?schema=public
 ```
 
-Wichtig: In Coolify muss ein persistentes Volume fuer `/app/storage` gesetzt werden, damit angelegte Daten Container-Neustarts und neue Deployments ueberleben.
+Wichtig: In Coolify muessen sowohl `/app/storage` als auch `/var/lib/postgresql/data` persistent sein, damit JSON-/PDF-Daten und die spaetere SQL-Datenbank Container-Neustarts und neue Deployments ueberleben.
+
+Praxis fuer den aktuellen Stand:
+
+1. PostgreSQL als eigene Coolify-Ressource mit `messpilot` als Initialdatenbank anlegen.
+2. Die interne URL dieser Ressource nicht oeffentlich freigeben.
+3. `DATABASE_URL` in den Environment Variables der MessPilot-App hinterlegen.
+4. App neu deployen.
+5. Danach getrennt Prisma-Schema gegen die Datenbank pruefen.
+
+Wichtig: Der aktuelle App-Stand kann schon mit gesetzter `DATABASE_URL` deployed werden, nutzt fachlich aber weiterhin standardmaessig den JSON-Adapter, solange `MESSPILOT_STORAGE_MODE=json` aktiv bleibt und die async SQL-Services noch nicht durchgeschaltet sind.
 
 ## Persistenz
 
@@ -177,6 +196,19 @@ Updateprinzip:
 6. App-Version und Schema-Version in der Adminkonsole kontrollieren.
 
 Fuer Kundenbetrieb duerfen Daten niemals im austauschbaren App-Container liegen. Ohne persistentes Volume oder SQL-Datenbank ist ein Redeploy nicht produktionssicher.
+
+## Prisma und Seeds
+
+Fuer die vorbereitete PostgreSQL-Schicht sind diese Kommandos vorgesehen:
+
+```bash
+npm install
+npm run db:generate
+npm run db:push
+npm run db:seed
+```
+
+Die App bleibt dabei standardmaessig weiter auf `MESSPILOT_STORAGE_MODE=json`, bis Services und Controller spaeter asynchron auf den SQL-Adapter umgestellt werden.
 
 ## Lizenzvorbereitung
 
