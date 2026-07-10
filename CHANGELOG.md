@@ -9,9 +9,22 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ### Added
 - **Coolify-Postgres-Rollout dokumentiert**: Die Deployment- und Datenbankdokumentation beschreibt jetzt den sauberen Weg ueber eine eigene interne PostgreSQL-Ressource (`messpilot`), das Setzen von `DATABASE_URL` in der App und die anschliessenden Prisma-Testschritte.
+- **SQL-Migrationsstatus dokumentiert**: Die technische Dokumentation beschreibt jetzt den aktuellen Hybridstand aus JSON-Spiegel, SQL-Schreibpfaden, Prisma-Sessions und fachlichen Legacy-IDs.
 
 ### Changed
 - **SQL-Betriebsstatus praezisiert**: Dokumentiert ist jetzt explizit, dass die PostgreSQL-Verbindung in Coolify vorbereitet werden kann, waehrend die aktuelle Runtime fachlich weiterhin auf dem JSON-Adapter laeuft, bis die async Prisma-Anbindung aktiviert wird.
+- **Protokoll-GUI auf SQL-Sicht umgestellt**: Die Messprotokoll-Liste im Frontend mischt keine lokalen Browser-Protokolle mehr mit API-Daten. Sichtbar bleiben nur noch die vom Backend gelieferten Datensaetze.
+- **Relation-ID-Mapping vereinheitlicht**: SQL-Records geben in den zentralen `toRecord`-Mappings wieder fachliche IDs aus dem Payload zurueck statt interner SQL-UUIDs. Das betrifft Benutzer-/Kundenketten, Gebaeude-/Raumketten sowie Protokoll-, Mangel- und Dokumentrelationen.
+- **CRUD-Fallback fuer Hybrid-Bestand erweitert**: `Gebaeude`, `Raeume`, `Verteiler` und `Protokolle` loesen `find/update/remove` jetzt robuster ueber direkte SQL-ID, Legacy-ID oder JSON-Spiegel auf.
+- **Adminkonsole-Statuslogik nachgezogen**: `System > Adminkonsole` zeigt den aktiven Adapter, SQL-Vorbereitung und Migrationsstaende jetzt konsistenter an.
+
+### Fixed
+- **VDE-Protokollworkflow**: Nach dem Anlegen eines VDE-Protokolls fuehrt `Pruefschritte starten` wieder in den eigentlichen Editor statt im Grunddatenmodus zu blockieren; redundante Footer-Navigation im Schrittbereich wurde entfernt.
+- **Protokollquellen in der Liste sichtbar**: Protokolle markieren jetzt direkt in der Liste, ob ihr Datensatz aus `SQL` oder `JSON` stammt, damit Hybrid- und Migrationsfehler schneller auffallen.
+- **Protokoll-Loeschen im SQL-Hybridmodus**: Vor dem Entfernen eines Protokolls werden verknuepfte Messwerte geloescht und Mangel-/Dokumentrelationen entkoppelt; zusaetzlich wird das Zielprotokoll bei ID-Drift ueber Spiegel- und Inhaltsdaten aufgeloest.
+- **Protokoll-Anlage mit lokalen Draft-IDs**: Temporaere Frontend-IDs wie `tmp-*` oder `local-*` werden beim SQL-Create nicht mehr als echte `legacyId` gespeichert.
+- **Kettenbruch bei Raum/Gebaeude/Verteiler**: Fachliche Relationen wie `customerId`, `locationId`, `buildingId`, `roomId`, `distributionId` und `protocolId` bleiben fuer das Frontend stabil, obwohl SQL intern UUIDs verwendet.
+- **Auth-Sessions auf SQL vorbereitet**: Das Prisma-Schema und der Auth-Service unterstuetzen jetzt SQL-Sessions als laufzeitfaehigen Pfad mit JSON-Fallback.
 
 ---
 
