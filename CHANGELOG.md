@@ -10,10 +10,18 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 ### Added
 - **Lizenzserver-Testdaten im UI:** Die Seite `System > Lizenz` enthält jetzt editierbare Felder für Lizenzserver-Status (`status`, `message`, `checkedAt`, `tenant`, `expiresAt`, `features`) und speichert diese im serverseitigen `company-settings` Datensatz.
 - **Serverpersistenz für Lizenzstatus:** Neue Firmeneinstellungsfelder wurden in `src/services/companySettings.service.js` für die zulässige Persistenz auf dem SQL-Pfad ergänzt.
+- **Website-Admin-Dashboard ausgebaut:** Die Preview-Website besitzt jetzt eine eigenständige Admin-GUI mit strukturierten Bereichen für `Übersicht`, `Besucher`, `Logins` und `Website`, inklusive Besucher-/Login-Charts sowie zusätzlicher Donut-Auswertungen für Browser, Betriebssystem, Tages- und Wochenverteilung.
+- **Öffentliche Website in Seitenstruktur ausgebaut:** `Home`, `Funktionen`, `Blog`, `Roadmap` sowie eigene Preview-Adminseiten wurden als zusammenhängende Website-Struktur aufgebaut.
+- **Website-Footer mit Rechtsmodals und GitHub-Link erweitert:** Impressum, Datenschutz, AGB, Kontakt und GitHub laufen jetzt über einheitliche Footer-Dialoge; GitHub besitzt zusätzlich ein Footer-Icon.
 
 ### Changed
 - **Lizenzformular auf Datenmodell erweitert:** Die bestehenden Lizenzformulare lesen die neuen Felder aus dem aktuellen Einstellungshintergrund und aktualisieren die Statusanzeige im `Lizenzstand` sofort nach dem Speichern.
 - **Testorientierter Austausch vorbereitet:** Die Struktur ist vorbereitet, um den späteren `GM-Core`-Validierungsfluss direkt im Lizenzbereich ohne Architekturwechsel abzubilden.
+- **Website-Admin-Login und Navigation verdichtet:** Die Admin-Loginseite der Website läuft jetzt ohne Topbar als kompakte Login-Maske; die Admin-GUI selbst nutzt eine reduzierte Icon-Topbar mit schlanker Logout-Aktion und kompakten Überblicks-Chips statt überladener Kopftexte.
+- **Landingpages visuell vereinheitlicht:** `Home`, `Funktionen`, `Blog` und `Roadmap` wurden im Stil ruhiger gezogen, inhaltlich präzisiert und in Hero-, Karten- und Footerlogik enger angeglichen.
+- **Roadmap wieder aktiviert und bereinigt:** Der Navigationspunkt `Roadmap` ist wieder aktiv; die Seite wurde an die übrigen Landingpages angenähert und um den zuvor störenden Kernfokus-Block bereinigt.
+- **Seitentitel- und Theme-Verhalten der Website stabilisiert:** Die Preview-Einstellungen überschreiben Seitentitel nicht mehr auf reines `MessPilot`; Light/Dark wechselt weicher über Fades.
+- **Website mobilfähig gemacht:** Topbar, Navigation, Footer, Modal-Fenster, Hero-Blöcke und Inhaltskarten reagieren jetzt auf kleinere Viewports deutlich sauberer und nutzen auf Smartphones eine eigene kompaktere Anordnung.
 
 ---
 
