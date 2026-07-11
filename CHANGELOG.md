@@ -9,6 +9,30 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ---
 
+## [0.7.1] - 2026-07-11
+
+### Added
+- **Tagesdokumentation für SQL-/PDF-Nachzug**: Der Arbeitsstand vom 2026-07-11 ist jetzt als eigener Tagesbericht dokumentiert, inklusive SQL-Fortschritt, Impressum-/UI-Nachzug, VDE-Zweitkabel-Themen und PDF-/Skizzenkorrekturen.
+- **SQL-Admin-Nutzung geschärft**: `System > SQL-Datenbank` wurde als aktiver Betriebs- und Resetpunkt für den PostgreSQL-Teststand weiter verfestigt.
+
+### Changed
+- **App-Version auf 0.7.1 angehoben**: `package.json`, `package-lock.json` und die sichtbaren Versionsbausteine wurden auf den neuen Patchstand für den laufenden SQL-/Export-Stabilisierungszyklus gesetzt.
+- **SQL-Only-Hauptpfad weiter durchgezogen**: Sichtbare Listen und zentrale CRUD-Pfade für Fachdaten orientieren sich noch konsequenter am PostgreSQL-Stand statt an gemischten JSON-/Legacy-Zwischenständen.
+- **Verbrauchsdiagramm Baustrom logisch nachgeschärft**: GUI und PDF bewerten den Verbrauchsverlauf jetzt gegen einen gleitenden Mittelwert der letzten bis zu drei Vorgängerwerte statt nur gegen den direkten Vorwert.
+- **PDF-Skizzenprojektion vereinheitlicht**: Die Punktprojektion für Beleuchtungs- und ESD-Skizzen orientiert sich jetzt enger an der quadratischen GUI-Darstellung.
+- **VDE-Mehrkabelworkflow nachgezogen**: Zweitkabel, Mehrzeilen-Messmatrix, Bezeichnerlogik (`W1`/`W2`) und mehrkabelige PDF-Ausgaben wurden weiter an den fachlichen Stromkreisworkflow angepasst.
+- **DIN-A3-/DGUV-Header verdichtet**: Die großen PDF-Kopfbereiche wurden schrittweise komprimiert, Logo- und Metaflächen ruhiger verteilt und doppelte Auftraggeber-/Auftragnehmer-Darstellungen reduziert.
+
+### Fixed
+- **Fehlende Messpunkte im PDF-Export**: Beleuchtungs-Messpunkte fallen im PDF nicht mehr aus, wenn einzelne `pointXPosition`-Felder fehlten oder nur der aktive Punkt im Formular gespeichert wurde.
+- **Impressum-Dialog nach Login**: Das globale Impressum wurde als echter zentrierter Vordergrund-Dialog vom generischen Modalverhalten entkoppelt.
+- **Baustrom-PDF-Verbrauchsseite**: Die Verlaufsauswertung zeigt Referenzlinie, geglättete Skala und verständlichere Zusammenfassung statt nur roher Vorwertdifferenzen.
+- **Protokoll-Archivierung**: Beim Archivieren werden nicht mehr fälschlich ganze VDE-/Wiederholungsgruppen derselben fachlichen Zuordnung mitgezogen.
+- **Prüfer- und Messgerätepfade auf SQL**: Anlegen, Bearbeiten, Löschen und Quellenanzeige wurden für den laufenden PostgreSQL-Betrieb robuster gemacht.
+- **VDE-Messmatrix-Trennlinien**: Unscharfe bzw. dicke senkrechte Gruppentrenner in der breiten GUI-Matrix wurden optisch bereinigt.
+
+---
+
 ## [0.7.0] - 2026-07-10
 
 ### Added
