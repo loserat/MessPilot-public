@@ -9,11 +9,24 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ---
 
+## [0.7.2] - 2026-07-11
+
+### Changed
+- **Versionsstand angehoben**: `package.json`, `package-lock.json` und sichtbare Versionsbausteine wurden auf `0.7.2` angehoben.
+- **Fokussierte Versionsdokumentation**: Der Tagesstand für den SQL-/PDF-/Workflow-Stabilisierungszyklus wurde als neuer Patch-Stand dokumentiert und für den weiteren Abgleich genutzt.
+- **ToDo-Ranking für den nächsten Zyklus ergänzt**: Offene fachliche Themen wurden in einen klaren nächsten Arbeitspaketplan überführt.
+
+### Open
+- **Offene Themen bleiben fachlich priorisiert**: SQL-Finalisierung bei Restpfaden, VDE-Zweitkabel-Endto-End, Export-/Footer-Stabilisierung und Rollen-/Session-Feinschliff laufen weiterhin als nächster Block.
+
+---
+
 ## [0.7.1] - 2026-07-11
 
 ### Added
 - **Tagesdokumentation für SQL-/PDF-Nachzug**: Der Arbeitsstand vom 2026-07-11 ist jetzt als eigener Tagesbericht dokumentiert, inklusive SQL-Fortschritt, Impressum-/UI-Nachzug, VDE-Zweitkabel-Themen und PDF-/Skizzenkorrekturen.
 - **SQL-Admin-Nutzung geschärft**: `System > SQL-Datenbank` wurde als aktiver Betriebs- und Resetpunkt für den PostgreSQL-Teststand weiter verfestigt.
+- **Lizenz-Freischaltungen vorbereitet**: `System > Lizenz` steuert jetzt testweise `PDF-Wasserzeichen`, `Firmenlogo in PDF-Kopf` und `Unterschriftfeld bei Prüfern` als sichtbare Feature-Gates.
 
 ### Changed
 - **App-Version auf 0.7.1 angehoben**: `package.json`, `package-lock.json` und die sichtbaren Versionsbausteine wurden auf den neuen Patchstand für den laufenden SQL-/Export-Stabilisierungszyklus gesetzt.
@@ -24,6 +37,8 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - **VDE-Mehrkabelworkflow nachgezogen**: Zweitkabel, Mehrzeilen-Messmatrix, Bezeichnerlogik (`W1`/`W2`) und mehrkabelige PDF-Ausgaben wurden weiter an den fachlichen Stromkreisworkflow angepasst.
 - **DIN-A3-/DGUV-Header verdichtet**: Die großen PDF-Kopfbereiche wurden schrittweise komprimiert, Logo- und Metaflächen ruhiger verteilt und doppelte Auftraggeber-/Auftragnehmer-Darstellungen reduziert.
 - **Adminbereiche nachgeschärft**: `System > Lizenz`, `Adminkonsole` und `SQL-Datenbank` wurden klarer als eigenständige Admin-/Betriebsansichten strukturiert.
+- **Lizenz-, Firmen- und Prüferoberflächen verdichtet**: `System > Lizenz` wirkt kompakter und finaler; `System > Firma` wurde in klarere Tabs inklusive eigenem `Logo`-Bereich gegliedert, und der `Prüfer > Unterschrift`-Tab wurde optisch an denselben Upload-/Vorschau-Stil angepasst.
+- **Feature-Gates bis in die PDF-Ausgabe gezogen**: Firmenlogo und Prüfer-Signatur werden nicht mehr nur GUI-seitig ein-/ausgeblendet, sondern auch im PDF-Modell, in Headern, Abschlussbereichen und einfachen Listenexporten an den Freigabestatus gekoppelt.
 
 ### Fixed
 - **Fehlende Messpunkte im PDF-Export**: Beleuchtungs-Messpunkte fallen im PDF nicht mehr aus, wenn einzelne `pointXPosition`-Felder fehlten oder im Formular nur der aktive Punkt Positionsdaten geliefert hat.
@@ -38,6 +53,7 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - **Firmeneinstellungen nicht mehr als stiller Browser-Cache**: Global relevante Firmen-/Systemschalter hängen nicht mehr an einem lokalen Firmen-`localStorage`-Puffer, sondern werden klarer über den Serverzustand geführt.
 - **SQL-Health-Sicht ergänzt**: `Firmeneinstellungen` erscheinen jetzt als eigener SQL-Bereich in Health-/Adminübersichten und machen die globale Einstellungsschicht sichtbarer.
 - **Generische CRUD-Fabrik auf SQL-Niveau**: Der verbleibende generische CRUD-Service arbeitet jetzt ebenfalls asynchron und passt damit sauberer zu den aktiven PostgreSQL-/Prisma-Repositories.
+- **Lizenzlogik in PDF-Hinweisen konsistent gemacht**: Abschlussseiten sprechen bei gesperrter Signaturfunktion nicht mehr irreführend von einer Unterschrift, sondern neutral von Freigabe; ebenso wurden feste Logo-Platzhalter im gesperrten Zustand entschärft.
 
 ---
 
