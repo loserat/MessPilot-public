@@ -7,6 +7,14 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Added
+- **Lizenzserver-Testdaten im UI:** Die Seite `System > Lizenz` enthält jetzt editierbare Felder für Lizenzserver-Status (`status`, `message`, `checkedAt`, `tenant`, `expiresAt`, `features`) und speichert diese im serverseitigen `company-settings` Datensatz.
+- **Serverpersistenz für Lizenzstatus:** Neue Firmeneinstellungsfelder wurden in `src/services/companySettings.service.js` für die zulässige Persistenz auf dem SQL-Pfad ergänzt.
+
+### Changed
+- **Lizenzformular auf Datenmodell erweitert:** Die bestehenden Lizenzformulare lesen die neuen Felder aus dem aktuellen Einstellungshintergrund und aktualisieren die Statusanzeige im `Lizenzstand` sofort nach dem Speichern.
+- **Testorientierter Austausch vorbereitet:** Die Struktur ist vorbereitet, um den späteren `GM-Core`-Validierungsfluss direkt im Lizenzbereich ohne Architekturwechsel abzubilden.
+
 ---
 
 ## [0.7.2] - 2026-07-11
