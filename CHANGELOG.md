@@ -7,6 +7,21 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+## [0.7.3] - 2026-07-12
+
+### Added
+- **Log-Details mit Direktsprung erweitert**: In `System > Logs` besitzt jede fachliche Änderungszeile jetzt einen Sprung-Button, der direkt in das betroffene Protokoll, den passenden Prüfschritt und den geänderten Wert führt.
+
+### Changed
+- **Versionsstand angehoben**: `package.json`, `package-lock.json` und die sichtbaren Versionsbausteine wurden auf `0.7.3` angehoben.
+- **Adminkonsole strukturiert verdichtet**: `System > Adminkonsole` zeigt Backend-, Adapter-, SQL-, Prisma- und Speicherstatus jetzt in kompakteren Betriebs- und Datenstandkarten statt in einer langen Mischansicht.
+- **SQL-Datenbankseite klarer getrennt**: `System > SQL-Datenbank` trennt Verbindung, Bereichsübersicht und Wartung deutlicher, damit Betriebsdaten und riskantere Eingriffe wie `SQL-Daten leeren` visuell besser voneinander abgegrenzt sind.
+- **System-Logs Übersicht beruhigt**: Die Logliste gruppiert schnelle fachliche Protokolländerungen wieder kompakter, statt jeden direkt aufeinander folgenden Autosave ungefiltert als volle Einzelzeile stehen zu lassen.
+
+### Fixed
+- **Logliste nicht mehr überladen**: Die Gruppierungslogik für `measurements.update` orientiert sich wieder am echten Action-Key und erzeugt dadurch eine deutlich kleinere, fachlich lesbarere Übersicht.
+- **Log-Performance in der Übersicht**: Die teure Feldänderungsanalyse läuft nicht mehr bereits in der Listen-Gruppierung, wodurch `System > Logs` die GUI nicht mehr unnötig ausbremst.
+
 ### Added
 - **Lizenzserver-Testdaten im UI:** Die Seite `System > Lizenz` enthält jetzt editierbare Felder für Lizenzserver-Status (`status`, `message`, `checkedAt`, `tenant`, `expiresAt`, `features`) und speichert diese im serverseitigen `company-settings` Datensatz.
 - **Serverpersistenz für Lizenzstatus:** Neue Firmeneinstellungsfelder wurden in `src/services/companySettings.service.js` für die zulässige Persistenz auf dem SQL-Pfad ergänzt.
