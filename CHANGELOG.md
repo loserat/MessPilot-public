@@ -18,18 +18,26 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 ### Changed
 - **App-Version auf 0.7.1 angehoben**: `package.json`, `package-lock.json` und die sichtbaren Versionsbausteine wurden auf den neuen Patchstand für den laufenden SQL-/Export-Stabilisierungszyklus gesetzt.
 - **SQL-Only-Hauptpfad weiter durchgezogen**: Sichtbare Listen und zentrale CRUD-Pfade für Fachdaten orientieren sich noch konsequenter am PostgreSQL-Stand statt an gemischten JSON-/Legacy-Zwischenständen.
+- **Globale und lokale Einstellungen getrennt**: Persönliche Browser-/UI-Präferenzen bleiben lokal, während `PDF-Wasserzeichen` und `PDF nach Abschluss erzeugen` jetzt über die serverseitigen Firmen-/SQL-Einstellungen laufen.
 - **Verbrauchsdiagramm Baustrom logisch nachgeschärft**: GUI und PDF bewerten den Verbrauchsverlauf jetzt gegen einen gleitenden Mittelwert der letzten bis zu drei Vorgängerwerte statt nur gegen den direkten Vorwert.
 - **PDF-Skizzenprojektion vereinheitlicht**: Die Punktprojektion für Beleuchtungs- und ESD-Skizzen orientiert sich jetzt enger an der quadratischen GUI-Darstellung.
 - **VDE-Mehrkabelworkflow nachgezogen**: Zweitkabel, Mehrzeilen-Messmatrix, Bezeichnerlogik (`W1`/`W2`) und mehrkabelige PDF-Ausgaben wurden weiter an den fachlichen Stromkreisworkflow angepasst.
 - **DIN-A3-/DGUV-Header verdichtet**: Die großen PDF-Kopfbereiche wurden schrittweise komprimiert, Logo- und Metaflächen ruhiger verteilt und doppelte Auftraggeber-/Auftragnehmer-Darstellungen reduziert.
+- **Adminbereiche nachgeschärft**: `System > Lizenz`, `Adminkonsole` und `SQL-Datenbank` wurden klarer als eigenständige Admin-/Betriebsansichten strukturiert.
 
 ### Fixed
-- **Fehlende Messpunkte im PDF-Export**: Beleuchtungs-Messpunkte fallen im PDF nicht mehr aus, wenn einzelne `pointXPosition`-Felder fehlten oder nur der aktive Punkt im Formular gespeichert wurde.
-- **Impressum-Dialog nach Login**: Das globale Impressum wurde als echter zentrierter Vordergrund-Dialog vom generischen Modalverhalten entkoppelt.
-- **Baustrom-PDF-Verbrauchsseite**: Die Verlaufsauswertung zeigt Referenzlinie, geglättete Skala und verständlichere Zusammenfassung statt nur roher Vorwertdifferenzen.
-- **Protokoll-Archivierung**: Beim Archivieren werden nicht mehr fälschlich ganze VDE-/Wiederholungsgruppen derselben fachlichen Zuordnung mitgezogen.
+- **Fehlende Messpunkte im PDF-Export**: Beleuchtungs-Messpunkte fallen im PDF nicht mehr aus, wenn einzelne `pointXPosition`-Felder fehlten oder im Formular nur der aktive Punkt Positionsdaten geliefert hat.
+- **Impressum-Dialog nach Login**: Das globale Impressum wurde vom generischen Modalverhalten entkoppelt und als echter zentrierter Vordergrund-Dialog stabilisiert.
+- **Baustrom-PDF-Verbrauchsseite**: Referenzlinie, Achsenskalierung und Zusammenfassung sind nachvollziehbarer und zeigen nicht mehr nur rohe Vorwertdifferenzen.
+- **Protokoll-Archivierung**: Beim Archivieren und Entarchivieren werden nicht mehr fälschlich ganze VDE-/Wiederholungsgruppen derselben fachlichen Zuordnung mitgezogen.
 - **Prüfer- und Messgerätepfade auf SQL**: Anlegen, Bearbeiten, Löschen und Quellenanzeige wurden für den laufenden PostgreSQL-Betrieb robuster gemacht.
 - **VDE-Messmatrix-Trennlinien**: Unscharfe bzw. dicke senkrechte Gruppentrenner in der breiten GUI-Matrix wurden optisch bereinigt.
+- **VDE-Mehrkabeldarstellung**: Zweitkabel werden in GUI und PDF konsistenter als eigene Leitungszeilen geführt, statt in der Darstellung zu verschwinden oder unklar zusammenzulaufen.
+- **A3-PDF-Kopfbereiche**: Doppelte Auftraggeber-/Auftragnehmer-Wiederholungen sowie übergroße Leerflächen im DIN-A3-/DGUV-Header wurden reduziert.
+- **Lokale Refresh-Session stabilisiert**: Die Cookie-Logik behandelt lokale HTTP-Sitzungen nicht mehr unnötig als `Secure`-Only-Fall, sodass Refreshs lokal nicht sofort wieder ausloggen.
+- **Firmeneinstellungen nicht mehr als stiller Browser-Cache**: Global relevante Firmen-/Systemschalter hängen nicht mehr an einem lokalen Firmen-`localStorage`-Puffer, sondern werden klarer über den Serverzustand geführt.
+- **SQL-Health-Sicht ergänzt**: `Firmeneinstellungen` erscheinen jetzt als eigener SQL-Bereich in Health-/Adminübersichten und machen die globale Einstellungsschicht sichtbarer.
+- **Generische CRUD-Fabrik auf SQL-Niveau**: Der verbleibende generische CRUD-Service arbeitet jetzt ebenfalls asynchron und passt damit sauberer zu den aktiven PostgreSQL-/Prisma-Repositories.
 
 ---
 

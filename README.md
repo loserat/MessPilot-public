@@ -94,7 +94,6 @@ Testzugänge:
 ```text
 admin / admin
 demo / demo
-master / master
 ```
 
 ### Docker
