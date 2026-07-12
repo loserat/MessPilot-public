@@ -11,6 +11,7 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ### Added
 - **Status-Icons im PDF fachlich vereinheitlicht**: Die Ergebnisdarstellung im PDF verwendet jetzt dieselbe Iconsprache wie `System > Icons`, statt frei nachgezeichnete Ersatzsymbole zu zeigen.
+- **Rollen-Normalisierung für Admin/Master erweitert**: Rolle-Erkennung berücksichtigt jetzt Alias-Schlüssel (`role`, `roleLabel`, `userRole`, `payload.userRole`, `roleName`, `capabilities`) aus Session und User-Payload, damit Master/Admin nicht ungewollt im Standard-Nutzerpfad landen.
 
 ### Changed
 - **Versionsstand angehoben**: `package.json`, `package-lock.json`, Tagesdokumentation, Website-Blog und die sichtbaren Versionsbausteine wurden auf `0.7.4` angehoben.
@@ -27,6 +28,7 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - **Prüfplakettenpfad bis zum Export stabilisiert**: Die Bewertungslogik und der PDF-Pfad bleiben konsistenter zusammen, sodass Prüfstatus und Plakettenhinweis nicht mehr gegeneinander laufen.
 - **Audit-Direktsprung robuster auf Protokollkontext**: Der Log-Detailsprung findet das Ziel jetzt auch bei fehlender ID über alternative Payload-Felder (`protocolId`, `measurementId`) sicherer.
 - **Audit-Log-Detailinhalt vollständig erhalten**: Die Kompaktierung von Änderungspayloads wurde so angepasst, dass bei vielen Feldänderungen nicht durch harte Trunkierung Daten verlieren.
+- **Admin-/Master-Berechtigungen in API/Session robuster erkannt**: Berechtigungskern liest Rollen jetzt aus mehreren Session- und Payload-Feldern, wodurch Statistikansicht und Benutzerverwaltung für berechtigte Rollen wieder zuverlässig erreichbar sind.
 - **VDE-PDF-Ausgabe gegen unbestimmte Layoutwerte abgesichert**: Interner Exportfehler durch nicht initialisierte Werte (`signatureTop`, `vdeRowHeight`) ist entschärft; der Export nutzt stabile Fallbacks.
 - **SQL-Readiness-Checks validiert**: `npm run smoke` und `npm run smoke:sql` laufen erfolgreich gegen PostgreSQL (Live/Dev), inklusive 19 Tabellen und Kern-CRUD-Checks; der SQL-Operativbetrieb ist damit dokumentiert freigegeben.
 - **Jahreswechsel in der Statistik stabil gehalten**: Der Statistikrender nutzt einen gemeinsamen Jahreszustand, sodass der Wechsel von `‹` / `›` nachvollziehbar bleibt und den bestehenden Layoutzustand nicht resettiert.
