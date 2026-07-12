@@ -17,11 +17,16 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - **VDE-Abschlussfluss weiter verdichtet**: Die Prüfschrittfolge endet klarer in einer Vorschau-/Abschlusslogik, damit Bewertung und PDF-Sicht im Ablauf enger zusammenliegen.
 - **PDF-Ergebnisdarstellung ruhiger positioniert**: Das Statussymbol sitzt im VDE-Export jetzt direkt in der Prüfergebnis-Zeile und wirkt dadurch nicht mehr wie ein doppelter zweiter Statusblock.
 - **Verteiler-Komponenteneditor weiter gestrafft**: Die rechte Bearbeitungsseite unter `Kunden > Verteiler` wurde für Schmelzsicherungen, RCD-Gruppen und Stromkreise erneut kompakter gezogen.
+- **System-Logs-Interaktion vereinfacht**: Die Refresh-Aktion im Logs-Toolbar verwendet nun ein icon-only-Design und nutzt das zentrale Iconset der App.
+- **System-UnderTabs konsistenter gerendert**: Untertabs in System-Bereichen greifen jetzt auf die zentrale Icon-Registry zurück und laden ihre Symbole stabiler ohne visuelle Neuausrichtung bei jedem Tabwechsel.
 
 ### Fixed
 - **PDF-Statussymbole im Export korrigiert**: Statt generischer Kästen oder unpassender Ersatzmarken werden wieder klare `OK`-, `Warnung`- und `Fehler`-Symbole in der MessPilot-Iconlogik dargestellt.
 - **VDE-Prüfergebnis im PDF nicht mehr doppelt**: Die separate Statusbox unterhalb des Ergebnisses entfällt; Icon und Text bilden wieder eine gemeinsame Aussage in derselben Ergebniszelle.
 - **Prüfplakettenpfad bis zum Export stabilisiert**: Die Bewertungslogik und der PDF-Pfad bleiben konsistenter zusammen, sodass Prüfstatus und Plakettenhinweis nicht mehr gegeneinander laufen.
+- **Audit-Direktsprung robuster auf Protokollkontext**: Der Log-Detailsprung findet das Ziel jetzt auch bei fehlender ID über alternative Payload-Felder (`protocolId`, `measurementId`) sicherer.
+- **Audit-Log-Detailinhalt vollständig erhalten**: Die Kompaktierung von Änderungspayloads wurde so angepasst, dass bei vielen Feldänderungen nicht durch harte Trunkierung Daten verlieren.
+- **VDE-PDF-Ausgabe gegen unbestimmte Layoutwerte abgesichert**: Interner Exportfehler durch nicht initialisierte Werte (`signatureTop`, `vdeRowHeight`) ist entschärft; der Export nutzt stabile Fallbacks.
 
 ## [0.7.3] - 2026-07-12
 
