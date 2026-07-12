@@ -7,6 +7,24 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+## [0.7.5] - 2026-07-12
+
+### Added
+- **Lizenzierbare Premiumbereiche vorbereitet**: `System > Lizenz` enthält jetzt testbare Freischaltungen für `System > Statistiken` und `System > Firma > Kalkulation`, damit beide Bereiche später sauber an ein Lizenzmodul gekoppelt werden können.
+- **Passwortregel als Adminoption ergänzt**: Unter `System > Konsole` gibt es eine globale Option, ob einfache Passwörter erlaubt bleiben oder eine strenge Regel mit Großbuchstaben, Kleinbuchstaben, Zahl und Mindestlänge erzwungen wird.
+
+### Changed
+- **System-Untertabs verständlicher benannt**: `Einstellungen` heißt sichtbar jetzt `GUI`, `VDE Berechnungen` heißt `VDE-Sollwerte`, `Adminkonsole` heißt `Konsole`, `SQL-Datenbank` heißt `Datenbank`, `QR-Code` heißt `QR` und `Messgeräte` heißt `Geräte`.
+- **Admin- und Premium-Tabs visuell getrennt**: Admin-/Systembereiche bleiben orange, `System > Statistiken` wird als Premium-/Auswertungsbereich lila zwischen normalen und Admin-Tabs einsortiert.
+- **System-Konsolenansicht verdichtet**: Die obere Statusleiste in `System > Konsole` nutzt kompakte Status-Chips mit einheitlichen Farben für Backend, SQL und Prisma statt großer gemischter Statuskarten.
+- **System-Aktionsbuttons vereinheitlicht**: Aktualisieren- und Löschen-Aktionen in Systembereichen werden als icon-only Buttons dargestellt, darunter `Status aktualisieren`, `Logs aktualisieren`, `Logs löschen` und `SQL-Daten leeren`.
+- **SQL-/Datenbankübersicht aktualisiert**: Die Datenbankansicht zeigt den aktuellen SQL-only Betrieb klarer, inklusive JSON-Bootstrap-Status, Systemzugang, Reset-Hinweis und zusätzlicher SQL-Bereiche wie Sessions, Messwerte, Prüfer, Messgeräte und Audit-Logs.
+
+### Fixed
+- **Gepinnte Liegenschaften in Protokollen robuster gefiltert**: Die Protokollanlage vergleicht Kunden-/Liegenschaftsbezüge jetzt SQL-/Legacy-ID-tolerant, sodass gepinnte Kunden und Liegenschaften im Wizard zuverlässiger zur richtigen Kundenzuordnung passen.
+- **Gepinnte Liegenschaft priorisiert**: Die Liegenschaftsauswahl im Protokoll-Wizard sortiert die gepinnte Liegenschaft nach oben, statt sie zwischen fremden oder falsch gematchten Einträgen untergehen zu lassen.
+- **Globale Passwortoption persistiert korrekt**: Die neue Passwort-Komplexitätsoption wird serverseitig als Firmeneinstellung gespeichert und beim Anlegen oder Ändern von Benutzern im Auth-Service berücksichtigt.
+
 ## [0.7.4] - 2026-07-12
 
 ### Added
@@ -21,6 +39,7 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - **System-Logs-Interaktion vereinfacht**: Die Refresh-Aktion im Logs-Toolbar verwendet nun ein icon-only-Design und nutzt das zentrale Iconset der App.
 - **System-UnderTabs konsistenter gerendert**: Untertabs in System-Bereichen greifen jetzt auf die zentrale Icon-Registry zurück und laden ihre Symbole stabiler ohne visuelle Neuausrichtung bei jedem Tabwechsel.
 - **System > Statistiken nach Jahresjahr filterbar**: Die Statistikseite erhielt einen Jahr-Wechselschalter, mit dem sich Kennzahlen gezielt je Kalenderjahr untersuchen lassen.
+- **Benutzerverwaltung klarer getrennt**: Standard-Kernbenutzer (`master`, `admin`) werden in der GUI nicht mehr als löschbare Benutzer angeboten; normale SQL-Benutzer bleiben für Master löschbar.
 
 ### Fixed
 - **PDF-Statussymbole im Export korrigiert**: Statt generischer Kästen oder unpassender Ersatzmarken werden wieder klare `OK`-, `Warnung`- und `Fehler`-Symbole in der MessPilot-Iconlogik dargestellt.
@@ -29,6 +48,8 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - **Audit-Direktsprung robuster auf Protokollkontext**: Der Log-Detailsprung findet das Ziel jetzt auch bei fehlender ID über alternative Payload-Felder (`protocolId`, `measurementId`) sicherer.
 - **Audit-Log-Detailinhalt vollständig erhalten**: Die Kompaktierung von Änderungspayloads wurde so angepasst, dass bei vielen Feldänderungen nicht durch harte Trunkierung Daten verlieren.
 - **Admin-/Master-Berechtigungen in API/Session robuster erkannt**: Berechtigungskern liest Rollen jetzt aus mehreren Session- und Payload-Feldern, wodurch Statistikansicht und Benutzerverwaltung für berechtigte Rollen wieder zuverlässig erreichbar sind.
+- **Benutzer löschen als Master stabilisiert**: Der Löschpfad bereinigt Session-/Audit-Abhängigkeiten vor dem Entfernen und fällt bei blockierenden SQL-Constraints auf einen ausgeblendeten `deleted`-Status zurück, statt mit internem Serverfehler abzubrechen.
+- **Kernbenutzer-Schutz korrigiert**: `master` und der Standard-`admin` werden nicht mehr scheinbar löschbar dargestellt, weil diese Startkonten durch die Core-User-Sicherung ohnehin automatisch wiederhergestellt werden.
 - **VDE-PDF-Ausgabe gegen unbestimmte Layoutwerte abgesichert**: Interner Exportfehler durch nicht initialisierte Werte (`signatureTop`, `vdeRowHeight`) ist entschärft; der Export nutzt stabile Fallbacks.
 - **SQL-Readiness-Checks validiert**: `npm run smoke` und `npm run smoke:sql` laufen erfolgreich gegen PostgreSQL (Live/Dev), inklusive 19 Tabellen und Kern-CRUD-Checks; der SQL-Operativbetrieb ist damit dokumentiert freigegeben.
 - **Jahreswechsel in der Statistik stabil gehalten**: Der Statistikrender nutzt einen gemeinsamen Jahreszustand, sodass der Wechsel von `‹` / `›` nachvollziehbar bleibt und den bestehenden Layoutzustand nicht resettiert.
