@@ -7,20 +7,46 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+## [0.7.4] - 2026-07-12
+
+### Added
+- **Status-Icons im PDF fachlich vereinheitlicht**: Die Ergebnisdarstellung im PDF verwendet jetzt dieselbe Iconsprache wie `System > Icons`, statt frei nachgezeichnete Ersatzsymbole zu zeigen.
+
+### Changed
+- **Versionsstand angehoben**: `package.json`, `package-lock.json`, Tagesdokumentation, Website-Blog und die sichtbaren Versionsbausteine wurden auf `0.7.4` angehoben.
+- **VDE-Abschlussfluss weiter verdichtet**: Die Prüfschrittfolge endet klarer in einer Vorschau-/Abschlusslogik, damit Bewertung und PDF-Sicht im Ablauf enger zusammenliegen.
+- **PDF-Ergebnisdarstellung ruhiger positioniert**: Das Statussymbol sitzt im VDE-Export jetzt direkt in der Prüfergebnis-Zeile und wirkt dadurch nicht mehr wie ein doppelter zweiter Statusblock.
+- **Verteiler-Komponenteneditor weiter gestrafft**: Die rechte Bearbeitungsseite unter `Kunden > Verteiler` wurde für Schmelzsicherungen, RCD-Gruppen und Stromkreise erneut kompakter gezogen.
+
+### Fixed
+- **PDF-Statussymbole im Export korrigiert**: Statt generischer Kästen oder unpassender Ersatzmarken werden wieder klare `OK`-, `Warnung`- und `Fehler`-Symbole in der MessPilot-Iconlogik dargestellt.
+- **VDE-Prüfergebnis im PDF nicht mehr doppelt**: Die separate Statusbox unterhalb des Ergebnisses entfällt; Icon und Text bilden wieder eine gemeinsame Aussage in derselben Ergebniszelle.
+- **Prüfplakettenpfad bis zum Export stabilisiert**: Die Bewertungslogik und der PDF-Pfad bleiben konsistenter zusammen, sodass Prüfstatus und Plakettenhinweis nicht mehr gegeneinander laufen.
+
 ## [0.7.3] - 2026-07-12
 
 ### Added
 - **Log-Details mit Direktsprung erweitert**: In `System > Logs` besitzt jede fachliche Änderungszeile jetzt einen Sprung-Button, der direkt in das betroffene Protokoll, den passenden Prüfschritt und den geänderten Wert führt.
+- **Log-PDF aus dem Detailfenster**: Der aktuell geöffnete Logeintrag kann direkt aus `System > Logs` als sauber aufgebautes PDF erzeugt und in einer Vorschau geöffnet werden.
 
 ### Changed
 - **Versionsstand angehoben**: `package.json`, `package-lock.json` und die sichtbaren Versionsbausteine wurden auf `0.7.3` angehoben.
 - **Adminkonsole strukturiert verdichtet**: `System > Adminkonsole` zeigt Backend-, Adapter-, SQL-, Prisma- und Speicherstatus jetzt in kompakteren Betriebs- und Datenstandkarten statt in einer langen Mischansicht.
 - **SQL-Datenbankseite klarer getrennt**: `System > SQL-Datenbank` trennt Verbindung, Bereichsübersicht und Wartung deutlicher, damit Betriebsdaten und riskantere Eingriffe wie `SQL-Daten leeren` visuell besser voneinander abgegrenzt sind.
 - **System-Logs Übersicht beruhigt**: Die Logliste gruppiert schnelle fachliche Protokolländerungen wieder kompakter, statt jeden direkt aufeinander folgenden Autosave ungefiltert als volle Einzelzeile stehen zu lassen.
+- **Login- und App-Start entlastet**: Der Bootstrappfad lädt Kerndaten nach erfolgreichem Login jetzt schlanker und in einem ruhigeren Übergang; schwere Admin-/Log-Pfade blockieren den Einstieg nicht mehr direkt.
+- **System-Logs konsequent lazy geladen**: Logs werden nicht mehr bereits beim normalen Login oder beim allgemeinen Öffnen von `Einstellungen` mitgeladen, sondern erst beim echten Wechsel nach `System > Logs`.
+- **Verteiler-Eigenschaftseditor kompakter aufgebaut**: Der rechte Editor unter `Kunden > Verteiler` wurde für Stromkreise, Schmelzsicherungen und RCD-Gruppen auf ein ruhigeres, platzsparenderes Formularschema mit kompakteren Auswahlfeldern umgestellt.
+- **Leitungskennzeichnung fachlich nachgezogen**: Leitungen im Verteilerbaum und in den Editoren werden jetzt fortlaufend je Stromkreis als `W1`, `W2`, `W3` usw. geführt; bei Doppelkabeln wird sauber auf `Wn-1` und `Wn-2` erweitert.
 
 ### Fixed
 - **Logliste nicht mehr überladen**: Die Gruppierungslogik für `measurements.update` orientiert sich wieder am echten Action-Key und erzeugt dadurch eine deutlich kleinere, fachlich lesbarere Übersicht.
 - **Log-Performance in der Übersicht**: Die teure Feldänderungsanalyse läuft nicht mehr bereits in der Listen-Gruppierung, wodurch `System > Logs` die GUI nicht mehr unnötig ausbremst.
+- **Login-Flackern beim Übergang**: Nach Klick auf `Anmelden` fällt die GUI nicht mehr sichtbar kurz in den Login-Zustand zurück, bevor die eigentliche App erscheint.
+- **Log-PDF-Vorschau trotz Pop-up-Schutz**: Die PDF-Vorschau öffnet ihr Ziel-Tab direkt aus dem Benutzerklick heraus und wird danach erst mit dem erzeugten Dokument befüllt, statt vom Browser als verspätetes Pop-up blockiert zu werden.
+- **Admin-Start ohne Log-Ballast**: `System > Logs` verursacht keine unnötige Last mehr im normalen Login-/Startpfad und bremst dadurch den ersten GUI-Aufbau nicht mehr aus.
+- **VDE-Prüfplakette erreicht den PDF-Export wieder korrekt**: Die Formularübernahme behandelt Checkbox plus Hidden-Fallback jetzt robust, sodass `Angebracht` nicht mehr still auf `Nicht angebracht` zurückfällt.
+- **Falsche Aktionen in Verteiler-Komponentenansichten entfernt**: Schmelzsicherungen und RCD-Gruppen verwenden nicht länger das Stromkreis-Aktionsgerüst mit unpassenden Kopier- oder Auswahlblöcken.
 
 ### Added
 - **Lizenzserver-Testdaten im UI:** Die Seite `System > Lizenz` enthält jetzt editierbare Felder für Lizenzserver-Status (`status`, `message`, `checkedAt`, `tenant`, `expiresAt`, `features`) und speichert diese im serverseitigen `company-settings` Datensatz.
@@ -37,6 +63,7 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - **Roadmap wieder aktiviert und bereinigt:** Der Navigationspunkt `Roadmap` ist wieder aktiv; die Seite wurde an die übrigen Landingpages angenähert und um den zuvor störenden Kernfokus-Block bereinigt.
 - **Seitentitel- und Theme-Verhalten der Website stabilisiert:** Die Preview-Einstellungen überschreiben Seitentitel nicht mehr auf reines `MessPilot`; Light/Dark wechselt weicher über Fades.
 - **Website mobilfähig gemacht:** Topbar, Navigation, Footer, Modal-Fenster, Hero-Blöcke und Inhaltskarten reagieren jetzt auf kleinere Viewports deutlich sauberer und nutzen auf Smartphones eine eigene kompaktere Anordnung.
+- **Website-Blog an Changelog gekoppelt:** Der öffentliche Blogeintrag für `0.7.3` spiegelt jetzt den offiziellen Changelog enger, damit Release-Kommunikation und interne Änderungsdokumentation nicht auseinanderlaufen.
 
 ---
 
