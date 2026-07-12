@@ -19,6 +19,7 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - **Verteiler-Komponenteneditor weiter gestrafft**: Die rechte Bearbeitungsseite unter `Kunden > Verteiler` wurde für Schmelzsicherungen, RCD-Gruppen und Stromkreise erneut kompakter gezogen.
 - **System-Logs-Interaktion vereinfacht**: Die Refresh-Aktion im Logs-Toolbar verwendet nun ein icon-only-Design und nutzt das zentrale Iconset der App.
 - **System-UnderTabs konsistenter gerendert**: Untertabs in System-Bereichen greifen jetzt auf die zentrale Icon-Registry zurück und laden ihre Symbole stabiler ohne visuelle Neuausrichtung bei jedem Tabwechsel.
+- **System > Statistiken nach Jahresjahr filterbar**: Die Statistikseite erhielt einen Jahr-Wechselschalter, mit dem sich Kennzahlen gezielt je Kalenderjahr untersuchen lassen.
 
 ### Fixed
 - **PDF-Statussymbole im Export korrigiert**: Statt generischer Kästen oder unpassender Ersatzmarken werden wieder klare `OK`-, `Warnung`- und `Fehler`-Symbole in der MessPilot-Iconlogik dargestellt.
@@ -27,6 +28,9 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - **Audit-Direktsprung robuster auf Protokollkontext**: Der Log-Detailsprung findet das Ziel jetzt auch bei fehlender ID über alternative Payload-Felder (`protocolId`, `measurementId`) sicherer.
 - **Audit-Log-Detailinhalt vollständig erhalten**: Die Kompaktierung von Änderungspayloads wurde so angepasst, dass bei vielen Feldänderungen nicht durch harte Trunkierung Daten verlieren.
 - **VDE-PDF-Ausgabe gegen unbestimmte Layoutwerte abgesichert**: Interner Exportfehler durch nicht initialisierte Werte (`signatureTop`, `vdeRowHeight`) ist entschärft; der Export nutzt stabile Fallbacks.
+- **SQL-Readiness-Checks validiert**: `npm run smoke` und `npm run smoke:sql` laufen erfolgreich gegen PostgreSQL (Live/Dev), inklusive 19 Tabellen und Kern-CRUD-Checks; der SQL-Operativbetrieb ist damit dokumentiert freigegeben.
+- **Jahreswechsel in der Statistik stabil gehalten**: Der Statistikrender nutzt einen gemeinsamen Jahreszustand, sodass der Wechsel von `‹` / `›` nachvollziehbar bleibt und den bestehenden Layoutzustand nicht resettiert.
+- **Schrittnavigation bei 9 Schritten optimiert**: Die Protokoll-Workflow-Navigation nutzt bei langen 9-Schritt-Folgen nun den kompakten Dichte-Modus, damit der Abstand zwischen letztem Schritt „Vorschau“ und dem Abschluss-`✓` wieder korrekt eng bleibt.
 
 ## [0.7.3] - 2026-07-12
 
