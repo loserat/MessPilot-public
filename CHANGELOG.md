@@ -9,6 +9,11 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ### Changed
 - **Interner Updatepfad zurückgestellt**: `System > Version` zeigt weiter Versionsstand, GitHub-Status und Changelog, blendet aber den experimentellen `Update ausführen`-Button sowie die GitHub-/Coolify-Debugkonfiguration aus. Deployments laufen vorerst über Push auf `main` und Coolify-Autodeploy.
+- **VDE-Bewertung optisch aufgeräumt**: Der Bewertungsschritt nutzt kompaktere Karten für Ergebnis, nächsten Prüftermin und Prüfplakette; die Plakettenfunktion erscheint nicht mehr als native Checkbox-Leiste.
+- **PDF-Ergebnislogik vereinheitlicht**: Beleuchtungs- und ESD-PDFs bevorzugen im Kopfbereich das fachliche Prüfergebnis statt nur den allgemeinen Protokollstatus.
+
+### Fixed
+- **Prüfplakette im VDE-PDF abgesichert**: Der PDF-Export gibt `Prüf-Plakette: Angebracht` nur noch aus, wenn das Prüfergebnis tatsächlich `Bestanden` ist.
 
 ## [0.7.5] - 2026-07-12
 
