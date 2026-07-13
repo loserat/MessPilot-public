@@ -7,6 +7,18 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+## [0.7.9] - 2026-07-13
+
+### Added
+- **GitHub-Diagnose im Versionsbereich**: `System > Version` zeigt jetzt geprüfte Repository-/Branchdaten, Token-Verwendung ohne Tokeninhalt sowie Status der GitHub-Prüfpunkte `package.json`, `Latest Release` und `Latest Tag`.
+
+### Changed
+- **Versionsstand angehoben**: `package.json`, `package-lock.json` und sichtbare Versionsbausteine wurden auf `0.7.9` gesetzt.
+- **Cache-Buster für Versionsdiagnose erhöht**: Die Script-Version für `app.settings.js` wurde erhöht, damit die neue Diagnoseansicht nach dem Deploy sicher geladen wird.
+
+### Fixed
+- **GitHub-Fehler besser eingrenzbar**: Private-Repo-Probleme wie fehlender Token, falsches Repo, falscher Branch oder fehlende Rechte lassen sich nun über HTTP-Status und Prüfschritt erkennen.
+
 ## [0.7.8] - 2026-07-13
 
 ### Changed
