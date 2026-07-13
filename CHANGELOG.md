@@ -12,6 +12,9 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - **Statistik-Untertab entfernt**: Die Statistikseite zeigt keinen generischen Untertab `Übersicht` mehr, weil sie als eigene Topbar-Seite funktioniert.
 - **Direktzugriff auf deaktivierte Premiumroute abgesichert**: Ein direkter Hash-Aufruf von `#statistiken` wird bei deaktivierter Statistik-Premiumfunktion wieder auf eine erlaubte Route zurückgeführt.
 
+### Changed
+- **Settings-Dateien entlastet**: Der BSV-/Baustromverteiler-Renderer wurde aus `app.settings.js` in `app.settings-temporary-power.js` ausgelagert. Das verbessert Nachverfolgbarkeit, reduziert die Größe der zentralen Settings-Datei und bereitet weitere modulare Refactorings vor.
+
 ## [0.7.6] - 2026-07-13
 
 ### Changed
