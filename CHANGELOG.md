@@ -7,6 +7,21 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+## [0.7.6] - 2026-07-13
+
+### Added
+- **Admin-Updateprüfung vorbereitet**: `System > Version` ist jetzt ein Admin-/Systemadmin-Bereich und kann den GitHub-Stand wieder aktiv über das Backend prüfen.
+- **Update-Konfiguration als Debugbereich**: Unter `System > Version` können Repository, Branch, optionaler GitHub-Token und optionale Coolify-Webhook-URL für Tests gepflegt werden.
+
+### Changed
+- **Update-Ausführung bewusst abgesichert**: `Update ausführen` verarbeitet die Anfrage nur als vorbereiteten `prepared-only`-Pfad und startet noch keinen echten Deploy- oder Serverupdate-Prozess.
+- **Versionsrechte konsistent gezogen**: Version prüfen und vorbereitete Update-Anfrage sind für `admin` und `systemadmin` erreichbar, passend zur sichtbaren Admin-Tab-Logik.
+- **Versionsstand angehoben**: `package.json`, `package-lock.json`, Tagesdokumentation, Website-Blog und sichtbare Versionsbausteine wurden auf `0.7.6` gesetzt, damit lokal und online ein echter Update-Vergleich möglich ist.
+
+### Fixed
+- **Privates GitHub-Repository im Versionscheck nutzbar**: `Version prüfen` verwendet jetzt Repository, Branch und GitHub-Token aus der Update-Konfiguration, statt ausschließlich auf feste Defaults und `process.env.GITHUB_TOKEN` zu schauen.
+- **Branch-Auswahl beim Versionscheck berücksichtigt**: Der Backend-Check liest `package.json` aus dem konfigurierten Branch und spiegelt die geprüfte Quelle im Versionsstatus zurück.
+
 ## [0.7.5] - 2026-07-12
 
 ### Added
