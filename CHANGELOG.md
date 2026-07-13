@@ -7,52 +7,8 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
-## [0.7.9] - 2026-07-13
-
-### Added
-- **GitHub-Diagnose im Versionsbereich**: `System > Version` zeigt jetzt geprüfte Repository-/Branchdaten, Token-Verwendung ohne Tokeninhalt sowie Status der GitHub-Prüfpunkte `package.json`, `Latest Release` und `Latest Tag`.
-
 ### Changed
-- **Versionsstand angehoben**: `package.json`, `package-lock.json` und sichtbare Versionsbausteine wurden auf `0.7.9` gesetzt.
-- **Cache-Buster für Versionsdiagnose erhöht**: Die Script-Version für `app.settings.js` wurde erhöht, damit die neue Diagnoseansicht nach dem Deploy sicher geladen wird.
-
-### Fixed
-- **GitHub-Fehler besser eingrenzbar**: Private-Repo-Probleme wie fehlender Token, falsches Repo, falscher Branch oder fehlende Rechte lassen sich nun über HTTP-Status und Prüfschritt erkennen.
-
-## [0.7.8] - 2026-07-13
-
-### Changed
-- **Update-Teststand bereitgestellt**: Patch-Version auf `0.7.8` angehoben, damit lokale Installationen auf `0.7.7` gezielt gegen `main` prüfen können, ob ein Update erkannt wird.
-- **Versionsbausteine synchronisiert**: Sichtbare System-Komponenten wurden auf denselben Teststand gesetzt.
-
-### Notes
-- Dieser Patch enthält bewusst keine neue Fachfunktion. Er dient als kontrollierter End-to-End-Test für `System > Version`, GitHub-Versionsabfrage und den vorbereiteten Coolify-Updatepfad.
-
-## [0.7.7] - 2026-07-13
-
-### Changed
-- **Coolify-Updatepfad aktiviert**: `Update ausführen` kann bei erkannter neuer GitHub-Version und hinterlegter Webhook-URL jetzt den Coolify-Deploy-Webhook auslösen.
-- **Browser-Cache-Buster nachgezogen**: Die Script-Versionen für `app.js` und `app.data.js` wurden erhöht, damit Browser nach dem Deploy nicht weiter den alten Versionscheck-Code laden.
-- **Versionsstand angehoben**: `package.json`, `package-lock.json` und sichtbare Versionsbausteine wurden auf `0.7.7` gesetzt.
-
-### Fixed
-- **Update-Button übergibt Webhook wirklich ans Backend**: Die gespeicherte Coolify-Webhook-URL wird jetzt beim Update-Request übertragen.
-- **GitHub-Fallback-Hinweis aussagekräftiger**: Wenn GitHub nicht erreichbar ist, bleibt der konkrete API-Fehler im Hinweis sichtbar, statt nur generisch auf den lokalen Fallback zu verweisen.
-
-## [0.7.6] - 2026-07-13
-
-### Added
-- **Admin-Updateprüfung vorbereitet**: `System > Version` ist jetzt ein Admin-/Systemadmin-Bereich und kann den GitHub-Stand wieder aktiv über das Backend prüfen.
-- **Update-Konfiguration als Debugbereich**: Unter `System > Version` können Repository, Branch, optionaler GitHub-Token und optionale Coolify-Webhook-URL für Tests gepflegt werden.
-
-### Changed
-- **Update-Ausführung bewusst abgesichert**: `Update ausführen` verarbeitet die Anfrage nur als vorbereiteten `prepared-only`-Pfad und startet noch keinen echten Deploy- oder Serverupdate-Prozess.
-- **Versionsrechte konsistent gezogen**: Version prüfen und vorbereitete Update-Anfrage sind für `admin` und `systemadmin` erreichbar, passend zur sichtbaren Admin-Tab-Logik.
-- **Versionsstand angehoben**: `package.json`, `package-lock.json`, Tagesdokumentation, Website-Blog und sichtbare Versionsbausteine wurden auf `0.7.6` gesetzt, damit lokal und online ein echter Update-Vergleich möglich ist.
-
-### Fixed
-- **Privates GitHub-Repository im Versionscheck nutzbar**: `Version prüfen` verwendet jetzt Repository, Branch und GitHub-Token aus der Update-Konfiguration, statt ausschließlich auf feste Defaults und `process.env.GITHUB_TOKEN` zu schauen.
-- **Branch-Auswahl beim Versionscheck berücksichtigt**: Der Backend-Check liest `package.json` aus dem konfigurierten Branch und spiegelt die geprüfte Quelle im Versionsstatus zurück.
+- **Interner Updatepfad zurückgestellt**: `System > Version` zeigt weiter Versionsstand, GitHub-Status und Changelog, blendet aber den experimentellen `Update ausführen`-Button sowie die GitHub-/Coolify-Debugkonfiguration aus. Deployments laufen vorerst über Push auf `main` und Coolify-Autodeploy.
 
 ## [0.7.5] - 2026-07-12
 
