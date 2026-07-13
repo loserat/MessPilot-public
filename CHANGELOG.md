@@ -7,6 +7,15 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+## [0.7.8] - 2026-07-13
+
+### Changed
+- **Update-Teststand bereitgestellt**: Patch-Version auf `0.7.8` angehoben, damit lokale Installationen auf `0.7.7` gezielt gegen `main` prüfen können, ob ein Update erkannt wird.
+- **Versionsbausteine synchronisiert**: Sichtbare System-Komponenten wurden auf denselben Teststand gesetzt.
+
+### Notes
+- Dieser Patch enthält bewusst keine neue Fachfunktion. Er dient als kontrollierter End-to-End-Test für `System > Version`, GitHub-Versionsabfrage und den vorbereiteten Coolify-Updatepfad.
+
 ## [0.7.7] - 2026-07-13
 
 ### Changed
