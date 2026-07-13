@@ -7,7 +7,10 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
-Noch keine Änderungen seit `0.7.6`.
+### Fixed
+- **Statistik-Topbar korrekt lizenzierbar**: `Statistiken` verschwindet jetzt direkt aus der Topbar, wenn die Premiumfunktion `premiumStatisticsEnabled` deaktiviert wird.
+- **Statistik-Untertab entfernt**: Die Statistikseite zeigt keinen generischen Untertab `Übersicht` mehr, weil sie als eigene Topbar-Seite funktioniert.
+- **Direktzugriff auf deaktivierte Premiumroute abgesichert**: Ein direkter Hash-Aufruf von `#statistiken` wird bei deaktivierter Statistik-Premiumfunktion wieder auf eine erlaubte Route zurückgeführt.
 
 ## [0.7.6] - 2026-07-13
 
