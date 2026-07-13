@@ -7,6 +7,17 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+## [0.7.7] - 2026-07-13
+
+### Changed
+- **Coolify-Updatepfad aktiviert**: `Update ausführen` kann bei erkannter neuer GitHub-Version und hinterlegter Webhook-URL jetzt den Coolify-Deploy-Webhook auslösen.
+- **Browser-Cache-Buster nachgezogen**: Die Script-Versionen für `app.js` und `app.data.js` wurden erhöht, damit Browser nach dem Deploy nicht weiter den alten Versionscheck-Code laden.
+- **Versionsstand angehoben**: `package.json`, `package-lock.json` und sichtbare Versionsbausteine wurden auf `0.7.7` gesetzt.
+
+### Fixed
+- **Update-Button übergibt Webhook wirklich ans Backend**: Die gespeicherte Coolify-Webhook-URL wird jetzt beim Update-Request übertragen.
+- **GitHub-Fallback-Hinweis aussagekräftiger**: Wenn GitHub nicht erreichbar ist, bleibt der konkrete API-Fehler im Hinweis sichtbar, statt nur generisch auf den lokalen Fallback zu verweisen.
+
 ## [0.7.6] - 2026-07-13
 
 ### Added
