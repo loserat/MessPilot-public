@@ -7,13 +7,27 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+Noch keine Änderungen seit `0.7.6`.
+
+## [0.7.6] - 2026-07-13
+
 ### Changed
 - **Interner Updatepfad zurückgestellt**: `System > Version` zeigt weiter Versionsstand, GitHub-Status und Changelog, blendet aber den experimentellen `Update ausführen`-Button sowie die GitHub-/Coolify-Debugkonfiguration aus. Deployments laufen vorerst über Push auf `main` und Coolify-Autodeploy.
+- **Baustromverteiler-Premiumbereich vorbereitet**: `System > Baustromverteiler` ist als lila Premium-/Lizenzbereich für Admin/Systemadmin vorbereitet und nutzt jetzt eine SQL-basierte MERZ-Vorlagenstruktur mit Produktschlüssel, Baumknoten, Steckvorrichtungen, Schutzorganen und Zusatzkennzeichen.
+- **BSV-Vorlagenansicht erweitert**: Die Baustromverteiler-Ansicht zeigt mehr MERZ-Startvorlagen, eine kompaktere Baumstruktur und einen klar lila markierten Premium-Tab `BSV`; der Kopfchip `Premium vorbereitet` wurde entfernt.
+- **BSV-Liste auf Tabellenstruktur umgebaut**: `System > BSV` nutzt jetzt eine echte Listen-/Tabellenansicht mit eingeblendeter Baumstruktur direkt unter dem ausgewählten MERZ-Datensatz; der Hauptordner im Baum heißt einheitlich `Merz Verteilerschränke`.
+- **BSV als Produktdatenbank verfeinert**: Die BSV-Seite nutzt nun ein Master-Detail-Layout mit linker MERZ-Produktauswahl, rechter Produktkarte, technischen Kennzahlen und kompakter Baumstruktur für die spätere Protokollübernahme.
+- **BSV-Produktdatenbank auf Explorer-Baum umgestellt**: Die BSV-Ansicht zeigt Hersteller, Produktfamilien, Produkttypen und Produktschlüssel jetzt als eingeklappte Explorer-Struktur. MERZ und WALTHER-WERKE sind vorbereitet; Detaildaten öffnen erst nach Klick auf einen konkreten Baustromverteiler.
+- **BSV-Details an Verteiler-Stromkreise angenähert**: Die Detailansicht zeigt vorbereitete Abgänge jetzt stromkreisnah als Baum mit Root, Schutzgruppe und fortlaufenden `W`-Stromkreisen, inklusive Bezeichnung, Schutz, Phasen und Leitung. Das bereitet die spätere Übernahme in `Kunden > Verteiler` und Protokoll-Stromkreismessungen vor.
+- **Unvollständige BSV-Vorlagen ausgeblendet**: Die sichtbare Produktliste zeigt vorerst nur Vorlagen mit belastbarer technischer Struktur, damit keine halbfertigen Daten als übernahmefähig wirken. Weitere Typen bleiben für spätere Nachpflege vorbereitet.
+- **MERZ-Tabellendatenbestand eingebunden**: Der vorbereitete MERZ-Katalogauszug mit 233 Typenschlüsseln wurde als separate Datenquelle unter `src/data` eingebunden und wird serverseitig in BSV-Seeds mit Bestellnummer, Baureihe, Nennstrom, kVA, Steckdosen, Zähler-/Wandlerkennzeichen, Klemmen, Schutzdaten und Katalogmetadaten übersetzt.
+- **Statistiken in die Topbar verschoben**: `System > Statistiken` wurde als eigene lila Premium-Topbar-Seite `Statistiken` ausgelagert und bleibt weiterhin nur für Admin/Systemadmin bei aktiver Premiumfreischaltung sichtbar.
 - **VDE-Bewertung optisch aufgeräumt**: Der Bewertungsschritt nutzt kompaktere Karten für Ergebnis, nächsten Prüftermin und Prüfplakette; die Plakettenfunktion erscheint nicht mehr als native Checkbox-Leiste.
 - **PDF-Ergebnislogik vereinheitlicht**: Beleuchtungs- und ESD-PDFs bevorzugen im Kopfbereich das fachliche Prüfergebnis statt nur den allgemeinen Protokollstatus.
 
 ### Fixed
 - **Prüfplakette im VDE-PDF abgesichert**: Der PDF-Export gibt `Prüf-Plakette: Angebracht` nur noch aus, wenn das Prüfergebnis tatsächlich `Bestanden` ist.
+- **BSV-Detailpopup aus Panel-Kontext gelöst**: Die Detailansicht wird als Vordergrunddialog vorbereitet, damit sie nicht mehr in Karten-/Panelbereichen abgeschnitten wirkt.
 
 ## [0.7.5] - 2026-07-12
 
