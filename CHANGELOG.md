@@ -7,13 +7,58 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Added
+- **Verteiler v2 als separater Konzepteditor vorbereitet**: Unter `Kunden > Verteiler` gibt es den neuen Untertab `Verteiler v2`. Der Editor liegt in `public/js/app.distributors-v2.js` und bleibt bewusst getrennt vom bestehenden Verteilereditor.
+- **Read-only Flow-Adapter fuer Verteilerlayouts**: Bestehende `layout.rows` werden in ein internes Flow-Modell mit Nodes, Kanten, Viewport, Quellversion und Template-Referenz uebersetzt. Unklare Abgaenge werden als `Abgang unklar` markiert, ohne CEE-/Schuko-/Klemmenabgaenge zu raten.
+- **Node-RED-artiger Canvas-Prototyp fuer Verteiler v2**: Der V2-Editor besitzt Baustein-Palette, freien Canvas mit Raster, Pan, Zoom, Mini-Map, Eigenschaftenpanel und Baum-Synchronisierung. Nodes koennen lokal verschoben und per Palette als Entwurf erzeugt werden.
+- **Lokale Entwurfsverbindungen im Canvas**: OUT-Ports koennen lokal per Drag auf IN-Ports verbunden werden. Vorschaukanten, Zielhervorhebung und UI-Schutzregeln verhindern Selbstanschluss, Duplikate, Gegenrichtung, Zyklen und Power-PE-Mischverbindungen.
+- **Dauerhafte Flow-v2-Speicherung vorbereitet**: Der Verteiler-v2-Editor kann Positionen, Entwurfsnodes, Entwurfskanten, Source-/Draft-Kanten und Canvas-Viewport jetzt manuell als `payload.flowV2` im bestehenden Verteiler-Datensatz speichern.
+- **Mehrfachauswahl im Verteiler-v2-Canvas**: Nodes koennen per Mausrahmen oder mit `Shift`/`Cmd`/`Strg` mehrfach markiert und gemeinsam verschoben werden.
+
 ### Fixed
+- **Footer-Dialoge mit X-Button**: Impressum, Datenschutz und AGB nutzen auf der Website jetzt einen kompakten X-Button statt eines Textlinks zum Schließen.
+- **Verteiler-v2-Portdarstellung korrigiert**: IN-/OUT-Anschluesse werden im Canvas jetzt als runde Portpunkte direkt am Node-Rand dargestellt statt als pillenfoermige Labels.
+- **Verteiler-v2-Kantenfuehrung verbessert**: Power- und PE-Verbindungen werden defensiver orthogonal geroutet, damit Linien beim Verschieben der Nodes nicht mehr durch Karteninhalte laufen.
+- **Website-Topbar seitenübergreifend vereinheitlicht**: Die zentrale Website-CSS setzt Radius, Flächen, Buttonzustände und Box-Sizing für die Topbar jetzt unabhängig von seitenlokalen Variablen. Dadurch verändert sich die Navigation beim Wechsel auf den Blog nicht mehr sichtbar.
 - **Statistik-Topbar korrekt lizenzierbar**: `Statistiken` verschwindet jetzt direkt aus der Topbar, wenn die Premiumfunktion `premiumStatisticsEnabled` deaktiviert wird.
 - **Statistik-Untertab entfernt**: Die Statistikseite zeigt keinen generischen Untertab `Übersicht` mehr, weil sie als eigene Topbar-Seite funktioniert.
 - **Direktzugriff auf deaktivierte Premiumroute abgesichert**: Ein direkter Hash-Aufruf von `#statistiken` wird bei deaktivierter Statistik-Premiumfunktion wieder auf eine erlaubte Route zurückgeführt.
+- **Alter Verteilereditor bleibt von Flow-v2 getrennt**: Speicherpfade des bestehenden Verteilereditors erhalten `flowV2`, ohne `payload.layout` oder `layout.rows` zu überschreiben.
 
 ### Changed
+- **Verteiler-v2-Canvas lesbarer gemacht**: Standard-Zoom liegt bei `90%`, `Alles einpassen` richtet den Canvas auf alle sichtbaren Nodes aus, Palette und Baumansicht sind einklappbar, Ports wurden auf `IN`/`OUT` plus separaten PE-Port reduziert und Kanten laufen orthogonal mit kleinen Rundungen.
+- **Verteiler-v2-Arbeitsbereich vergroessert**: Der freie Canvas bietet jetzt mehr Platz fuer groessere Verteileraufbauten und zeigt bei Mehrfachauswahl eine eigene Inspector-Zusammenfassung.
+- **Fachliche Darstellung im Verteiler-v2-Prototyp geschaerft**: Normale `circuit`-Zeilen erzeugen nicht mehr automatisch Klemmen. Ohne expliziten `outputType` erscheint `Abgang unklar · <Stromkreis>`. PE bleibt als gruen gestrichelter separater Konzeptpfad und wird nicht ueber RCD oder LS gefuehrt.
+- **Verteiler-v2-Speicherstatus ergänzt**: Der Editor zeigt `Gespeichert`, `Ungespeicherte Änderungen` oder `Speichern fehlgeschlagen`, warnt vor dem Verlassen bei ungespeicherten Änderungen und bietet `Änderungen verwerfen` sowie `Flow zurücksetzen`.
+- **Flow-v2-Fallback abgesichert**: Gespeicherte Flow-v2-Daten werden beim Öffnen bevorzugt geladen; fehlen sie oder sind sie ungültig, wird die Ansicht weiterhin sicher aus `layout.rows` erzeugt.
+- **Website-Design stärker an Blog-Optik angeglichen**: Die zentrale Website-CSS übernimmt die ruhigere Blog-Palette, weichere Schatten, dezente Kartenflächen, einheitlichere Pills und einen harmonisierten Footer für Home, Blog, Preise, FAQ und vorbereitete Zusatzseiten.
+- **Blog-Changelog ausführlicher aufgebaut**: Der öffentliche Blog zeigt den `0.7.x`-Stand jetzt nicht mehr als kompakte Kurzfassung, sondern nach Unterversionen von `0.7.6` bis `0.7.0` mit konkreten Änderungen und Bugfixes.
+- **Normbezüge auf der Website neutraler formuliert**: Website-Texte vermeiden produktähnliche Aussagen wie VDE-zertifiziert oder VDE-autorisiert. DIN-VDE-Normbezug wird nur als fachlicher Bezug innerhalb der Prüfdokumentation beschrieben.
+- **Preisseite bis zum Final Release entschärft**: Preise bleiben unkenntlich, Zusatzleistungen zeigen keinen verkaufsbetonten Preisblock, und der Betriebshinweis stellt Self-Hosting als bevorzugte, datensouveräne Variante dar.
+- **FAQ um Betriebs- und Normhinweise ergänzt**: Die FAQ beschreibt Self-Hosting, optionales späteres Hosting und die rechtlich neutrale Einordnung von Normbezügen klarer.
+- **Home-Seite der Website final reduziert**: Die Startseite wurde auf maximal fünf klare Bereiche zurückgebaut: Hero, drei Kernbereiche, einfacher Prüfablauf, Zielgruppe und Abschluss. Dadurch wirkt die Website weniger wie eine überladene SaaS-Landingpage und stärker wie eine ruhige Produktvorstellung.
+- **Website-Home semantisch geschärft**: Texte, Buttons, Überschriftenhierarchie und Demo-/Roadmap-Verweise wurden für bessere Lesbarkeit, Barrierefreiheit und mobile Nutzung neu strukturiert.
+- **Public-README aktualisiert**: Das README beschreibt jetzt Version `0.7.6`, Website-/App-Routen, SQL-Hauptpfad, BSV-Vorbereitung, Statistik-/Premiumbereiche und den aktuellen Beta-Stand.
+- **Website optisch ruhiger ans CI gezogen**: Alle Website-Seiten erhalten einen gemeinsamen, gedämpften MessPilot-Farb-Layer mit Blau-, Grün- und Goldakzenten, hochwertigeren Kartenflächen und weniger harten Abschnittskanten.
+- **Website-Hintergrund an App-Wellen angeglichen**: Die Website nutzt jetzt eine feste SVG-Wellenebene mit durchgehenden roten, goldenen und blauen Linien wie in der App-Optik. Bei reduzierter Bewegung wird die Animation deaktiviert.
+- **Home-Hero reduziert**: Der experimentelle Protokoll-Preview-Slider wurde wieder entfernt. Die Startseite nutzt wieder einen ruhigeren, einspaltigen Hero ohne rechten Beispielblock.
+- **Browser-Titel der Website gekürzt**: Die Titel in den Browser-Tabs wurden auf kurze Namen wie `MessPilot`, `MessPilot Blog` und `MessPilot Roadmap` reduziert.
+- **Demo-Link hervorgehoben**: Der Website-Topbar-Link heißt jetzt `Demo-Login` und pulsiert langsam grün.
+- **Footer reduziert**: Der separate Link `Kontakt` wurde aus dem Website-Footer entfernt, weil die Kontaktdaten bereits im Impressum stehen.
+- **GitHub-Footerlink direkt geöffnet**: Der GitHub-Eintrag im Website-Footer öffnet jetzt direkt das Public Repository in einem neuen Tab statt ein Info-Popup.
+- **Website-Navigation reduziert**: Der Menüpunkt `Funktionen` wurde aus der Website-Topbar entfernt, bis die Funktionsseite neu sauber konzipiert ist.
+- **Funktionsseite komplett neu aufgebaut**: Die Seite `Funktionen` wurde als cleanere Produktseite mit Hero, ruhigen Scroll-Abschnitten, Datenfluss, Prüfablauf, Wiederholungsprüfung, Export-Erklärung und echten Demo-PDFs aus `public/demo/pdf` neu strukturiert.
+- **Landingpage inhaltlich geschärft**: Die Startseite beschreibt MessPilot jetzt klarer als Prüfsoftware für strukturierte Elektroprüfungen, Wiederholungsprüfungen, PDF-Ausgabe und vorbereitete BSV-Produktdatenbank, ohne zusätzliche Inhaltsbuttons oder überladene Marketingblöcke.
+- **Website mobil beruhigt**: Die Website-Topbar scrollt auf kleinen Displays mit und nimmt nicht mehr dauerhaft Platz weg. Der überladene Detail-Testblock auf der Funktionsseite wurde entfernt, damit die Seite auf Mobile, Tablet und Laptop klarer wirkt.
+- **Landingpage auf Root-Pfad gelegt**: `messpilot.de/` zeigt jetzt die Website/Landingpage statt direkt die App. Die MessPilot-App ist ueber `/login` und `/app` erreichbar; alte `/preview`-Routen bleiben als Kompatibilitaet erhalten.
 - **Settings-Dateien entlastet**: Der BSV-/Baustromverteiler-Renderer wurde aus `app.settings.js` in `app.settings-temporary-power.js` ausgelagert. Das verbessert Nachverfolgbarkeit, reduziert die Größe der zentralen Settings-Datei und bereitet weitere modulare Refactorings vor.
+- **Statistik-Renderer ausgelagert**: Der Premium-Statistikbereich wurde aus `app.settings.js` in `app.settings-statistics.js` verschoben. Damit sind BSV und Statistik als eigenständige Settings-Module getrennt und die zentrale Settings-Datei weiter entlastet.
+- **Log-Renderer ausgelagert**: Der System-Logs-/Audit-Trail-Bereich wurde aus `app.settings.js` in `app.settings-logs.js` verschoben. Dadurch sind Logliste, Detaildialog, PDF-Payload und Log-Löschdialog als eigenes Modul nachvollziehbar.
+- **Version-Renderer ausgelagert**: Der System-Versionstab wurde aus `app.settings.js` in `app.settings-version.js` verschoben. Die große Versionsansicht mit Bausteinen und Detaildialog ist damit ebenfalls ein eigenständiges Settings-Modul.
+- **Audit-Direktsprung ausgelagert**: Der Sprung aus `System > Logs` zum betroffenen Protokollfeld wurde aus `app.js` in `app.audit-jump.js` verschoben. Damit wird der App-Orchestrator kleiner, ohne Protokollfachlogik anzufassen.
+- **Bild-/JPEG-Helfer ausgelagert**: Datei- und Bildkonvertierungslogik wurde aus `app.js` in `app.image-utils.js` verschoben. Logo-, Zertifikat- und Signatur-Uploads nutzen damit ein eigenes Frontend-Modul.
+- **QR-Formular-Helfer ausgelagert**: Das Sammeln und Speichern der QR-Formulareinstellungen wurde aus `app.js` in `app.qr-form.js` verschoben und liegt damit näher am QR-Modul.
+- **Navigation-Helfer ausgelagert**: Reine Tab-/String-Helfer wie `tabId`, `moduleTabId` und `moduleTabLabel` wurden aus `app.js` in `app.navigation-utils.js` verschoben und stehen frueher in der Script-Reihenfolge bereit.
 
 ## [0.7.6] - 2026-07-13
 
