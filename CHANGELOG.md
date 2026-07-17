@@ -7,7 +7,15 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+Noch keine dokumentierten Änderungen.
+
+## [0.7.7] - 2026-07-17
+
 ### Added
+- **Website-Admin-Besuche SQL-persistent vorbereitet**: Website- und Loginseiten-Zugriffe koennen jetzt ueber `WebsiteVisit` in PostgreSQL gespeichert werden. Erfasst werden Zeitpunkt, Pfad, Methode, IP, Browser, Betriebssystem, Referrer und kompakter User-Agent.
+- **Website-Einstellungen SQL-persistent vorbereitet**: Einstellungen der Website-Admin-GUI koennen jetzt ueber `WebsiteSetting` in PostgreSQL gespeichert werden. Die bestehende JSON-Datei bleibt als lokaler Fallback erhalten.
+- **Login-Auswertung im Website-Admin erweitert**: App-Loginereignisse aus dem Audit-Log liefern fuer die Website-Admin-GUI jetzt neben IP auch Browser und Betriebssystem, sofern diese Informationen im Login-Payload vorhanden sind.
+- **SEO-Vorbereitung dokumentiert**: Die Website ist auf minimale, rechtlich neutrale SEO-Optimierung ausgelegt: klare Seitentitel, Meta-Beschreibungen, strukturierte Daten, Website-Check und fachlich neutrale Begriffe statt Keyword-Ueberladung.
 - **Verteiler v2 als separater Konzepteditor vorbereitet**: Unter `Kunden > Verteiler` gibt es den neuen Untertab `Verteiler v2`. Der Editor liegt in `public/js/app.distributors-v2.js` und bleibt bewusst getrennt vom bestehenden Verteilereditor.
 - **Read-only Flow-Adapter fuer Verteilerlayouts**: Bestehende `layout.rows` werden in ein internes Flow-Modell mit Nodes, Kanten, Viewport, Quellversion und Template-Referenz uebersetzt. Unklare Abgaenge werden als `Abgang unklar` markiert, ohne CEE-/Schuko-/Klemmenabgaenge zu raten.
 - **Node-RED-artiger Canvas-Prototyp fuer Verteiler v2**: Der V2-Editor besitzt Baustein-Palette, freien Canvas mit Raster, Pan, Zoom, Mini-Map, Eigenschaftenpanel und Baum-Synchronisierung. Nodes koennen lokal verschoben und per Palette als Entwurf erzeugt werden.
@@ -16,6 +24,8 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - **Mehrfachauswahl im Verteiler-v2-Canvas**: Nodes koennen per Mausrahmen oder mit `Shift`/`Cmd`/`Strg` mehrfach markiert und gemeinsam verschoben werden.
 
 ### Fixed
+- **Website-Admin-Daten ueberstehen Redeploy besser**: Neue Besucher- und Website-Einstellungsdaten sind nicht mehr nur an den Node-Prozess gebunden, sobald die neuen Prisma-Tabellen per `db:push` in der Datenbank vorhanden sind.
+- **App-Login-Aufrufe werden im Website-Tracking beruecksichtigt**: Neben Website-Seiten werden auch `/login` und `/app` als relevante Zugriffspfade fuer Besucherstatistiken erfasst.
 - **Footer-Dialoge mit X-Button**: Impressum, Datenschutz und AGB nutzen auf der Website jetzt einen kompakten X-Button statt eines Textlinks zum Schließen.
 - **Verteiler-v2-Portdarstellung korrigiert**: IN-/OUT-Anschluesse werden im Canvas jetzt als runde Portpunkte direkt am Node-Rand dargestellt statt als pillenfoermige Labels.
 - **Verteiler-v2-Kantenfuehrung verbessert**: Power- und PE-Verbindungen werden defensiver orthogonal geroutet, damit Linien beim Verschieben der Nodes nicht mehr durch Karteninhalte laufen.
@@ -26,6 +36,8 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 - **Alter Verteilereditor bleibt von Flow-v2 getrennt**: Speicherpfade des bestehenden Verteilereditors erhalten `flowV2`, ohne `payload.layout` oder `layout.rows` zu überschreiben.
 
 ### Changed
+- **Version auf 0.7.7 angehoben**: `package.json`, `package-lock.json`, README, Changelog, Website-Blog und Tagesdokumentation bilden den neuen Beta-Zwischenstand ab.
+- **Docker-/SQL-Hinweise fuer Website-Admin geschaerft**: Fuer produktive Website-Admin-Statistiken muessen nach Deployment und Schema-Aenderungen `npm run db:generate` und `npm run db:push` ausgefuehrt werden.
 - **Verteiler-v2-Canvas lesbarer gemacht**: Standard-Zoom liegt bei `90%`, `Alles einpassen` richtet den Canvas auf alle sichtbaren Nodes aus, Palette und Baumansicht sind einklappbar, Ports wurden auf `IN`/`OUT` plus separaten PE-Port reduziert und Kanten laufen orthogonal mit kleinen Rundungen.
 - **Verteiler-v2-Arbeitsbereich vergroessert**: Der freie Canvas bietet jetzt mehr Platz fuer groessere Verteileraufbauten und zeigt bei Mehrfachauswahl eine eigene Inspector-Zusammenfassung.
 - **Fachliche Darstellung im Verteiler-v2-Prototyp geschaerft**: Normale `circuit`-Zeilen erzeugen nicht mehr automatisch Klemmen. Ohne expliziten `outputType` erscheint `Abgang unklar · <Stromkreis>`. PE bleibt als gruen gestrichelter separater Konzeptpfad und wird nicht ueber RCD oder LS gefuehrt.
