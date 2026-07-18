@@ -7,7 +7,25 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
-Noch keine dokumentierten Änderungen.
+### Changed
+- **System-Icons aufgeraeumt**: Die iOS-AppIcon-Anzeige unter `System > Icons` wurde bereinigt. Das echte `AppIcon.appiconset` wird jetzt in einer einzigen iOS-Kategorie angezeigt, statt parallel mit doppelten Exportdateien aufzutauchen.
+- **iOS-Exportgroessen getrennt sichtbar gemacht**: Die zusaetzlichen `messpilot-ios-icon-*.png`-Exportdateien werden wieder unter `System > Icons` angezeigt, aber als eigene Kategorie `iOS Exportgroessen`, damit AppIcon-Set und Export-Fallbacks fachlich getrennt bleiben.
+- **Animierte Logos auf aktuellen Brandstand gebracht**: Helle Motion-Varianten fuer Favicon, Brand-Icon und Wellen-Symbol nutzen jetzt die aktuellen statischen Logos als Basis und legen nur noch dezente Animationen darueber.
+
+### Fixed
+- **Doppelte iOS-AppIcon-Gruppen entfernt**: `System > Icons` zeigt iOS-App-Icons nicht mehr doppelt als Exportliste und AppIcon-Set.
+- **Icon-Cache aktualisiert**: Der Asset-Cache-Key fuer die Iconuebersicht wurde angehoben, damit Browser die ueberarbeiteten Dateien und manuell nachgezogenen Icon-Dateien neu laden.
+
+## [0.7.8] - 2026-07-17
+
+### Changed
+- **App-Version auf 0.7.8 angehoben**: `package.json`, `package-lock.json`, README, Changelog, Website-Blog und Tagesdokumentation bilden den neuen Patchstand ab.
+- **System-Version-Bausteine aktualisiert**: `System > Version` zeigt jetzt mehr aktuelle Bausteinstände fuer App, Website, Website-Admin, BSV, Verteiler v2, Premiumstatistiken, Lizenzschalter und Raumskizzen-Engine.
+- **Prüfplakettenlogik zentralisiert**: Die VDE-/Baustrom-Bewertung berechnet die Prüfplakette jetzt konsistenter aus dem tatsächlichen Prüfergebnis. `Nicht bestanden`, offene Bewertung oder Mängel erzwingen `Nicht angebracht`; bei `Bestanden` wird die Plakette automatisch vorgeschlagen und kann bewusst abgewählt werden.
+
+### Fixed
+- **Plakettenwert im Speichern-Pfad abgesichert**: Alte Draft-Werte für `vdeInspectionSticker` können beim Speichern nicht mehr als `Angebracht` erhalten bleiben, wenn die automatische Bewertung nicht bestanden ist.
+- **Versionsübersicht auf aktuellen Entwicklungsstand gebracht**: Veraltete Bausteinversionen aus `0.7.5` wurden für betroffene Bereiche auf den tatsächlichen `0.7.7`-Stand nachgezogen und fehlende Bausteine ergänzt.
 
 ## [0.7.7] - 2026-07-17
 
@@ -24,6 +42,10 @@ Noch keine dokumentierten Änderungen.
 - **Mehrfachauswahl im Verteiler-v2-Canvas**: Nodes koennen per Mausrahmen oder mit `Shift`/`Cmd`/`Strg` mehrfach markiert und gemeinsam verschoben werden.
 
 ### Fixed
+- **Protokollnavigation nach Login stabilisiert**: Der Wechsel in `Protokolle` landet wieder zuverlässig in der Protokollansicht und fällt nicht mehr durch veraltete Navigations-/Sessionzustände scheinbar auf `Kunden` zurück.
+- **Raumskizzen-Globals abgesichert**: Direkte Frontend-Abhängigkeiten auf `roomOpeningColors`, `defaultRoomSketch` und `renderRoomSketchEditor` wurden defensiver über `window`-Fallbacks abgesichert. Dadurch brechen Protokollansicht und `Räume bearbeiten` nicht mehr gemeinsam ab, wenn Browser-Cache oder Script-Reihenfolge kurzzeitig Mischstände liefern.
+- **Raumdialog gegen fehlenden Skizzenrenderer gehärtet**: Raumdaten können weiter angezeigt und gespeichert werden, auch wenn der Raumskizzen-Editor nicht geladen ist. Statt eines JavaScript-Abbruchs erscheint ein neutraler Hinweis.
+- **App-Asset-Cache nach Frontend-Fix aktualisiert**: Die Cache-Versionen der betroffenen App-Skripte wurden erhöht, damit Browser nach Deploys keine alten Raum-/Protokollmodule mit neuen Modulen mischen.
 - **Website-Admin-Daten ueberstehen Redeploy besser**: Neue Besucher- und Website-Einstellungsdaten sind nicht mehr nur an den Node-Prozess gebunden, sobald die neuen Prisma-Tabellen per `db:push` in der Datenbank vorhanden sind.
 - **App-Login-Aufrufe werden im Website-Tracking beruecksichtigt**: Neben Website-Seiten werden auch `/login` und `/app` als relevante Zugriffspfade fuer Besucherstatistiken erfasst.
 - **Footer-Dialoge mit X-Button**: Impressum, Datenschutz und AGB nutzen auf der Website jetzt einen kompakten X-Button statt eines Textlinks zum Schließen.
