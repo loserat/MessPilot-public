@@ -1,455 +1,157 @@
-# API-Dokumentation
+# MessPilot API
 
-Die API ist aktuell eine Demo-API mit JSON-Datei-Persistenz. Sie bereitet die spaetere Fach-App vor, ersetzt aber noch keine relationale Datenbank.
+Stand: 2026-09-06. Die installierbare App nutzt Express und PostgreSQL über Prisma.
+Dies ist eine Dokumentation des aktuellen Beta-Stands, keine allgemeine Produktionsfreigabe.
+Die externe Website und ihr Shop-/Lizenzserver werden in einem anderen Projekt entwickelt.
 
-Basis-URL lokal:
+Basis lokal: `http://localhost:3100/api`. Bestehende Adressen bleiben erhalten.
+Die Anwendung ist derzeit für einen Betrieb je Installation ausgelegt, nicht für
+mehrere voneinander unabhängige Firmen auf derselben Installation.
 
-```text
-http://localhost:3100/api
-```
+## Antwortformat und Fehler
 
-## Healthcheck
+Erfolg: `{ "success": true, "data": ..., "message": "..." }`.
 
-```http
-GET /api/health
-```
-
-Beispielantwort:
-
-```json
-{
-  "success": true,
-  "data": {
-    "app": "MessPilot",
-    "status": "ok",
-    "mode": "demo",
-    "storage": {
-      "mode": "json",
-      "database": "jsonFile",
-      "databaseUrlConfigured": false,
-      "databaseUrlMasked": "",
-      "databaseHost": "",
-      "databaseName": "",
-      "dataStorage": "storage/demoStore.json",
-      "pdfStorage": {
-        "mode": "local",
-        "path": "storage/pdfs"
-      },
-      "persistentStorageRequired": true,
-      "activeRepository": "json"
-    },
-    "timestamp": "2026-06-15T19:37:31.926Z",
-    "counts": {
-      "customers": 5,
-      "locations": 6,
-      "buildings": 4,
-      "rooms": 4,
-      "systems": 4,
-      "distributions": 4,
-      "inspections": 4,
-      "measurements": 4,
-      "defects": 5,
-      "inspectors": 2,
-      "testDevices": 2
-    }
-  },
-  "message": "Backend erreichbar"
-}
-```
-
-Die Datenbank-URL wird nie im Klartext ausgeliefert. Fuer den Systembereich wird nur eine maskierte Darstellung und der technische Status gemeldet.
-
-## Einheitliche Antworten
-
-Erfolg:
-
-```json
-{
-  "success": true,
-  "data": [],
-  "message": "Kunden geladen"
-}
-```
-
-Fehler:
+Fehler, beispielsweise ein ungültiger Kundenname:
 
 ```json
 {
   "success": false,
   "error": {
-    "message": "Pflichtfeld fehlt: name",
-    "code": "VALIDATION_ERROR"
+    "message": "Bitte die markierten Pflichtfelder prüfen.",
+    "code": "VALIDATION_ERROR",
+    "details": {
+      "fields": { "name": "Bitte einen nicht leeren Text angeben." }
+    }
   }
 }
 ```
 
-## Authentifizierung
-
-Alle Fachendpunkte ausser `/api/health` und `/api/auth/*` erwarten eine gueltige MessPilot-Session. Die Session wird als HTTP-only Cookie gespeichert.
-
-Startkonto im lokalen Seed:
-
-```text
-Benutzer: admin
-Passwort: admin
-Rolle: admin
-```
-
-Geschuetztes Master-Konto: `master / master`. Lokale Standardkonten folgen dem Schema Benutzer=Passwort=Rolle: `master`, `admin`, `user`, `viewer`, `demo`.
-
-### Session pruefen
-
-```http
-GET /api/auth/me
-```
-
-### Login
-
-```http
-POST /api/auth/login
-Content-Type: application/json
-
-{
-  "email": "master",
-  "password": "master"
-}
-```
-
-### Logout
-
-```http
-POST /api/auth/logout
-```
-
-### Benutzer
-
-```http
-GET  /api/users
-GET  /api/users/:id
-POST /api/users
-PUT  /api/users/:id
-```
-
-`GET`, `POST` und `PUT` fuer Benutzer benoetigen `master` oder `admin`. Admins koennen normale Benutzer pflegen; geschuetzte `master`- und `admin`-Konten duerfen nur von `master` geaendert werden. Benutzer werden nicht geloescht, sondern ueber `status: "disabled"` deaktiviert.
-
-Rollen:
-
-- `master`
-- `admin`
-- `user`
-- `viewer`
-- `demo`
-- `demo`
-
-Aktives Rollenmodell:
-
-- `master`: Benutzer, Rollen, Lizenz, Datenbank, Updates und Systemstatus verwalten.
-- `admin`: Kunden-/Objektstruktur, Messgeraete, Pruefer und fachliche Einstellungen verwalten.
-- `user`: fachliche Bearbeitung ohne Systemverwaltung.
-- `viewer`: nur lesen und exportierte/erzeugte Dokumente ansehen.
-- `demo`: Demo-/Gastzugang ohne Schreibrechte.
-
-`master` und `admin` sind geschuetzte Kernrollen und duerfen nicht deaktiviert oder in andere Rollen umgewandelt werden.
-
-### Lizenz und Feature-Gates
-
-Noch kein aktiver Endpunkt. Geplantes Ziel:
-
-- `GET /api/system/license` fuer Status, Edition, Limits und Installations-ID
-- `PUT /api/system/license` fuer Lizenzschluessel durch `master`
-- serverseitige Pruefung vor Kundenanlage, PDF-Export und editionabhaengigen Funktionen
-
-Beispiele fuer spaetere Gates:
-
-- ohne Lizenz maximal 2 Kunden
-- PDF-Wasserzeichen nur mit passender Lizenz entfernen
-- erweiterte Rollen/Rechte und Branding nur mit passender Edition
-
-### Prüfer
-
-```http
-GET    /api/inspectors
-GET    /api/inspectors/:id
-POST   /api/inspectors
-PUT    /api/inspectors/:id
-DELETE /api/inspectors/:id
-```
-
-Wichtige Felder:
-
-- `name`
-- `role`
-- `certificateNumber`
-- `phone`
-- `email`
-- `signatureFileName`
-- `status`
-- `note`
-
-### Messgeräte
-
-```http
-GET    /api/test-devices
-GET    /api/test-devices/:id
-POST   /api/test-devices
-PUT    /api/test-devices/:id
-DELETE /api/test-devices/:id
-```
-
-Messgeraete koennen optional ueber `inspectorId` einem Pruefer zugeordnet werden. Die Zuordnung ist nicht exklusiv; ein Pruefer darf mehrere Messgeraete verantworten.
-
-Wichtige Felder:
-
-- `name`
-- `deviceType`
-- `manufacturer`
-- `model`
-- `serialNumber`
-- `calibrationDate`
-- `calibrationDue`
-- `status`
-- `note`
-
-## CRUD-Endpunkte
-
-Alle folgenden Fachbereiche benoetigen Login. Die meisten Bereiche unterstuetzen aktuell:
-
-- `GET /`
-- `GET /:id`
-- `POST /`
-- `PUT /:id`
-- `DELETE /:id`
-
-### Kunden
-
-```http
-GET    /api/customers
-GET    /api/customers/:id
-POST   /api/customers
-PUT    /api/customers/:id
-```
-
-Pflichtfeld bei `POST`: `name`
-
-Kunden koennen nicht geloescht werden. Ein DELETE-Versuch wird serverseitig abgewiesen.
-
-### Standorte
-
-```http
-GET    /api/locations
-GET    /api/locations/:id
-POST   /api/locations
-PUT    /api/locations/:id
-DELETE /api/locations/:id
-```
-
-Pflichtfelder bei `POST`: `customerId`, `name`
-
-### Gebaeude
-
-```http
-GET    /api/buildings
-GET    /api/buildings/:id
-POST   /api/buildings
-PUT    /api/buildings/:id
-DELETE /api/buildings/:id
-```
-
-Pflichtfelder bei `POST`: `locationId`, `name`
-
-### Anlagen
-
-```http
-GET    /api/systems
-GET    /api/systems/:id
-POST   /api/systems
-PUT    /api/systems/:id
-DELETE /api/systems/:id
-```
-
-Pflichtfelder bei `POST`: `buildingId`, `name`
-
-### Verteilungen
-
-```http
-GET    /api/distributions
-GET    /api/distributions/:id
-POST   /api/distributions
-PUT    /api/distributions/:id
-DELETE /api/distributions/:id
-```
-
-Pflichtfelder bei `POST`: `systemId`, `name`
-
-### Pruefungen
-
-```http
-GET    /api/inspections
-GET    /api/inspections/:id
-POST   /api/inspections
-PUT    /api/inspections/:id
-DELETE /api/inspections/:id
-```
-
-Pflichtfelder bei `POST`: `distributionId`, `type`, `date`
-
-### Messprotokolle
-
-```http
-GET    /api/measurements
-GET    /api/measurements/:id
-POST   /api/measurements
-PUT    /api/measurements/:id
-DELETE /api/measurements/:id
-```
-
-Pflichtfelder bei `POST`: `date`, `measurementType`, `objectLabel`
-
-Der aktuelle Frontend-Workflow speichert Entwuerfe ueber diesen Endpunkt. Fuer die Zuordnung werden zusaetzlich `customerId`, `locationId`, `buildingId` und `roomId` mitgefuehrt.
-
-Beleuchtungsmessungen koennen ausserdem uebergeben:
-
-- `tester`
-- `standardPreset`
-- `workArea`
-- `targetLux`
-- `uniformity`
-- `maxMinRatio`
-- `measuringPlane`
-- `grid`
-- `edgeOffset`
-- `rating`
-- `note`
-- `measurementValues`
-
-Wichtiges aktuelles Verhalten:
-
-- Das Frontend vergibt fuer aktive Entwuerfe eine stabile `protocolId`.
-- Nach dem ersten Speichern wird diese ID weiterverwendet.
-- Weitere Speicherungen sollen per Aktualisierung denselben Datensatz fortschreiben.
-- Die Demo-API ist noch kein finales Datenmodell und erzwingt noch keine fachliche Eindeutigkeit auf Serverebene.
-
-Beispiel:
-
-```bash
-curl -X POST http://localhost:3100/api/measurements \
-  -H "Content-Type: application/json" \
-  -d '{"date":"2026-06-18","measurementType":"Beleuchtungsmessung ASR 3.4","objectLabel":"EG-001 · Technikraum","customerId":"customer-1","locationId":"location-1","status":"Entwurf"}'
-```
-
-### Export
-
-```http
-GET /api/export/measurements/:id/pdf
-POST /api/export/measurements/:id/archive
-POST /api/export/measurements/:id/unarchive
-```
-
-Erzeugt serverseitig ein PDF fuer ein gespeichertes Messprotokoll. Standard ist eine Inline-Ausgabe fuer Browser-Vorschau.
-
-Optionale Query-Parameter:
-
-- `?preview=1`: Vorschau erzeugen, ohne den PDF-Status des Protokolls zu veraendern.
-- `?download=1`: PDF als Download ausliefern und den Exportstatus als erzeugt markieren.
-
-Archivieren erzeugt/markiert den PDF-Stand serverseitig und setzt den PDF-Status auf `Erzeugt`. Zurueckholen setzt den PDF-Status wieder auf `Nicht erzeugt`, damit das Protokoll wieder in der aktiven Liste bearbeitet werden kann.
-
-Der aktuelle PDF-Export enthaelt:
-
-- Protokollkopf mit Pruefart und Status
-- Kunde, Liegenschaft, Gebaeude und Raum
-- Pruefdatum, Pruefer und Bearbeitungsstatus
-- Norm-/Grunddaten fuer Beleuchtungsmessungen
-- Raum-, Raster- und Randabstandsangaben
-- Messwerte, falls im Protokoll gespeichert
-- Bewertung und Hinweisbereich
-
-Beispiel:
-
-```bash
-curl -I http://localhost:3100/api/export/measurements/mea_demo_001/pdf?preview=1
-curl -o messprotokoll.pdf http://localhost:3100/api/export/measurements/mea_demo_001/pdf?download=1
-```
-
-### Maengel
-
-```http
-GET    /api/defects
-GET    /api/defects/:id
-POST   /api/defects
-PUT    /api/defects/:id
-DELETE /api/defects/:id
-```
-
-Pflichtfelder bei `POST`: `title`, `status` sowie `inspectionId` oder `distributionId`
-
-### Dokumente
-
-```http
-GET    /api/documents
-GET    /api/documents/:id
-POST   /api/documents
-PUT    /api/documents/:id
-DELETE /api/documents/:id
-```
-
-Pflichtfelder bei `POST`: `name`, `type`
-
-Hinweis: Es gibt noch keine Datei-Uploads. Die erste PDF-Erzeugung laeuft ueber den Export-Endpunkt.
-
-### Benutzer
-
-Benutzer sind im Abschnitt Authentifizierung dokumentiert. Es gibt keinen DELETE-Endpunkt.
-
-## Testbeispiele
-
-Healthcheck:
-
-```bash
-curl http://localhost:3100/api/health
-```
-
-Kunden laden:
-
-```bash
-curl -c /tmp/messpilot.cookies \
-  -H "Content-Type: application/json" \
-  -d '{"email":"master","password":"master"}' \
-  http://localhost:3100/api/auth/login
-
-curl -b /tmp/messpilot.cookies http://localhost:3100/api/customers
-```
-
-Demo-Kunden anlegen:
-
-```bash
-curl -b /tmp/messpilot.cookies -X POST http://localhost:3100/api/customers \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Demo GmbH","status":"aktiv"}'
-```
-
-Die Kundennummer wird automatisch fortlaufend durch den Server vergeben, zum Beispiel `KD-0006`. Manuell übergebene `customerNumber`-Werte werden bei Anlage und Aktualisierung ignoriert.
-
-Die Kundenart wird automatisch aus der USt-ID abgeleitet: ohne `taxId` wird der Kunde als `Privatkunde` geführt, mit `taxId` als `Gewerbe`.
-
-Validierung testen:
-
-```bash
-curl -b /tmp/messpilot.cookies -X POST http://localhost:3100/api/customers \
-  -H "Content-Type: application/json" \
-  -d '{}'
-```
-
-## Aktuelle Grenzen
-
-- Daten werden aktuell in `storage/demoStore.json` gespeichert.
-- `storage/` wird nicht versioniert und ist lokale Laufzeitpersistenz.
-- Der Healthcheck meldet die konfigurierte Storage-Art ueber `storage.mode`.
-- Der Healthcheck meldet den tatsaechlich aktiven Repository-Adapter ueber `storage.activeRepository`.
-- PostgreSQL ist als Zielarchitektur vorbereitet, aber noch nicht als Laufzeit-Backend aktiv.
-- Keine Relationenpruefung zwischen IDs.
-- Authentifizierung und Rollen sind ein erster JSON-/Cookie-Startpunkt, aber noch nicht produktiv gehaertet.
-- Keine Uploads.
-- Keine E-Mail-Funktionen.
-- PDF-Export ist als erste Vorschau vorhanden, aber noch nicht final freigegeben.
-- Keine normativ freigegebenen Berechnungen.
+`error.details` ist optional und additiv. Aktuell werden freigegebene Feldfehler
+(`body`, `name`, `customerId`) und Zähler von Löschabhängigkeiten ausgegeben.
+Interne Datenbankdetails werden nicht in dieses Feld übernommen; unerwartete
+Serverfehler haben eine allgemeine Fehlermeldung.
+
+| HTTP | Bedeutung |
+| --- | --- |
+| 400 | Ungültige Eingaben |
+| 401 | Keine gültige Anmeldung |
+| 403 | Keine Berechtigung für Aktion oder Kundendaten |
+| 404 | Datensatz nicht gefunden |
+| 409 | Abhängigkeit, Eindeutigkeits- oder Protokollversionskonflikt |
+| 500 / 503 | Server- oder Verfügbarkeitsfehler; kein bestätigter Erfolg |
+
+## Anmeldung und Sitzungen
+
+- `GET /api/auth/me`: aktuellen Benutzer oder `data.user: null` abfragen.
+- `POST /api/auth/login`: eigenes Konto mit `email` und `password` anmelden.
+- `POST /api/auth/logout`: Sitzung serverseitig widerrufen.
+
+Es gibt keine dokumentierten Standardzugangsdaten. Das erste Systemkonto wird
+explizit über `npm run setup:admin` eingerichtet; keine automatische Kontoanlage
+beim Lesen oder Starten der App.
+
+Sitzungs- und Browserbindung werden über Cookies verwaltet. Nicht-Browser-Clients
+müssen sämtliche erhaltenen Cookies übernehmen, nicht nur den ersten Cookie.
+Fachendpunkte verlangen Anmeldung und zusätzliche rollenabhängige Freigaben.
+Kundengebundene Lesekonten sehen nur ihren zugeordneten Bereich.
+
+Der Browser zeigt eine Abmeldung erst nach Bestätigung oder HTTP 401 als beendet.
+Bei einem Server-/Netzfehler bleibt der Zustand ehrlich erkennbar und die Aktion
+kann über „Abmelden“ erneut ausgelöst werden.
+
+## Kunden
+
+| Methode | Adresse | Zweck |
+| --- | --- | --- |
+| GET | `/api/customers` | Zugängliche Kunden |
+| GET | `/api/customers/:id` | Kundendetails |
+| POST | `/api/customers` | Kunde anlegen |
+| PUT | `/api/customers/:id` | Kunde bearbeiten |
+| DELETE | `/api/customers/:id` | Kunde ohne Abhängigkeiten löschen |
+| DELETE | `/api/customers/:id?force=true` | Kunde samt verknüpfter Daten löschen |
+
+Schreibaktionen verlangen die bestehende Kundenverwaltungsberechtigung.
+Der Request muss ein JSON-Objekt sein; `name` muss bei Anlage und im resultierenden
+Änderungsstand ein nicht leerer String sein. PUT darf weiterhin einzelne Felder ändern.
+Die Kundenart wird aus `taxId` abgeleitet.
+
+Kundennummern vergibt ausschließlich der Server: `KD-0001`, nach `KD-9999`
+entsprechend `KD-10000`. Clientseitige Nummern werden bei POST/PUT ignoriert.
+Betriebszuordnung und Identität können über Kunden-POST/PUT nicht umgeschrieben werden.
+
+Zählererhöhung und Anlage erfolgen atomar. Die Datenbank verhindert doppelte Nummern
+je Betrieb. Löschen reduziert den persistenten Zähler nicht. Lücken sind zulässig.
+Die Garantie für nicht wiederverwendete Nummern gilt ab der neuen Zählerführung;
+früher gelöschte Nummern ohne Verlauf können nicht rückwirkend rekonstruiert werden.
+
+Bei vorhandenen Abhängigkeiten liefert normales DELETE
+`409 CUSTOMER_DELETE_BLOCKED` mit `error.details.linkedData`.
+Die ausdrücklich bestätigte vollständige Löschung umfasst die zugeordneten Standorte,
+Gebäude, Räume, Anlagen, Verteiler, Stromkreise, Schutzgeräte, Prüfungen,
+Protokolle, Mängel und Dokumentmetadaten. Sie läuft in einer gemeinsamen Transaktion.
+Scheitert ein Teil, werden die vorherigen Datenbankänderungen zurückgerollt.
+Physische PDF-Dateien werden dabei nicht zusätzlich gelöscht.
+
+## Standorte / Liegenschaften
+
+`/api/locations`: GET und POST; `/api/locations/:id`: GET, PUT und DELETE.
+
+`name` und `customerId` müssen nicht leere Strings sein; dies gilt auch für den
+zusammengeführten Änderungsstand. Kunden-IDs werden gegen bestehende SQL-/Legacy-IDs
+aufgelöst. Ein unbekannter Kunde führt zu HTTP 400 statt zu einem Standort ohne Zuordnung.
+Schreibberechtigung und kundengebundene Lesegrenzen bleiben erhalten.
+
+## Firmeneinstellungen und Frontend-Transport
+
+`GET /api/company-settings` und `PUT /api/company-settings` verlangen die vorhandene
+Verwaltungsberechtigung. Das Formular hält ungespeicherte Eingaben sitzungslokal,
+über Tabwechsel und Speicherfehler hinweg. Erst eine bestätigte Serverantwort
+aktualisiert den gespeicherten Stand. Ein Seitenreload verwirft weiterhin ungespeicherte
+Entwürfe; es gibt keine neue dauerhafte Browserablage.
+
+JSON-Datenzugriffe in `app.data.js` nutzen den zentralen `requestJson`-Client:
+
+- Standard-Zeitlimit 12 Sekunden, einschließlich vollständiger Antwortverarbeitung.
+- Abbruch über AbortController; externe Abbruchsignale werden berücksichtigt.
+- Ungültige JSON-Antworten erzeugen `INVALID_RESPONSE`; HTTP 204 wird ausdrücklich unterstützt.
+- Serverstatus, Fehlercode und sichere Details bleiben für Aufrufer verfügbar.
+- Ladeanzeige und Timer werden auch bei Fehlern freigegeben.
+- Keine automatische Wiederholung von Schreibanfragen.
+
+Ein Timeout oder Verbindungsabbruch beweist nicht, dass der Server nichts gespeichert hat.
+Vor erneuter Anlage den Serverstand prüfen. Eine dauerhafte Idempotenzlösung
+gegen doppelte Anlagen nach verlorener Antwort ist noch offen.
+
+## Weitere bestehende API-Bereiche
+
+Weiterhin registriert sind Gebäude, Räume, Anlagen, Verteiler, Stromkreise,
+Prüfungen, Messprotokolle, Mängel, Dokumente, Benutzer, Prüfer, Messgeräte,
+PDF-Export, QR, Baustromvorlagen und Systemfunktionen.
+Die genauen Methoden und Berechtigungen stehen in `src/routes/`.
+Diese Bereiche wurden nicht pauschal auf einen neuen Vertrag umgestellt.
+
+`/api/measurements` und der bestehende Alias `/api/protocols` bleiben erhalten.
+Protokollabschluss, bestätigtes Wiederöffnen und Versionskonflikte sind im
+App-Repository in `docs/PROTOCOL_LOCK_2026-09-05.md` beschrieben. Dieser interne
+Bericht wird nicht in die öffentliche Dokumentationsablage synchronisiert.
+PDF-Vorschau: `GET /api/export/measurements/:id/pdf?preview=1`.
+Eine PDF-Ausgabe ist keine automatische fachliche, rechtliche oder normative Freigabe.
+
+`/api/licenses` existiert bereits. Der künftige Vertrag mit der externen
+Lizenzplattform ist noch nicht finalisiert; interne Entscheidung im App-Repository:
+`docs/LICENSING.md`.
+Es werden hier keine erfundenen Limits, Preise oder Lizenzrechte festgelegt.
+
+Alte `/api/preview/*`-Routen sind weiterhin vorhanden und separat stillzulegen;
+sie gehören nicht zum neuen App-Vertrag. Auch die öffentliche Route
+`/api/public/system` ist keine pauschale Freigabe aller ihrer Unterfunktionen.
+
+## Prüfung und Installation
+
+Die öffentliche [Deployment-Anleitung](DEPLOYMENT.md) beschreibt die kontrollierte
+Umstellung. Der interne Bericht `docs/API_STABILIZATION_2026-09-06.md` im
+App-Repository enthält die ausführlichen Testergebnisse und Grenzen.
+Maschinenlesbare OpenAPI-Dokumentation, umfassende API-Schemata, Pagination,
+vollständiges Berechtigungsaudit und Schutz vor verlorenen Schreibantworten
+bleiben nachfolgende Arbeitspakete.

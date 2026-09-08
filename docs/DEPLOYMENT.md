@@ -1,336 +1,159 @@
-# Deployment
+# Installation und Betrieb
 
-Diese Anleitung beschreibt den aktuellen Weg, MessPilot auf einem VPS oder Server online zu betreiben.
+Stand: 2026-09-08 · MessPilot 0.7.9 Beta. Diese Anleitung ist mit den Dateien im
+App-Repository abgeglichen. Die beschriebenen Installations-/Restoreabläufe wurden
+in diesem Dokumentationsschritt nicht ausgeführt. Keine Produktionsfreigabe.
 
-## Kurzantwort
+## Voraussetzungen und Konfiguration
 
-Ja, MessPilot kann aktuell online auf einem Server laufen.
+Benötigt werden das vollständige App-Repository, Docker mit Compose oder Node.js
+ab Version 20 sowie PostgreSQL mit passendem Schema. Das öffentliche
+`MessPilot-public`-Repository enthält synchronisierte Dokumentation; es ist kein
+vollständiger App-Checkout zum Bauen.
 
-Der empfohlene Stand fuer jetzt:
+Compose definiert `messpilot` und `postgres` (PostgreSQL 16). Intern verwendet die
+App Port 3100; `MESSPILOT_PORT` steuert die Host-Freigabe. Die Konfiguration aus
+`.env.example` vor dem ersten Start mit eigenen Werten einrichten. Eine vorhandene
+`.env` nicht überschreiben und keine Geheimnisse ins Repository übernehmen.
 
-- Docker Compose
-- Port intern: `3100`
-- persistenter Ordner: `./storage`
-- persistentes Volume fuer PostgreSQL: `postgres_data`
-- Reverse Proxy davor, z. B. Nginx, Caddy, Traefik oder Coolify
+| Variable | Verwendung |
+| --- | --- |
+| `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` | Einrichtung des Compose-Datenbankcontainers; eigene Zugangsdaten verwenden |
+| `DATABASE_URL` | Verbindung der App zur vorgesehenen Datenbank; Compose bildet bei fehlender URL einen Standard aus den PostgreSQL-Werten |
+| `PORT` / `MESSPILOT_PORT` | Node-Listener / von Compose veröffentlichter Host-Port |
+| `SESSION_COOKIE_NAME`, `COOKIE_SECURE` | Sessioncookie; Secure-Konfiguration passend zum HTTPS-Betrieb prüfen |
+| `MESSPILOT_PDF_STORAGE_PATH` | Lokales PDF-Verzeichnis, standardmäßig `storage/pdfs` |
+| `MESSPILOT_LICENSE_ENCRYPTION_KEY` | Geheimnis der vorhandenen Lizenzimplementierung; stabil und getrennt vom Code verwahren |
+| `GM_CORE_LICENSE_BASE_URL` | Noch vorhandene Altanbindung; kein Vertrag des zukünftigen Website-Lizenzservers |
 
-## Voraussetzungen auf dem Server
+Die Lizenzplattform wird extern neu geplant und ist noch nicht umgestellt.
+`MESSPILOT_LICENSE_ALLOW_UNSIGNED_DEV` ist keine Betriebsfreigabe.
+`MESSPILOT_STORAGE_MODE` und `MESSPILOT_SQL_BOOTSTRAP_JSON` schalten den aktuellen
+Code nicht auf JSON um: Der Speicherpfad ist fest PostgreSQL.
 
-- Linux-VPS oder vergleichbarer Server
-- Docker
-- Docker Compose Plugin
-- Git
-- Domain oder Subdomain, falls oeffentlich erreichbar
+`npm start` lädt `.env` nicht automatisch. Bei Node-Betrieb müssen benötigte Werte
+vor dem Start in der Prozessumgebung stehen. Prisma-CLI und Compose haben eigene
+Konfigurationsmechanismen; deren funktionierende Verbindung beweist nicht die App-Konfiguration.
 
-## Repository holen
+## Leere Neuinstallation mit Compose
 
-```bash
-git clone https://github.com/loserat/messpilot.git
-cd messpilot
-```
+Nur in einem neuen, eindeutig getrennten Installationsverzeichnis mit leerer
+Zieldatenbank verwenden. Projekt-/Container-/Volume-Namen vorab abgleichen;
+die Compose-Datei enthält feste Containernamen und darf nicht versehentlich eine
+bestehende Installation übernehmen.
 
-Optional `.env` anlegen:
-
-```bash
-cp .env.example .env
-```
-
-Standard:
-
-```text
-MESSPILOT_PORT=3100
-POSTGRES_USER=messpilot
-POSTGRES_PASSWORD=replace-with-a-local-secret
-POSTGRES_DB=messpilot
-```
-
-## Start mit Docker
+Nach Einrichtung der Konfiguration:
 
 ```bash
-docker compose up -d --build
+docker compose up -d postgres
 ```
 
-Status pruefen:
+Mit `docker compose ps` prüfen, dass PostgreSQL als `healthy` gemeldet wird.
+Erst danach das App-Image bauen und das leere Schema einrichten:
+
+```bash
+docker compose build messpilot
+docker compose run --rm --no-deps messpilot npm run db:migrate:deploy
+```
+
+Die Migration legt bei leerer Datenbank die Baseline und anschließend die
+Kundennummernerweiterung an. Der App-Start selbst führt keine Migration aus.
+
+Für das erste Systemkonto `MESSPILOT_SETUP_ADMIN_EMAIL`, `MESSPILOT_SETUP_ADMIN_NAME`
+und `MESSPILOT_SETUP_ADMIN_PASSWORD` vorübergehend sicher in der Host-Prozessumgebung
+bereitstellen. Das Passwort selbst wählen, mindestens 12 Zeichen; keine Werte in
+Befehlshistorie oder Dokumentation eintragen. Die folgende Weitergabe enthält nur Variablennamen:
+
+```bash
+docker compose run --rm --no-deps \
+  -e MESSPILOT_SETUP_ADMIN_EMAIL \
+  -e MESSPILOT_SETUP_ADMIN_NAME \
+  -e MESSPILOT_SETUP_ADMIN_PASSWORD \
+  messpilot npm run setup:admin
+unset MESSPILOT_SETUP_ADMIN_EMAIL MESSPILOT_SETUP_ADMIN_NAME MESSPILOT_SETUP_ADMIN_PASSWORD
+docker compose up -d --no-deps messpilot
+```
+
+`setup:admin` funktioniert ausschließlich bei leerer Benutzertabelle und ist kein
+Passwort-Reset. Es gibt keine automatisch angelegten Standardkonten. Bestehende
+Konten behalten ihre Zugangsdaten. Demo-Seeds sind keine Installation.
+
+## Bestehende Installation aktualisieren
+
+Der Stand vom 06.09. benötigt eine Schemaänderung. **Nicht einfach neu bauen und
+starten.** Die dokumentierte Übernahme der Bestandsinstallation ist noch offen und
+bedarf einer ausdrücklichen Freigabe. Folgender Ablauf ist vorbereitet:
+
+1. Zielinstallation, laufenden Build, Datenbank, Schema, Dateivolumes und frühere
+   Nummernvergabe lesen und abgleichen. Wartungsfenster und Rückkehrweg festlegen.
+2. Schreibzugriffe anhalten; Datenbank und Dateispeicher zusammengehörig sichern.
+   Restore auf einer separaten Kopie nachweisen. Alte Writer während der Umstellung
+   und danach nicht parallel zum neuen Nummernzähler weiterlaufen lassen.
+3. Mit dem neuen Checkout/Build und ausdrücklich gesetzter, geprüfter `DATABASE_URL`
+   `npm run db:preflight -- --baseline` ausführen. Es prüft ohne Datenänderung das
+   Ausgangsschema, Dubletten und Nummernbereich. Bei Abweichungen stoppen.
+4. Nur bei passendem Ausgangsschema und fehlender Migrationshistorie mit
+   `npx prisma migrate resolve --applied 0_baseline` die vorhandene Baseline markieren.
+   Dies ist ein Schreibschritt. Für eine bereits korrekt migrierte Installation
+   stattdessen deren Migrationsstatus prüfen; nicht erneut eine Baseline erzwingen.
+5. `npm run db:migrate:deploy` aus dem neuen Stand ausführen. Danach
+   `npm run db:preflight` und `npx prisma migrate status` prüfen.
+6. Ausschließlich den zum Schema passenden App-Build starten. Anmeldung, SQL-Zugriff,
+   vorhandene Kunden/Protokolle und Dateizugriff prüfen. Schreibbetrieb erst nach
+   Abnahme freigeben und Build-/Schema-/Prüfstand dokumentieren.
+
+Prisma ist im Checkout auf 5.22.0 festgelegt. Die vollständige interne Begründung
+und isolierte Testbelege stehen in `docs/API_STABILIZATION_2026-09-06.md` im App-Repository.
+Kein `db:push`, `migrate reset`, Demo-Seed oder automatisches Umnummerieren auf Bestandsdaten.
+Ein fehlgeschlagener Migrationslauf verlangt Prüfung; weder Spalten löschen noch
+blind den alten Writer starten. Restore muss Datenbank, Dateien, Nummernverlauf und
+passenden Build gemeinsam berücksichtigen.
+
+## Persistenz und Wiederherstellung
+
+| Bestandteil | Konfigurierter Speicher |
+| --- | --- |
+| Konten, Sessions und fachliche Datensätze | PostgreSQL-Volume `postgres_data` unter `/var/lib/postgresql/data` |
+| Gespeicherte PDF-Dateien und weitere Laufzeitdateien | Bind-Mount `./storage:/app/storage` |
+| Konfiguration und erforderliche Geheimnisse | Geschützte, separate Ablage außerhalb des Repositorys |
+| Passender Programmstand | Nachvollziehbarer Commit-/Image-Stand plus Migrationshistorie |
+
+Ein Archiv von `storage/` allein sichert keine SQL-Daten. Ein SQL-Dump allein
+sichert keine physischen PDFs. Ein ungeprüft kopiertes laufendes Datenbankvolume
+ist kein nachgewiesen wiederherstellbares Backup.
+
+Der noch zu belegende Restoretest muss auf einer separaten Installation mindestens
+Schema/Migrationshistorie, Benutzeranmeldung, vorhandene Datensätze und Zuordnungen,
+Kundennummernzähler sowie vorhandene PDF-Dateien prüfen. Sicherungszeitpunkt,
+Werkzeugversion, Prüfergebnis und Wiederherstellungsdauer festhalten. Aufbewahrung,
+Automatisierung und zulässiger Datenverlust sind für die konkrete Installation noch festzulegen.
+
+## Lesende Kontrolle nach einem freigegebenen Start
 
 ```bash
 docker compose ps
 docker compose logs --tail=80 messpilot
-```
-
-Healthcheck:
-
-```bash
 docker compose exec -T messpilot wget -qO- http://127.0.0.1:3100/api/health
 ```
 
-## Zugriff
-
-Ohne Reverse Proxy:
-
-```text
-http://SERVER-IP:3100
-```
-
-Mit Reverse Proxy:
-
-```text
-https://messpilot.example.tld
-```
-
-## Reverse Proxy Beispiel Nginx
-
-Beispiel fuer eine Subdomain:
-
-```nginx
-server {
-    listen 80;
-    server_name messpilot.example.tld;
-
-    location / {
-        proxy_pass http://127.0.0.1:3100;
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-}
-```
-
-TLS sollte danach ueber Certbot, Caddy, Traefik oder die Serverplattform eingerichtet werden.
-
-## Coolify
-
-Aktueller Stand ist Coolify-kompatibel:
-
-- Build per `Dockerfile`
-- Start per `docker-compose.yml`
-- Port `3100`
-- Volume fuer Persistenz: `./storage:/app/storage`
-- PostgreSQL-Volume: `/var/lib/postgresql/data`
-- Healthcheck: `/api/health`
-
-Empfohlene Coolify-Einstellungen:
-
-- Repository: `https://github.com/loserat/messpilot`
-- Build Pack: Docker Compose oder Dockerfile
-- Interner Port: `3100`
-- Healthcheck Path: `/api/health`
-- Persistenter Speicher: `/app/storage`
-- Optionales Environment:
-
-```text
-PORT=3100
-NODE_ENV=production
-MESSPILOT_PORT=3100
-POSTGRES_USER=messpilot
-POSTGRES_PASSWORD=<secret>
-POSTGRES_DB=messpilot
-DATABASE_URL=postgresql://messpilot:<secret>@<coolify-postgres-host>:5432/messpilot?schema=public
-```
-
-Wichtig: In Coolify muessen sowohl `/app/storage` als auch `/var/lib/postgresql/data` persistent sein, damit JSON-/PDF-Daten und die spaetere SQL-Datenbank Container-Neustarts und neue Deployments ueberleben.
-
-Praxis fuer den aktuellen Stand:
-
-1. PostgreSQL als eigene Coolify-Ressource mit `messpilot` als Initialdatenbank anlegen.
-2. Die interne URL dieser Ressource nicht oeffentlich freigeben.
-3. `DATABASE_URL` in den Environment Variables der MessPilot-App hinterlegen.
-4. App neu deployen.
-5. Danach getrennt Prisma-Schema gegen die Datenbank pruefen.
-
-Wichtig: Der aktuelle App-Stand kann schon mit gesetzter `DATABASE_URL` deployed werden, nutzt fachlich aber weiterhin standardmaessig den JSON-Adapter, solange `MESSPILOT_STORAGE_MODE=json` aktiv bleibt und die async SQL-Services noch nicht durchgeschaltet sind.
-
-## Persistenz
-
-MessPilot nutzt aktuell eine JSON-Datei:
-
-```text
-storage/demoStore.json
-```
-
-Diese Datei ist lokale Laufzeitpersistenz und wird nicht versioniert.
-
-Wichtig fuer Redeploys: Wenn `/app/storage` im Container nicht auf ein persistentes Volume zeigt, sind angelegte Protokolle, Kunden und Stammdaten nach einem neuen Deploy weg. Fuer produktive Nutzung ist das nur eine Uebergangsloesung; Zielbild ist PostgreSQL fuer strukturierte Daten plus dauerhafter PDF-Storage auf Volume, NAS oder S3/MinIO-kompatiblem Speicher.
-
-Sichern:
-
-```bash
-tar -czf messpilot-storage-backup.tar.gz storage
-```
-
-Wiederherstellen:
-
-```bash
-tar -xzf messpilot-storage-backup.tar.gz
-docker compose restart messpilot
-```
-
-## Update auf dem Server
-
-```bash
-git pull
-docker compose up -d --build
-docker compose exec -T messpilot wget -qO- http://127.0.0.1:3100/api/health
-```
-
-## Zielbild: Kundeninstallation per Docker
-
-Langfristig soll MessPilot beim Kunden lokal oder auf einem kundeneigenen Server per Docker laufen.
-
-Geplante Zielarchitektur:
-
-- `messpilot` App-Container
-- PostgreSQL-Container oder externer PostgreSQL-Dienst
-- persistenter Storage fuer PDFs, Zertifikate, Exporte und Backups
-- `.env` fuer Datenbank, Storage, Lizenzstatus und Updatekanal
-- Healthcheck fuer App-Version, Datenbankschema, Storage und spaeter Lizenzstatus
-
-Updateprinzip:
-
-1. Backup von Datenbank und Datei-Storage erstellen.
-2. Neues Docker-Image oder neuen Git-Stand laden.
-3. Container neu starten.
-4. Datenbankmigrationen ausfuehren.
-5. Healthcheck pruefen.
-6. App-Version und Schema-Version in der Adminkonsole kontrollieren.
-
-Fuer Kundenbetrieb duerfen Daten niemals im austauschbaren App-Container liegen. Ohne persistentes Volume oder SQL-Datenbank ist ein Redeploy nicht produktionssicher.
-
-## Prisma und Seeds
-
-Fuer die vorbereitete PostgreSQL-Schicht sind diese Kommandos vorgesehen:
-
-```bash
-npm install
-npm run db:generate
-npm run db:push
-npm run db:seed
-```
-
-Die App bleibt dabei standardmaessig weiter auf `MESSPILOT_STORAGE_MODE=json`, bis Services und Controller spaeter asynchron auf den SQL-Adapter umgestellt werden.
-
-## Lizenzvorbereitung
-
-Eine spaetere Kundeninstallation soll einen Lizenzschluessel aufnehmen koennen. Technisch geplant:
-
-- Lizenzstatus unter `System > Adminkonsole`
-- Installation-ID je Docker-/Serverinstallation
-- offline pruefbarer Lizenzschluessel oder optionaler Online-Check
-- Feature-Gates serverseitig, z. B. Kundenlimit oder PDF-Wasserzeichen
-
-Aktuell wird noch keine Lizenz erzwungen.
-
-## Synchronisierung zur öffentlichen Repository
-
-MessPilot betreibt eine **private Development-Repo** und eine separate **öffentliche Community-Repo** für Issues und Releases.
-
-### Automatische Synchronisierung
-
-GitHub Actions synchronisiert automatisch diese Dateien:
-- `README.md` — Public-Startseite, erzeugt aus `.github/PUBLIC_README.md`
-- `CHANGELOG.md` — Release-Notizen
-- `ROADMAP.md` — Öffentliche Feature-Roadmap
-- `SECURITY.md` — Sicherheitsrichtlinien
-- `THIRD_PARTY_NOTICES.md` — Lizenzhinweise zu Abhängigkeiten
-- `docs/API.md` — API-Dokumentation
-- `docs/DEPLOYMENT.md` — Diese Datei
-- `docs/SYSTEM_OVERVIEW.md` — System- und Ablaufübersicht
-- `LICENSE` — Lizenztext
-
-**Trigger**:
-- Bei jedem Push zu `main` (wenn obige Dateien ändern)
-- Täglich Montags um 09:00 UTC (Schedule)
-- Manuell via `workflow_dispatch`
-
-### Setup der Synchronisierung
-
-1. **Personal Access Token (PAT) erstellen**:
-   - GitHub → Settings → Developer settings → Personal access tokens (Tokens classic)
-   - Scope: `repo` (vollständiger Zugriff auf Repos)
-   - Token kopieren
-
-2. **Secret in privater Repo hinzufügen**:
-   - Private Repo → Settings → Secrets and variables → Actions
-   - New repository secret: `SYNC_REPO_TOKEN` = [dein PAT]
-
-3. **Workflow testen**:
-   ```bash
-   # Manueller Trigger (GitHub Web UI)
-   # Actions → "Sync to Public Repository" → "Run workflow" → Wähle "main" → "Run workflow"
-   
-   # Oder über CLI:
-   gh workflow run sync-to-public.yml --ref main
-   ```
-
-4. **Logs prüfen**:
-   - GitHub → Actions → "Sync to Public Repository"
-   - Letzter Run sollte mit ✓ markiert sein
-
-### Was wird NICHT synchronisiert
-
-Diese sensiblen Inhalte bleiben privat:
-- `src/` — Anwendungsquellcode
-- `public/` — Frontend-Code
-- `server.js` — Server-Konfiguration
-- `.env*` — Umgebungsvariablen
-- `docker-compose.yml`, `Dockerfile` — Deployment-Details
-- `docs/daily/` — Interne Progress-Logs
-- `docs/TECHNICAL.md`, `docs/BACKEND.md` — Interne Doku
-- `storage/` — Datenspeicher und Demo-Daten
-
-### Konfiguration anpassen
-
-Die Sync-Konfiguration befindet sich in `.github/SYNC_CONFIG.json`:
-
-```json
-{
-  "files": {
-    "include": [ /* Dateien zum Sync'en */ ],
-    "exclude": [ /* Dateien, die NICHT sync'd werden */ ]
-  },
-  "sync": {
-    "targetRepo": "loserat/MessPilot-public",
-    "trigger": {
-      "onPush": true,
-      "onSchedule": "0 9 * * 1",
-      "onManualDispatch": true
-    }
-  }
-}
-```
-
----
-
-## Aktuelle Grenzen fuer Online-Betrieb
-
-MessPilot kann online laufen, ist aber noch keine produktiv abgesicherte Mehrbenutzer-Anwendung.
-
-Noch offen:
-
-- Authentifizierung und Rollen sind vorhanden, aber noch nicht produktiv gehaertet
-- keine Mandantenfaehigkeit
-- keine produktive Datenbank
-- keine Backups innerhalb der App
-- PDF-Vorschau ist vorhanden, aber noch keine finale Freigabe-/Serienexport-Funktion
-- keine E-Mail-Funktion
-- keine normativ freigegebenen Berechnungen
-
-## Empfehlung fuer oeffentlichen Betrieb
-
-Fuer Tests:
-
-- Server per HTTPS absichern
-- Zugriff falls moeglich zunaechst per VPN, Basic Auth oder IP-Whitelist begrenzen
-- Demo-Startkonto `admin / admin` und geschuetztes Master-Konto `master / master` vor produktivem Betrieb sofort aendern
-- bei reinem HTTPS-Betrieb `COOKIE_SECURE=true` setzen
-- `storage/` regelmaessig sichern
-
-Fuer spaetere Produktivnutzung:
-
-- gehaertete Authentifizierung mit Passwortregeln, CSRF-Schutz, Audit-Log und optional MFA
-- PostgreSQL oder SQLite mit Repository-Schicht
-- Migrationskonzept
-- Backupkonzept
-- feineres Rollen-/Rechtekonzept
-- serverseitige Validierung der Fachlogik
+Logs vor Weitergabe auf sensible Inhalte prüfen. Ein erfolgreicher HTTP-Healthcheck
+belegt nicht alle Fachabläufe oder ein aktuelles Schema. Zusätzlich die SQL-Anzeige
+und den angemeldeten App-Ablauf prüfen. `npm run smoke:sql` schreibt Testdaten und
+gehört ausschließlich in eine isolierte Testdatenbank.
+
+Die App ist lokal unter `http://localhost:3100` erreichbar, sofern die Host-Freigabe
+unverändert ist. Bei VPS/Coolify PostgreSQL intern erreichbar halten und den
+Reverse Proxy mit HTTPS, Cookie-Konfiguration und Zugriffsschutz separat abnehmen.
+Ein Dockerfile-Deployment benötigt eine eigens bereitgestellte PostgreSQL-Ressource
+und persistente Dateispeicherung; das Image allein stellt beides nicht bereit.
+
+## Verbliebene Altlasten und Grenzen
+
+`docker-compose.local-sql.yml` ist ein altes Override: Es veröffentlicht PostgreSQL
+auf Host-Port 5432 ohne explizite Loopback-Bindung und enthält wirkungslose alte
+JSON-Bootstrap-Variablen. Es ist keine empfohlene Standardanleitung und wurde hier
+nicht verändert. Eine lokale Testdatenbank ausdrücklich isolieren und ihre Erreichbarkeit prüfen.
+
+Offen bleiben vollständige Browser-/SQL-/Fachabnahme, Backup/Restore des Bestands,
+Lizenzdurchsetzung, API-/Rollen-/Sicherheitsprüfung und finale PDF-Abnahme.
+Weitere Informationen: [Systemübersicht](SYSTEM_OVERVIEW.md), [API](API.md).

@@ -1,142 +1,74 @@
-# MessPilot System Overview
+# MessPilot-Systemübersicht
 
-This document describes the current system shape in a public-friendly way. It intentionally avoids internal implementation notes and real customer data.
+Stand: 2026-09-08 · Version 0.7.9 · Beta. Diese Übersicht beschreibt den aktuellen
+App-Quellcode; sie bestätigt keine produktive Installation oder fachliche Freigabe.
 
-## Storage Model
-
-Current beta storage is JSON/file based. A later database migration is planned.
-
-```text
-Browser
-  |
-  |  HTTP / JSON
-  v
-Express API
-  |
-  |  read/write
-  v
-storage/demoStore.json
-  |
-  +-- customers
-  +-- locations
-  +-- buildings
-  +-- rooms
-  +-- measurements
-  +-- defects
-```
-
-Some editor state is still local to the browser while the workflows are being hardened.
+## Bausteine und Datenfluss
 
 ```text
-Browser localStorage
-  |
-  +-- active customer/location/building context
-  +-- active protocol draft
-  +-- distributor editor state
-  +-- theme selection
+Browser der Mitarbeiter
+  │ Anmeldung, Kunden, technische Objekte, Prüfprotokolle
+  ▼
+MessPilot-App / Express-API
+  ├─ PostgreSQL / Prisma: Konten, Sitzungen und fachliche Daten
+  ├─ PDF-Erzeugung: Vorschau, Download und Dateiablage
+  └─ Rollen, Validierung und Audit
+
+Separates Projekt: öffentliche Website / Shop / zukünftiger Lizenzserver
+  ▲
+  └─ geplante ausgehende Lizenz-API-Verbindung des App-Backends
 ```
 
-Target direction:
+PostgreSQL ist der einzige aktive fachliche Datenpfad. Es gibt keinen automatischen
+JSON-Demo-Fallback. Browserzustände wie Theme, Navigation und noch nicht gespeicherte
+Formulareingaben sind keine dauerhafte SQL-Speicherung.
+
+Die Installation ist für einen Betrieb mit mehreren Benutzern vorgesehen.
+Mehrere unabhängig getrennte Firmen auf derselben Installation sind nicht abgenommen.
+Die externe Lizenzplattform ist geplant; im App-Code besteht noch die alte
+GM-Core-Anbindung mit offenen Prüf- und Durchsetzungslücken.
+
+## Fachliche Struktur
 
 ```text
-Browser
-  |
-  v
-API
-  |
-  +-- PostgreSQL or SQLite
-  +-- file storage for generated exports
-  +-- audit and user/session tables
+Kunde → Liegenschaft → Gebäude → Räume / technische Anlagen / Verteiler
+Verteiler → Schutzstruktur → Stromkreise → Leitungen
+Prüfprotokoll → Zuordnung + Stammdaten-Snapshot + Prüf- und Messwerte
+             → Bewertung / Dokumentationsstatus → PDF und Mängel
 ```
 
-## Object Structure
+Protokolle übernehmen den jeweils benötigten Stammdatenstand als Snapshot.
+Das ist eine im Protokoll gespeicherte Kopie; Messwerte gehören zum Prüfprotokoll.
+Eine vollständige unveränderliche Historie sämtlicher Profile und PDFs ist noch offen.
 
-MessPilot structures inspection data from customer to technical object.
+## Prüfablauf
 
-```text
-Customer
-  |
-  +-- Location
-        |
-        +-- Building
-              |
-              +-- Room
-              |     |
-              |     +-- Lighting measurements
-              |
-              +-- Distribution board
-                    |
-                    +-- Prefuse
-                          |
-                          +-- RCD group
-                                |
-                                +-- Circuit
-                                      |
-                                      +-- Cable data
-                                      +-- Measurement values in protocol snapshots
-```
+1. Kunde und technisches Objekt zuordnen, Prüfart wählen.
+2. Grunddaten und benötigte Struktur erfassen.
+3. Prüfschritte und Messwerte der gewählten Prüfart dokumentieren.
+4. Ergebnis bzw. Dokumentationsstatus prüfen und ausdrücklich abschließen.
+5. PDF ansehen/exportieren; Folgeprüfung bei Bedarf aus dem bestehenden Kontext starten.
 
-## Protocol Workflow
+Die Schritte unterscheiden sich für VDE/DGUV/Baustrom, Beleuchtung, ESD und
+Anlagen-Inbetriebnahmen. Der Server kontrolliert beim Abschluss erforderliche
+Daten und Zuordnungen. Dies ist keine vollständige normative Messwertfreigabe.
 
-All protocols use the same shell: assignment first, then type-specific steps.
+Abgeschlossene Protokolle sind schreibgeschützt. Änderungen erfordern bestätigtes
+Wiederöffnen, passende Rechte und eine aktuelle Version. Widersprüchliche oder
+konkurrierende Schreibzugriffe können mit HTTP 409 abgelehnt werden.
 
-```text
-1  Assignment & standard
-   |
-2  Protocol base data
-   |
-3  Type-specific structure
-   |
-4  Inspection / test steps
-   |
-5  Measurement entry
-   |
-6  Evaluation
-   |
-7  Completion / export
-```
+## Betrieb und Grenzen
 
-For VDE-style distribution board protocols, the current workflow is:
+`/` und `/login` öffnen die Anmeldung, `/app` liefert die App-Oberfläche.
+Öffentliche Website und Shop werden außerhalb dieses Repositories entwickelt.
+Verbliebene ältere Preview-APIs sind eine gesonderte Aufräumaufgabe.
 
-```text
-1  Zuordnung & Norm
-   |
-2  Grunddaten & Verteiler
-   |
-3  Stromkreise
-   |
-4  Besichtigen
-   |
-5  Erproben
-   |
-6  Messen
-   |
-7  Bewertung
-   |
-8  Abschluss
-```
+Die App benötigt PostgreSQL sowie dauerhafte Dateiablage für gespeicherte PDFs.
+Schemaänderungen werden versioniert migriert; ein neues App-Image allein aktualisiert
+keine Bestandsdatenbank. Es gibt keine automatisch erzeugten Standardkonten.
 
-Important rule:
+Fachliche Endabnahme, Backup/Restore der konkreten Installation, sichere
+Lizenzdurchsetzung und vollständige Browser-/Berechtigungsprüfung bleiben offen.
+Einzelne bestandene Tests bedeuten keine allgemeine Produktionsfreigabe.
 
-```text
-Distribution board master data
-  -> copied into protocol as circuit snapshot
-  -> measurement values belong to the protocol
-  -> later board edits do not overwrite existing protocol measurements
-```
-
-## Export Flow
-
-```text
-Protocol draft
-  |
-  +-- validate required fields
-  |
-  +-- build print model
-  |
-  +-- render PDF preview
-  |
-  +-- user confirms/downloads
-```
-
-PDF templates are still being refined. VDE-style protocols use a first page for header and inspection results, followed by landscape circuit tables.
+Weitere Informationen: [API](API.md) und [Deployment](DEPLOYMENT.md).

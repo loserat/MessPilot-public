@@ -7,14 +7,115 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+Stand der Zusammenführung: 2026-09-08. App-Version bleibt `0.7.9`, Reifegrad Beta.
+Die Änderungen sind keine Produktionsfreigabe. Bestehende Installationen benötigen
+vor Übernahme des neuen Backends die vorbereitete Kundennummernmigration samt
+Sicherung, geprüftem Restore und kontrolliertem Schemaabgleich; ein Docker-Neubau
+allein reicht nicht. Ablauf: [Deployment](docs/DEPLOYMENT.md).
+
 ### Changed
+- **API und Datenbank stabilisiert**: Kunden-/Standortpflichtfelder werden auch bei Änderungen geprüft. Ein persistenter Zähler und SQL-Eindeutigkeit sichern Kundennummern je Betrieb; mehrstufige Kundenlöschungen verwenden eine gemeinsame Transaktion. Versionierte Baseline, additive Migration und lesende Vorprüfung sind enthalten. Bestandsmigration noch nicht ausgeführt.
+- **App-Design zentralisiert**: Farben, Typografie, Radien und Standardabstände liegen in zentralen CSS-Variablen. Fachlayouts bleiben modular; der Build prüft Designwerte und CSS-Imports. Ein Kunden-Theme-Editor ist noch nicht umgesetzt.
+- **Dokumentation konsolidiert**: Architektur, PostgreSQL-Datenhaltung, Einrichtung, Updateabläufe und Prüfgrenzen aktualisiert. Zentraler interner Index, Pflegeablauf und Berichtsvorlage ergänzt; historische Techniknotizen archiviert. Öffentliche README-Vorlage an App-/Website-Trennung und tatsächliche Installationsvoraussetzungen angepasst.
+- **Abgeschlossene Protokolle schreibgeschützt**: Ansehen, Schrittwechsel und PDF-Vorschau verändern den gespeicherten Abschluss nicht. Erneutes Bearbeiten verlangt eine Bestätigung und setzt das Protokoll bewusst auf `In Bearbeitung`. Serverseitiger Abschlussschutz und SQL-Versionsprüfung verhindern unbemerkte Überschreibungen; Wiederöffnen wird protokolliert. Keine vollständige Revisionshistorie.
+- **App-Repository von der öffentlichen Website getrennt**: Die externe Website ist nicht mehr Bestandteil dieses Projekts. `/`, `/login` und `/app` öffnen direkt die App-Shell; frühere Websitepfade leiten auf `/login` weiter. Der Build-Check prüft nur noch die App-Shell.
+- **Systemgraph als Adminansicht vorbereitet**: `System > Graph` zeigt geladene SQL-Datensaetze als interaktive, reine Leseansicht. Knotenarten, Beschriftungen und lokale Layoutkraefte lassen sich im Browser einstellen, ohne Fach- oder Nutzdaten zu veraendern.
+- **Kundenkontext im Graphen getrennt**: Kundenbezogene Objektketten werden ausschliesslich ueber gerichtete, vorhandene ID-Referenzen zu Kundenclustern zusammengefasst. Neutrale oder nicht eindeutig zuordenbare Daten bleiben ausserhalb dieser Bereiche.
+- **Graph-Darstellung beruhigt**: Sichtbare Kundenkreise und Richtungspfeile wurden entfernt. Die kundenzentrierte Layoutlogik bleibt intern aktiv, damit Datenbereiche ohne dekorative Gruppenrahmen raeumlich getrennt bleiben.
+- **IBN-Dokumentationsstatus statt Ergebnisautomatik**: Inbetriebnahmen zeigen jetzt `In Bearbeitung` oder `Vollstaendig dokumentiert`. `Bestanden` und `Nicht bestanden` werden bei der IBN nicht mehr automatisch aus Pflichtfeldern abgeleitet.
+- **IBN-Abschlussfluss angepasst**: Der bisherige Schritt `Bewertung` wurde zu `Abschluss` umbenannt. Fuer den Abschluss ist kein Rating mehr erforderlich; nur der naechste Prueftermin bleibt als Abschlussangabe erforderlich.
+- **IBN-Messwertseite verdichtet**: Messwerte werden in klar getrennten Zeilen dargestellt. Der Hinweis `Erfassung automatisch aus dem Messwert` wurde entfernt; Pflichtwerte nutzen die volle Breite, optionale Werte behalten nur ihr Abwahl-Icon.
+- **IBN-Arbeitsflaeche verbreitert**: Der Anlagenkontext rechts wurde aus den IBN-Schritten entfernt. Die frei gewordene Flaeche wird fuer eine kompaktere einspaltige Arbeitsansicht genutzt.
+- **IBN-Messwerte automatisch erfassen**: Der Erfassungsstatus wird nicht mehr manuell ueber ein Dropdown gesetzt. Ein eingetragener Wert gilt automatisch als erfasst; leere Pflichtfelder bleiben offen.
+- **Optionale IBN-Messwerte per Icon abwaehlbar**: Optionale Messgroessen werden ohne Statusauswahl dargestellt und koennen nur ueber ein Icon als nicht erforderlich markiert bzw. wieder aktiviert werden. Nicht relevante Werte kommen weiterhin aus dem Anlagen-Messprofil.
+- **Firmenansicht verdichtet**: `System > Firma` fokussiert jetzt auf `Firmendaten`; Stammdaten sowie Adresse und Kontakt sind zusammengefuehrt. Die Premium-Untertabs `Kalkulation` und `Logo` werden nur bei aktiver Freischaltung lila angezeigt.
+- **Firmenformular aufgeraeumt**: Die Logo-Vorschau erscheint als Bild in der Kopfzeile. Der Speichern-Button steht ebenfalls oben und wird erst bei tatsaechlichen Formularaenderungen eingeblendet.
+- **Rollenbeschreibungen erweitert**: `System > Benutzer` beschreibt Rechte und Sichtbarkeit der Rollen jetzt konkreter fuer die Administration.
+- **System-Navigation bereinigt**: Der derzeit ungenutzte Tab `Plugins` wurde aus der sichtbaren Systemnavigation entfernt.
+- **Dialogdarstellung vereinheitlicht**: Modal- und Impressum-Dialoge nutzen einen vollflaechigen Vordergrund-Layer ohne lokal begrenztes Hintergrund-Blur innerhalb einzelner Panel-Zellen.
+- **Topbar-Branding bewusst stabil gehalten**: Die bestehende animierte Symbolmarke mit `MESSPILOT Beta` bleibt erhalten; die kurz getestete Voll-Logo-Variante wurde wegen unguenstiger Breite wieder verworfen.
+- **IBN-PDF fachlicher gegliedert**: Anlagenprotokolle folgen jetzt der sichtbaren Reihenfolge `Pruefauftrag und Zuordnung`, `Angaben zur Anlage`, `Pruefgrundlagen`, `Sicht- und Funktionspruefung`, `Mess- und Funktionspruefung`, `Pruefergebnis`, `Maengel` sowie `Hinweise und Uebergabe`.
+- **IBN-PDF optisch beruhigt**: Blaue Flaechen wurden zugunsten neutraler Tabellenkoepfe, dezenter Trennlinien und einer naeher an VDE-, ASR- und DGUV-Ausgaben liegenden Protokolloptik reduziert.
+- **IBN-Stammdaten und Fachpruefung getrennt**: Die erste PDF-Seite buendelt Protokoll-, Auftrags-, Zuordnungs- und Anlagendaten. Die fachlichen Pruefgrundlagen beginnen vollstaendig auf einer Folgeseite.
+- **IBN-PDF-Code modularisiert**: Definitionen und deutsche Fachtexte, Report-Modellbildung und PDF-Darstellung liegen jetzt getrennt in `pdf.commissioning-definitions.js`, `pdf.commissioning-model.js` und `pdf.commissioning-renderer.js`. `pdf.service.js` bleibt der kompatible Einstiegspunkt.
+- **IBN-Frontend kontrolliert aufgeteilt**: Workflow, Validierung, Persistenz und Rendering wurden aus dem zentralen IBN-Skript in eigenstaendige Module verschoben. `app.system-commissioning.js` koordiniert weiterhin den bestehenden Ablauf und die bisherigen globalen Einstiegspunkte.
+- **Protokollliste entdoppelt**: Die zwei nahezu identischen Tabellenrenderer wurden in `app.protocol-list.js` zusammengefuehrt. Die unterschiedlichen Leerzustaende und beide bisherigen Funktionsnamen bleiben erhalten.
+- **Protokollfortschritt ausgelagert**: Fortschrittsermittlung fuer VDE, Beleuchtung, ESD und IBN sowie Statuspunkt und Fortschrittsanzeige liegen jetzt gebuendelt in `app.protocol-progress.js`.
+- **Refactoring bewusst begrenzt**: Es wurden keine CSS-, SQL-, Prisma-, API- oder Payload-Strukturen geaendert. `styles.css` bleibt vorerst unveraendert; die Schnitte dienen Wartbarkeit und Fehlerisolation, nicht einer behaupteten Laufzeitoptimierung.
+- **Refactoring technisch geprueft**: Nach den Auslagerungen liefen `npm run build` und `npm run smoke` mehrfach erfolgreich. Der Smoke-Check bestaetigt PostgreSQL als aktiven Adapter und neun geladene Repositories.
+
+### Fixed
+
+- **Speicher- und Fehlerfälle**: Bestätigte Kunden-/Standort-IDs bleiben nach Teilfehlern erhalten. JSON-Anfragen haben Timeout über den gesamten Antwortkörper, Abbruch und klare Fehlerweitergabe ohne automatische Schreibwiederholung. Logout zeigt unbestätigte Abmeldungen nicht als Erfolg; Firmeneingaben bleiben bei Tabwechsel und Speicherfehlern sitzungslokal erhalten.
+- **Prüfintervalle und App-Einstieg**: Monatsintervalle einschließlich null Jahren und Monatsenden korrigiert; angemeldeten Login-Pfad normalisiert und optionale Versionsabfrage vom Arbeitsbeginn entkoppelt.
+- **Theme und Mobilansichten**: Doppelte Theme-Initialisierung entfernt, gesperrten Browserspeicher abgefangen und Moduswechsel zwischen Tabs synchronisiert. Mobile Hauptcontainer und überlagernder Versionslink korrigiert.
+- **Prüfstand 2026-09-08**: Lokaler Release-Check mit 83 Tests, 184 JavaScript-Dateien, 17 Stylesheets und neun Repository-Smokes erfolgreich. Isolierte SQL-/HTTP-/Chromium-Nachweise stammen vom 06.09.; keine neue Abnahme der Bestandsinstallation und keine vollständige fachliche Freigabe.
+- **Abhängigkeitswarnungen behoben**: body-parser auf 1.20.6 und qs auf 6.16.0 aktualisiert, über auf Express begrenzte Overrides. Express bleibt auf 4.22.2. Neun Parser-Regressionen ergänzen die bestehenden Tests; vollständiger npm-Audit meldet nach dem Update keine bekannten Schwachstellen.
+- **Freigabevorbereitung**: Automatische Rücksetzung von Systemkonten entfernt; explizite Ersteinrichtung ohne Standardpasswort, Schutz vor unberechtigter Rollenaufwertung und keine nur scheinbar gespeicherte Session.
+- **Protokolldaten**: Erfundenen Prüfer, Auftragnehmer, Auftrag, Ort und Messgerät aus aktiven Vorgaben/PDF-Fallbacks entfernt; Messantworten nicht mehr als bereits geprüft vorbelegt. Bestandsdaten bleiben unverändert.
+- **API-Speicherung**: Serverseitige strukturelle Abschlussprüfung und Kundenzuordnung bei Protokollschreibzugriffen; ältere CRUD-API wartet auf tatsächliche Service-Ergebnisse und reicht Fehler weiter.
+- **Release-Checks**: Gemeinsamer Build-, Syntax-, Asset-, Test- und Smokecheck über `npm run release:check`; Demo-Seed im Produktionsmodus gesperrt.
+- **Statistik nach Dateiaufteilung repariert**: Fehlende Hilfsfunktionen zur Messart und Wiederholungsprüfung wiederhergestellt.
+- **Kunden-Submit vor asynchroner Verarbeitung abgesichert**: Formulardaten werden nicht mehr durch die verspätete Unterdrückung des Standard-Submits in die URL geschrieben; fehlende Liegenschaften öffnen den richtigen Tab.
+- **Protokollspeicherung eindeutig getrennt**: Bewusstes Entwurfspeichern funktioniert unabhängig vom Autosave-Schalter. Abschluss verlangt Serverbestätigung, PDF-Vorschau und Messwertübernahme lösen keinen Abschluss mehr aus. Beschriftungen erklären Entwurf und Abschluss.
+- **Regressionen automatisiert abgesichert**: 16 Node-Tests für Statistik, Kunden-Submit sowie Speicher-, Vorschau- und Fehlerpfade ergänzt; Browser-/SQL-Endabnahme bleibt offen.
+- **Graph-Verknuepfungen fuer Pruefer und Messgeraete**: Protokolle lesen explizite Pruefer- und Messgeraete-IDs jetzt auch aus `measurementValues`; vorhandene Geraet-zu-Pruefer-Zuordnungen erscheinen ebenfalls als Kante. Namen oder technische Bezeichnungen werden dabei nicht als Ersatzreferenz verwendet.
+- **Graph-Renderer nach Kundencluster-Refactoring stabilisiert**: Die interne Knotenreferenz fuer die gerichtete Kundenauflosung wurde wiederhergestellt, damit `System > Graph` nach dem Oeffnen nicht abbricht.
+- **IBN-Abschluss per blauem Haken**: Der Abschluss wird nicht mehr durch die entfernte Rating-Auswahl blockiert. Nach erfolgreichem Speichern wird der Editor geschlossen und die Protokollliste neu aufgebaut.
+- **IBN-Vorschau**: Die Abschlussuebersicht zeigt den Dokumentationsstatus statt eines veralteten oder leeren Pruefergebnisses.
+- **IBN-Wiederholungspruefungen**: Vollstaendig dokumentierte IBN-Datensaetze werden wieder als abgeschlossene Vorgaenger erkannt. Folgepruefungen koennen dadurch wieder korrekt gestartet werden.
+- **IBN-Fortschritt**: Der Workflow bewertet den Abschluss nicht mehr anhand eines Ratings, sondern anhand der notwendigen Datenerfassung und des Prueftermins.
+- **IBN-Status im SQL-Payload**: Ein final gespeicherter IBN-Datensatz erhaelt konsistent den Status `Vollstaendig dokumentiert`; alte Datenfelder bleiben aus Kompatibilitaetsgruenden erhalten.
+- **IBN-Cache**: Die Versionsparameter fuer Workflow, Persistenz und Hauptskript wurden aktualisiert, damit Browser und Docker nicht auf dem alten Abschlussfluss bleiben.
+- **IBN-Messwert-Fortschritt synchronisiert**: Darstellung, Schrittvalidierung und Fortschrittsberechnung verwenden jetzt dieselbe automatische Ableitung aus Messwert und Anlagenprofil.
+- **IBN-Anlagenart im PDF robuster erkannt**: SiBe, BMA und RWA werden nicht mehr nur aus einem einzelnen Typfeld, sondern aus Anlagen-Snapshot, Objektbezeichnung, Protokolltyp und vorhandenen Pruefschluesseln bestimmt. Aeltere Datensaetze fallen dadurch nicht mehr unnoetig auf den generischen Anlagenrenderer zurueck.
+- **Interne IBN-Schluessel aus dem PDF entfernt**: Technische Bezeichner wie `power`, `access`, `smokeFans` oder `operatorStations` erhalten deutsche Fachbezeichnungen und passende anlagenspezifische Gruppierungen.
+- **IBN-PDF-Seitenumbrueche nachgezogen**: Abschnittsueberschriften erhalten ausreichenden Abstand zu vorherigen Tabellen; Referenz- und Hinweistexte werden nicht mehr am Seitenende angeschnitten.
+- **IBN-Messwerttabelle bei Legacy-Daten abgesichert**: Die Anlagenarterkennung kann nun auch ueber charakteristische Prueffelder erfolgen, damit RWA-, BMA- und SiBe-Messgroessen trotz unvollstaendiger alter Metadaten geladen werden.
+
+## [0.7.9] - 2026-07-19
+
+### Added
+- **Technische Anlagenakten unter Kunden erweitert**: Unter `Kunden > Anlagen` koennen SiBe-Zentralen, Brandmeldeanlagen und Rauch- und Waermeabzugsanlagen ueber einen gefuehrten Drei-Schritt-Dialog angelegt und anschliessend ohne Aenderung ihrer urspruenglichen Objektzuordnung bearbeitet werden.
+- **SiBe-Anlagen fachlich vorbereitet**: Sicherheitsbeleuchtungsanlagen erfassen jetzt System- und Betriebsart, zentrale Stromversorgung, Batterieanlage, Stromkreise, Sicherheits- und Rettungszeichenleuchten, Ueberwachung, Aufstellraum und Bestandsdokumentation.
+- **BMA-Anlagen fachlich vorbereitet**: Brandmeldeanlagen erfassen Anlagenumfang, Brandmeldezentrale, Melder-/Loop-Struktur, Alarmuebertragung, Feuerwehrschnittstellen, Energieversorgung und vorhandene Bestandsunterlagen.
+- **RWA-Anlagen als eigener Anlagentyp**: Natuerliche, maschinelle und kombinierte Rauch- und Waermeabzugsanlagen koennen mit Schutzziel, Zentrale, Energie-/Notstromversorgung, Antrieben, Bedienstellen, Meldern, Ventilatoren, BMA-/GLT-Schnittstellen, Meldungen und Dokumentationsstand angelegt werden.
+- **Anlagen-Inbetriebnahme unter Protokolle vorbereitet**: `Protokolle > + > Inbetriebnahme` zeigt ausschliesslich unterstuetzte Anlagen ohne vorhandenes Inbetriebnahmeprotokoll. Nach der Auswahl erscheint ein eigener SiBe-, BMA- oder RWA-Inbetriebnahmedialog.
+- **Pruefserien-Metadaten fuer Anlagenprotokolle**: Angelegte Inbetriebnahmen speichern Anlagenbezug, Anlagen-Snapshot, Pruefart `commissioning`, Pruefserien-ID, Auftrags-/Plandaten und den anlagenspezifisch vorbereiteten Pruefumfang im vorhandenen SQL-Protokollpfad.
+- **Eigener IBN-PDF-Renderer**: SiBe-, BMA- und RWA-Inbetriebnahmen erhalten einen serverseitigen PDF-Aufbau mit Zuordnung, Anlagen-Snapshot, Pruefauftrag, typabhaengigen Pruefpunkten, Ergebnisuebersicht, Hinweisen und bestehender Abschluss-/Unterschriftsseite.
+- **IBN-Wiederholungspruefungen**: Abgeschlossene Anlagen-Inbetriebnahmen koennen als Folgepruefung fortgefuehrt werden. Der neue SQL-Datensatz referenziert den Vorgaenger, bleibt in derselben Pruefserie und zeigt alte Pruefergebnisse ausschliesslich als Vorwerte.
+- **Anlagenbezogene IBN-Messprofile**: SiBe-, BMA- und RWA-Anlagen koennen fuer jede vorbereitete Messgroesse festlegen, ob sie als Pflichtwert, optionaler Wert oder fuer die konkrete Anlage nicht relevant behandelt wird. Die Konfiguration wird ohne Prisma-Migration im vorhandenen SQL-Anlagen-Payload gespeichert.
+
+### Changed
+- **Anlagenakte und Pruefung fachlich getrennt**: Dauerhafte Stammdaten verbleiben an der technischen Anlage; pruefungsbezogene Werte, Funktionsresultate, Zugaenglichkeit, Bewertung und Pruefplakette gehoeren in das jeweilige Protokoll.
+- **Normbezuege als Planungsmetadaten eingeordnet**: SiBe-, BMA- und RWA-Anlagen fuehren vorbereitete fachliche Referenzen, ohne daraus automatisch Vollstaendigkeit, Konformitaet oder Freigabe abzuleiten.
+- **IBN als gefuehrter Fuenf-Schritt-Ablauf**: Nach der Anlagenwahl wird die Inbetriebnahme auf einer eigenen Protokoll-Arbeitsseite mit `Grunddaten`, `Pruefumfang`, `Messwerte`, `Bewertung` und `Vorschau` bearbeitet. Die obere Navigation entspricht dem bestehenden Pruefschritt-Muster.
+- **IBN-Abschlussstatus vereinheitlicht**: Der finale Speichervorgang setzt fuenf abgeschlossene Schritte, `commissioningStatus: completed` und den fachlichen Bewertungsstatus.
+- **IBN-Entwuerfe und Fortschritt persistent**: Bereits nach der Anlagenwahl entsteht ein SQL-Entwurf. Grunddaten, Pruefumfang und Abschluss werden einzeln gespeichert und koennen nach Rueckkehr aus der Protokollliste am ersten offenen Schritt fortgesetzt werden.
+- **IBN-PDF fachlich strukturiert**: Erstinbetriebnahme und Wiederholungspruefung erhalten getrennte Titel, Pruefgrundlagen, gruppierte anlagenspezifische Pruefbereiche, Vorwertbezug, Dokumentationsstatus, Abweichungsliste und einen klar abgegrenzten Abschlusskontext.
+- **Anlagenspezifische IBN-Messwerte**: SiBe-, BMA- und RWA-Inbetriebnahmen erfassen vorbereitete Mess- und Funktionswerte mit Einheit, Bearbeitungsstatus und optionalem Vorwert aus der Vorgaengerpruefung.
+- **IBN-Bewertung und Folgetermin**: Bewertung, Maengel, Feststellungen und naechster Prueftermin sind eigene Pflichtangaben. Ein bestandener Abschluss ist bei offenen oder negativen Pruefpunkten gesperrt.
+- **IBN-PDF um Messwerte erweitert**: Der Export enthaelt aktuelle Messwerte, Vorwerte, Erfassungsstatus, Bewertung, Maengel und den naechsten Prueftermin.
+- **Messprofil als Protokoll-Snapshot**: Inbetriebnahme und Wiederholungspruefung uebernehmen das Messprofil aus der Anlagenakte in ihren Anlagen-Snapshot. Spaetere Aenderungen der Anlage veraendern dadurch keine bereits gespeicherten Protokollstaende rueckwirkend.
+- **Optionale IBN-Messwerte vereinfacht**: Optionale Messgroessen koennen im Pruefschritt ueber einen eindeutigen Button fuer die jeweilige Pruefung ab- und wieder zugeschaltet werden. Nicht relevante Messgroessen bleiben sichtbar erklaert, blockieren aber weder Fortschritt noch Abschluss.
+- **IBN-PDF an bestehende Exportfamilie angeglichen**: Protokolldaten, Zuordnung, Anlagenangaben, Pruefauftrag und Bewertung werden kompakter in paarweisen Tabellen dargestellt. Titel, Abstaende und Hinweistexte wurden reduziert; Pruefumfang und Messwerte bleiben als fachliche Tabellen erhalten.
 - **System-Icons aufgeraeumt**: Die iOS-AppIcon-Anzeige unter `System > Icons` wurde bereinigt. Das echte `AppIcon.appiconset` wird jetzt in einer einzigen iOS-Kategorie angezeigt, statt parallel mit doppelten Exportdateien aufzutauchen.
 - **iOS-Exportgroessen getrennt sichtbar gemacht**: Die zusaetzlichen `messpilot-ios-icon-*.png`-Exportdateien werden wieder unter `System > Icons` angezeigt, aber als eigene Kategorie `iOS Exportgroessen`, damit AppIcon-Set und Export-Fallbacks fachlich getrennt bleiben.
 - **Animierte Logos auf aktuellen Brandstand gebracht**: Helle Motion-Varianten fuer Favicon, Brand-Icon und Wellen-Symbol nutzen jetzt die aktuellen statischen Logos als Basis und legen nur noch dezente Animationen darueber.
 
 ### Fixed
+- **RWA im Anlagen-Plusmenue ergaenzt**: Der bereits vorbereitete RWA-Fachdialog ist jetzt auch ueber die feste Typenliste unter `Kunden > Anlagen > +` erreichbar und verwendet passende Vorgaben fuer Anlagenbezeichnung und Anlagen-ID.
 - **Doppelte iOS-AppIcon-Gruppen entfernt**: `System > Icons` zeigt iOS-App-Icons nicht mehr doppelt als Exportliste und AppIcon-Set.
 - **Icon-Cache aktualisiert**: Der Asset-Cache-Key fuer die Iconuebersicht wurde angehoben, damit Browser die ueberarbeiteten Dateien und manuell nachgezogenen Icon-Dateien neu laden.
+- **IBN-Fortschritt in der Protokollliste korrigiert**: Inbetriebnahmen werden nicht mehr mit einem generischen Fuenf-Schritte-Protokoll verrechnet. Abgeschlossene IBN-Protokolle erreichen korrekt drei von drei Schritten; der bei 100 Prozent nicht benoetigte Fortschrittsbalken wird ausgeblendet.
+- **IBN-Listenbezeichnung und Nummerierung korrigiert**: Anlagen-Inbetriebnahmen zeigen die konkrete Anlagenart, das passende Pruefobjekt und ein eigenes `MP-IBN-*`-Nummernschema statt unpassender Standardtypen und -praefixe.
+- **IBN-Bearbeiten auf richtigen Ablauf geroutet**: Der Bearbeiten-Button oeffnet gespeicherte SiBe-, BMA- und RWA-Inbetriebnahmen wieder im Anlageneditor statt in einem fremden generischen Pruefablauf. Gespeicherte Werte werden geladen und per `PUT` ohne Dublette aktualisiert.
+- **IBN-PDF vom generischen Raumprotokoll getrennt**: Inbetriebnahmen fallen nicht mehr in den allgemeinen PDF-Renderer mit unpassender Raumskizzen-/Messwertstruktur.
+- **IBN-Schritte koennen nicht mehr uebersprungen werden**: Die Navigation blockiert direkte Spruenge ueber offene Schritte und fuehrt den Benutzer in der vorgesehenen Reihenfolge durch den Ablauf.
+- **IBN-Pruefumfang und Listenfortschritt synchronisiert**: Der Pruefumfang gilt erst als abgeschlossen, wenn jeder Pruefpunkt bewusst bewertet wurde. Wird ein Punkt wieder auf `Noch nicht geprueft` gesetzt, sinkt der gespeicherte Fortschritt in der Protokollliste entsprechend.
+- **Abgeschlossene IBN-Protokolle bleiben abgeschlossen**: Erneutes Oeffnen und Zwischenspeichern setzt einen finalen Datensatz nicht mehr unbeabsichtigt auf `In Bearbeitung` zurueck.
+- **IBN-Messwerte nicht mehr widerspruechlich bewertet**: Ein eingetragener Wert setzt den Erfassungsstatus automatisch auf erfasst. Optional abgewahlte und laut Anlagenprofil nicht relevante Werte werden nicht mehr als offene Pflichtwerte gezaehlt.
+- **IBN-PDF-Groesse reduziert**: Unnoetig hohe Einzelzeilen und wiederholte grossflaechige Stammdatenbloecke wurden durch kompakte Tabellenzeilen ersetzt. Messgroessen mit Anlagenstatus `nicht relevant` werden im Export nicht als offene Messwerte ausgegeben.
 
 ## [0.7.8] - 2026-07-17
 
